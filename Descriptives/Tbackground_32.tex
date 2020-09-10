@@ -1,0 +1,35 @@
+\begin{table}[ht]
+\caption{Demographic, Family and AFQT characteristics}
+\label{tab:background}
+\centering
+\scalebox{1.0}[1.0]{% 
+\begin{threeparttable}
+\begin{tabular}{lrrr@{}l}
+\toprule 
+Variable & NLSY79 & NLSY97 & \multicolumn{2}{c}{97--79} \\
+\midrule 
+\multicolumn{5}{l}{\emph{Demographics:}} \\
+~~White:                             & 0.79 & 0.70 & -0.09 & *** \\ 
+~~Black:                             & 0.15 & 0.17 & 0.02 & ** \\ 
+~~Hispanic:                          & 0.07 & 0.14 & 0.07 & *** \\ 
+~~Foreign Born:                      & 0.04 & 0.05 & 0.01 &   \\ 
+\vspace{-6pt}  \\
+\multicolumn{5}{l}{\emph{Family Characteristics:}} \\
+~~Mother's education:                & 11.75 & 12.86 & 1.12 & *** \\ 
+~~Father's education:                & 12.15 & 12.99 & 0.84 & *** \\ 
+~~Family Income:                     & 32.96 & 33.48 & 0.51 &   \\ 
+~~Share lived in female-headed HH:   & 0.12 & 0.23 & 0.11 & *** \\ 
+\vspace{-6pt}  \\
+\multicolumn{5}{l}{\emph{AFQT:}} \\
+~~Median of AFQT score               & 0.38 & 0.45 & 0.07 &   \\ 
+~~Standard Deviation of AFQT score:  & 0.96 & 0.97 & 0.02 & *** \\ 
+\vspace{-6pt}  \\
+%$N$ at age 16               &  3,852 &  4,443 & & \\ 
+$N$ at age 32               &  3,324 &  2,742 & & \\ 
+%$NT$ at age 32               &    181 &    165 & & \\ 
+\bottomrule 
+\end{tabular} 
+\footnotesize{Notes: Education is highest grade of the respondent's biological parents. Family income is in 1,000's of 1982-84\$. All demographic and family variables are from survey round 1 in both cohorts except female-headed household, which is from age 14 in NLSY97. AFQT distribution normalized so that the distribution including all cohorts is mean-zero, variance one. For median AFQT score, the significance comes from bootstrapped standard errors of the median (500 replications). For standard deviations of AFQT score, the significance comes from two-tailed F-tests of the ratio of the variances. Statistics weighted by NLSY sampling weights. Significance reported at the 1\% (***), 5\% (**), and 10\% (*) levels. Samples size for statistical analysis varied for some variables due to missing values (see Table \ref{tab:sample} for more on sample creation.)}
+\end{threeparttable} 
+} 
+\end{table} 

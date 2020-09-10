@@ -1,0 +1,329 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/jared/WageReturnsRepo/Data/IPEDS/importZipctyAB.log
+  log type:  text
+ opened on:  21 Dec 2018, 11:10:36
+
+. clear all
+
+. 
+. * Import massive zipcode-county data match from CDC
+. * https://wonder.cdc.gov/wonder/sci_data/codes/fips/type_txt/cntyxref.asp
+. * Should do the exact same thing as "make_zcty.R"
+. 
+. forvalues X = 1/10 {
+  2.         * Unzip the data
+.         if `X'<=5 {
+  3.                 !unzip zipctyA.zip zipcty`X'
+  4.         }
+  5.         else {
+  6.                 !unzip zipctyB.zip zipcty`X'
+  7.         }
+  8. 
+.         * Give a valid text extension
+.         !mv zipcty`X' zipcty`X'.raw
+  9. 
+.         * Make a temporary dct file to read in data
+.         !echo "dictionary using zipcty`X'.raw {     " >> myzipcty.dct
+ 10.         !echo "  _column(1)   float  zipcode    %5f " >> myzipcty.dct
+ 11.         !echo "  _column(24)  str2   stabbr     %2s " >> myzipcty.dct
+ 12.         !echo "  _column(26)  int    fips3      %3f " >> myzipcty.dct
+ 13.         !echo "  _column(29)  str25  countyname %25s" >> myzipcty.dct
+ 14.         !echo "}                                    " >> myzipcty.dct
+ 15. 
+.         * Read in and save the data
+.         infile using myzipcty.dct, clear
+ 16.         drop if _n==1 & mi(zipcode)
+ 17.         contract _all
+ 18.         drop _freq
+ 19.         tempfile holder`X'
+ 20.         save `holder`X'', replace
+ 21. 
+.         * Delete raw data and temp dct files
+.         !rm myzipcty.dct
+ 22.         !rm zipcty`X'.raw
+ 23. }
+
+Archive:  zipctyA.zip
+  inflating: zipcty1                 
+
+
+
+
+
+
+
+
+dictionary using zipcty1.raw {     
+  _column(1)   float  zipcode    %5f 
+  _column(24)  str2   stabbr     %2s 
+  _column(26)  int    fips3      %3f 
+  _column(29)  str25  countyname %25s
+}                                    
+
+(2,310,001 observations read)
+(1 observation deleted)
+(note: file /tmp/St05929.000001 not found)
+file /tmp/St05929.000001 saved
+
+
+
+Archive:  zipctyA.zip
+  inflating: zipcty2                 
+
+
+
+
+
+
+
+
+dictionary using zipcty2.raw {     
+  _column(1)   float  zipcode    %5f 
+  _column(24)  str2   stabbr     %2s 
+  _column(26)  int    fips3      %3f 
+  _column(29)  str25  countyname %25s
+}                                    
+
+(2,310,001 observations read)
+(1 observation deleted)
+(note: file /tmp/St05929.000002 not found)
+file /tmp/St05929.000002 saved
+
+
+
+Archive:  zipctyA.zip
+  inflating: zipcty3                 
+
+
+
+
+
+
+
+
+dictionary using zipcty3.raw {     
+  _column(1)   float  zipcode    %5f 
+  _column(24)  str2   stabbr     %2s 
+  _column(26)  int    fips3      %3f 
+  _column(29)  str25  countyname %25s
+}                                    
+
+(2,310,001 observations read)
+(1 observation deleted)
+(note: file /tmp/St05929.000003 not found)
+file /tmp/St05929.000003 saved
+
+
+
+Archive:  zipctyA.zip
+  inflating: zipcty4                 
+
+
+
+
+
+
+
+
+dictionary using zipcty4.raw {     
+  _column(1)   float  zipcode    %5f 
+  _column(24)  str2   stabbr     %2s 
+  _column(26)  int    fips3      %3f 
+  _column(29)  str25  countyname %25s
+}                                    
+
+(2,310,001 observations read)
+(1 observation deleted)
+(note: file /tmp/St05929.000004 not found)
+file /tmp/St05929.000004 saved
+
+
+
+Archive:  zipctyA.zip
+  inflating: zipcty5                 
+
+
+
+
+
+
+
+
+dictionary using zipcty5.raw {     
+  _column(1)   float  zipcode    %5f 
+  _column(24)  str2   stabbr     %2s 
+  _column(26)  int    fips3      %3f 
+  _column(29)  str25  countyname %25s
+}                                    
+
+(2,310,001 observations read)
+(1 observation deleted)
+(note: file /tmp/St05929.000005 not found)
+file /tmp/St05929.000005 saved
+
+
+
+Archive:  zipctyB.zip
+  inflating: zipcty6                 
+
+
+
+
+
+
+
+
+dictionary using zipcty6.raw {     
+  _column(1)   float  zipcode    %5f 
+  _column(24)  str2   stabbr     %2s 
+  _column(26)  int    fips3      %3f 
+  _column(29)  str25  countyname %25s
+}                                    
+
+(2,310,001 observations read)
+(1 observation deleted)
+(note: file /tmp/St05929.000006 not found)
+file /tmp/St05929.000006 saved
+
+
+
+Archive:  zipctyB.zip
+  inflating: zipcty7                 
+
+
+
+
+
+
+
+
+dictionary using zipcty7.raw {     
+  _column(1)   float  zipcode    %5f 
+  _column(24)  str2   stabbr     %2s 
+  _column(26)  int    fips3      %3f 
+  _column(29)  str25  countyname %25s
+}                                    
+
+(2,310,001 observations read)
+(1 observation deleted)
+(note: file /tmp/St05929.000007 not found)
+file /tmp/St05929.000007 saved
+
+
+
+Archive:  zipctyB.zip
+  inflating: zipcty8                 
+
+
+
+
+
+
+
+
+dictionary using zipcty8.raw {     
+  _column(1)   float  zipcode    %5f 
+  _column(24)  str2   stabbr     %2s 
+  _column(26)  int    fips3      %3f 
+  _column(29)  str25  countyname %25s
+}                                    
+
+(2,310,001 observations read)
+(1 observation deleted)
+(note: file /tmp/St05929.000008 not found)
+file /tmp/St05929.000008 saved
+
+
+
+Archive:  zipctyB.zip
+  inflating: zipcty9                 
+
+
+
+
+
+
+
+
+dictionary using zipcty9.raw {     
+  _column(1)   float  zipcode    %5f 
+  _column(24)  str2   stabbr     %2s 
+  _column(26)  int    fips3      %3f 
+  _column(29)  str25  countyname %25s
+}                                    
+
+(2,310,001 observations read)
+(1 observation deleted)
+(note: file /tmp/St05929.000009 not found)
+file /tmp/St05929.000009 saved
+
+
+
+Archive:  zipctyB.zip
+  inflating: zipcty10                
+
+
+
+
+
+
+
+
+dictionary using zipcty10.raw {     
+  _column(1)   float  zipcode    %5f 
+  _column(24)  str2   stabbr     %2s 
+  _column(26)  int    fips3      %3f 
+  _column(29)  str25  countyname %25s
+}                                    
+
+(2,037,945 observations read)
+(1 observation deleted)
+(note: file /tmp/St05929.00000a not found)
+file /tmp/St05929.00000a saved
+
+
+
+. 
+. * Combine, fix errors and save
+. clear all
+
+. forvalues X=1/10 {
+  2.         append using `holder`X''
+  3. }
+
+. * No state info for 39901, but yes fips
+. replace stabbr="GA" if zipcode==39901
+(1 real change made)
+
+. 
+. * For some zipcodes, some of the matched 3-digit fips code
+. *  don't have a corresponding countyname. If so, and if there is at
+. *  least one fips3 that DOES have a countyname, drop the one without
+. bys zipcode: egen namers = total(~mi(countyname))
+
+. drop if mi(countyname) & namers>1
+(127 observations deleted)
+
+. drop namers
+
+. 
+. contract _all
+
+. drop _freq
+
+. 
+. compress
+  (0 bytes saved)
+
+. save zipctyAB.dta, replace
+(note: file zipctyAB.dta not found)
+file zipctyAB.dta saved
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/jared/WageReturnsRepo/Data/IPEDS/importZipctyAB.log
+  log type:  text
+ closed on:  21 Dec 2018, 11:13:14
+-------------------------------------------------------------------------------

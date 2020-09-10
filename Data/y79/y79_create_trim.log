@@ -1,0 +1,1340 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/jared/WageReturnsRepo/Data/y79/y79_create_trim.log
+  log type:  text
+ opened on:  29 Jan 2019, 09:10:50
+
+. 
+. **************************************************
+. * Keep and rename vars and obs
+. **************************************************
+. !unzip -u y79_master.dta.zip
+
+Archive:  y79_master.dta.zip
+  inflating: y79_master.dta          
+
+. use y79_master.dta, clear
+
+. !rm y79_master.dta
+
+
+. 
+. * Rename certain variables
+. rename dob_yr          birthYear
+
+. rename dob_mo          birthMonth
+
+. rename family_size1979 HHsize1979
+
+. rename grade_current   gradeCurrent
+
+. 
+. * Keep relevant variables and observations
+. * local keep_demo    id year age birthMonth birthYear female white black hisp
+> anic race region weight oversampleRace annualHrsWrk missInt afqt m_afqt hgcMo
+> th m_hgcMoth hgcFath m_hgcFath foreignBorn famInc1978 m_famInc1978 liveWithMo
+> m14 femaleHeadHH14 HHsize1979 born1961 born1962 born1963 born1964 ageAtMissIn
+> t yearMissInt everMissInt missIntCum missIntLength everMiss3plusInt missIntLa
+> stSpell everReturnAfter3plusMissInt fedMinWage cpi
+. * local keep_school  hgc gradeCurrent enrSchool monthsSchool enrK12 monthsK12
+>  enrCollege monthsCollege gradDiploma gradHS grad2yr grad4yr gradGraduate enr
+> K12Jan-enrK12Dec enrCollegeJan-enrCollegeDec
+. * local keep_work    annualWeeksWorked weeksWorked??? hoursWorked??? avgHrs??
+> ? weeksMilitary??? workFT??? workPT??? work??? workSch??? workK12??? workColl
+> ege??? military??? other??? activity??? weeksLabForce weeksMilitary wageMean?
+> ?? wageMedian??? annualWageMean annualWageMed annualWageMin annualWageMax ann
+> ualWageMain annualOccMin annualOccMax annualOccMain annualIndMin annualIndMax
+>  annualIndMain 
+. * keep `keep_demo' `keep_school' `keep_work'
+. 
+. sort id year
+
+. 
+. label var id               "Person ID"
+
+. label var year             "Year of Survey"
+
+. label var age              "Age as of Jan 1 of current year"
+
+. label var birthMonth       "Birth month"
+
+. label var birthYear        "Birth year"
+
+. label var female           "Female"
+
+. label var white            "White indicator"
+
+. label var black            "Black indicator"
+
+. label var hispanic         "Hispanic indicator"
+
+. label var race             "Race from Screener (Mixed dropped in 97)"
+
+. label var region           "Census Region at Interview Date"
+
+. label var weight           "Weight - Cross-Sectional weight from first year o
+> f Survey"
+
+. label var oversampleRace   "Dummy: 1=oversample; 0=cross-sectional"
+
+. label var annualHrsWrk     "Hours worked in calendar year t across all jobs"
+
+. label var missInt          "Missed Interview In Current Year"
+
+. label var afqt               "Standardized AFQT (Altonji et al.)"
+
+. label var asvabAR            "Standardized ASVAB Arithmetic Reasoning    (AR)
+>  Subtest (Altonji et al.)"
+
+. label var asvabCS            "Standardized ASVAB Coding Speed            (CS)
+>  Subtest (Altonji et al.)"
+
+. label var asvabMK            "Standardized ASVAB Mathematics Knowledge   (MK)
+>  Subtest (Altonji et al.)"
+
+. label var asvabNO            "Standardized ASVAB Numerical Operations    (NO)
+>  Subtest (Altonji et al.)"
+
+. label var asvabPC            "Standardized ASVAB Paragraph Comprehension (PC)
+>  Subtest (Altonji et al.)"
+
+. label var asvabWK            "Standardized ASVAB Word Knowledge          (WK)
+>  Subtest (Altonji et al.)"
+
+. label var m_afqt                   "Missing AFQT"                            
+>   
+
+. label var m_asvabAR          "Missing ASVAB Arithmetic Reasoning    (AR)"
+
+. label var m_asvabCS          "Missing ASVAB Coding Speed            (CS)"
+
+. label var m_asvabMK          "Missing ASVAB Mathematics Knowledge   (MK)"
+
+. label var m_asvabNO          "Missing ASVAB Numerical Operations    (NO)"
+
+. label var m_asvabPC          "Missing ASVAB Paragraph Comprehension (PC)"
+
+. label var m_asvabWK          "Missing ASVAB Word Knowledge          (WK)"
+
+. label var hgcMoth          "Mother's HGC"
+
+. label var m_hgcMoth        "Missing Mother's HGC"
+
+. label var hgcFath          "Father's HGC"
+
+. label var m_hgcFath        "Missing Father's HGC"
+
+. label var foreignBorn      "Born outside of the US"
+
+. label var famInc1978       "(Real) Family Income in 1978"
+
+. label var m_famInc1978     "Missing Family Income in 1978"
+
+. label var liveWithMom14    "Live with mother at age 14"
+
+. label var femaleHeadHH14   "Female headed household at age 14"
+
+. label var HHsize1979       "Household Size in 1979"
+
+. label var born1957         "Born in year 1957 dummy"
+
+. label var born1958         "Born in year 1958 dummy"
+
+. label var born1959         "Born in year 1959 dummy"
+
+. label var born1960         "Born in year 1960 dummy"
+
+. label var born1961         "Born in year 1961 dummy"
+
+. label var born1962         "Born in year 1962 dummy"
+
+. label var born1963         "Born in year 1963 dummy"
+
+. label var born1964         "Born in year 1964 dummy"
+
+. label var ageAtMissInt     "Age * Miss Int dummy"
+
+. label var yearMissInt      "Year * Miss Int dummy"
+
+. label var everMissInt      "Ever miss an interview"
+
+. label var missIntCum       "Running Tally Of Current Missed Interview Spell"
+
+. label var missIntLength    "Length Of Current Missed Interview Spell"
+
+. label var everMiss3plusInt "Ever miss 3+ consecutive interviews"
+
+. label var everReturnAfter3plusMissInt "Ever return after missing 3+ consecuti
+> ve interviews"
+
+. label var fedMinWage       "Federal Minimum Wage, $1982-84"
+
+. label var cpi              "Consumer Price Index (CPI) $1982-84"
+
+. 
+. label var hgc              "HGC as of survey date"
+
+. label var gradeCurrent     "Current Grade Attending"
+
+. label var enrSchool        "Ever enrolled in any school in calendar year t"
+
+. label var monthsSchool     "Months enrolled in any school in calendar year t"
+
+. label var enrK12           "Ever enrolled in K12 in calendar year t"
+
+. label var monthsK12        "Months enrolled in K12 in calendar year t"
+
+. label var enrCollege       "Ever enrolled in College in calendar year t"
+
+. label var monthsCollege    "Months enrolled in College in calendar year t"
+
+. label var gradHS           "Absorbing dummy for having graduated HS by year t
+> "
+
+. label var grad2yr          "Absorbing dummy for having competed 2 yr degree b
+> y year t"
+
+. label var grad4yr          "Absorbing dummy for having competed 4 yr degree b
+> y year t"
+
+. label var gradGraduate     "Absorbing dummy for having competed graduate degr
+> ee by year t"
+
+. label var enrK12Jan        "Enrolled in K12 in Jan of Survey Year"
+
+. label var enrK12Feb        "Enrolled in K12 in Feb of Survey Year"
+
+. label var enrK12Mar        "Enrolled in K12 in Mar of Survey Year"
+
+. label var enrK12Apr        "Enrolled in K12 in Apr of Survey Year"
+
+. label var enrK12May        "Enrolled in K12 in May of Survey Year"
+
+. label var enrK12Jun        "Enrolled in K12 in Jun of Survey Year"
+
+. label var enrK12Jul        "Enrolled in K12 in Jul of Survey Year"
+
+. label var enrK12Aug        "Enrolled in K12 in Aug of Survey Year"
+
+. label var enrK12Sep        "Enrolled in K12 in Sep of Survey Year"
+
+. label var enrK12Oct        "Enrolled in K12 in Oct of Survey Year"
+
+. label var enrK12Nov        "Enrolled in K12 in Nov of Survey Year"
+
+. label var enrK12Dec        "Enrolled in K12 in Dec of Survey Year"
+
+. label var enrCollegeJan    "Enrolled in College in Jan of Survey Year"
+
+. label var enrCollegeFeb    "Enrolled in College in Feb of Survey Year"
+
+. label var enrCollegeMar    "Enrolled in College in Mar of Survey Year"
+
+. label var enrCollegeApr    "Enrolled in College in Apr of Survey Year"
+
+. label var enrCollegeMay    "Enrolled in College in May of Survey Year"
+
+. label var enrCollegeJun    "Enrolled in College in Jun of Survey Year"
+
+. label var enrCollegeJul    "Enrolled in College in Jul of Survey Year"
+
+. label var enrCollegeAug    "Enrolled in College in Aug of Survey Year"
+
+. label var enrCollegeSep    "Enrolled in College in Sep of Survey Year"
+
+. label var enrCollegeOct    "Enrolled in College in Oct of Survey Year"
+
+. label var enrCollegeNov    "Enrolled in College in Nov of Survey Year"
+
+. label var enrCollegeDec    "Enrolled in College in Dec of Survey Year"
+
+. label var enrGradSchJan    "Enrolled in GradSch in Jan of Survey Year"
+
+. label var enrGradSchFeb    "Enrolled in GradSch in Feb of Survey Year"
+
+. label var enrGradSchMar    "Enrolled in GradSch in Mar of Survey Year"
+
+. label var enrGradSchApr    "Enrolled in GradSch in Apr of Survey Year"
+
+. label var enrGradSchMay    "Enrolled in GradSch in May of Survey Year"
+
+. label var enrGradSchJun    "Enrolled in GradSch in Jun of Survey Year"
+
+. label var enrGradSchJul    "Enrolled in GradSch in Jul of Survey Year"
+
+. label var enrGradSchAug    "Enrolled in GradSch in Aug of Survey Year"
+
+. label var enrGradSchSep    "Enrolled in GradSch in Sep of Survey Year"
+
+. label var enrGradSchOct    "Enrolled in GradSch in Oct of Survey Year"
+
+. label var enrGradSchNov    "Enrolled in GradSch in Nov of Survey Year"
+
+. label var enrGradSchDec    "Enrolled in GradSch in Dec of Survey Year"
+
+. 
+. label var annualWeeksWorked "Number of weeks of calendar year t spent working
+>  for an employer"
+
+. label var weeksLabForce    "Number of weeks of calendar year t spent in the l
+> abor force"
+
+. label var annualWageMean   "Average wage (either pay or compensation) weighte
+> d by weeks worked in calendar year"
+note: label truncated to 80 characters
+
+. label var annualWageMed    "Median wage (either pay or compensation) across a
+> ll jobs in calendar year t"
+
+. label var annualWageMin    "Lowest wage (either pay or compensation) across a
+> ll jobs in calendar year t"
+
+. label var annualWageMax    "Highest wage (either pay or compensation) across 
+> all jobs in calendar year t"
+
+. label var annualWageMain   "Wage at main job in calendar year t"
+
+. label var annualOccMin     "Occupation of the lowest-wage job in calendar yea
+> r t"
+
+. label var annualOccMax     "Occupation of the highest-wage job in calendar ye
+> ar t"
+
+. label var annualOccMain    "Occupation of the main job in calendar year t"
+
+. label var annualIndMin     "Industry of the lowest-wage job in calendar year 
+> t"
+
+. label var annualIndMax     "Industry of the highest-wage job in calendar year
+>  t"
+
+. label var annualIndMain    "Industry of the main job in calendar year t"
+
+. label var weeksWorkedJan   "Weeks Worked in Jan of calendar year t"
+
+. label var weeksWorkedFeb   "Weeks Worked in Feb of calendar year t"
+
+. label var weeksWorkedMar   "Weeks Worked in Mar of calendar year t"
+
+. label var weeksWorkedApr   "Weeks Worked in Apr of calendar year t"
+
+. label var weeksWorkedMay   "Weeks Worked in May of calendar year t"
+
+. label var weeksWorkedJun   "Weeks Worked in Jun of calendar year t"
+
+. label var weeksWorkedJul   "Weeks Worked in Jul of calendar year t"
+
+. label var weeksWorkedAug   "Weeks Worked in Aug of calendar year t"
+
+. label var weeksWorkedSep   "Weeks Worked in Sep of calendar year t"
+
+. label var weeksWorkedOct   "Weeks Worked in Oct of calendar year t"
+
+. label var weeksWorkedNov   "Weeks Worked in Nov of calendar year t"
+
+. label var weeksWorkedDec   "Weeks Worked in Dec of calendar year t"
+
+. label var weeksSelfEmployedJan   "Weeks Self-Employed in Jan of calendar year
+>  t"
+
+. label var weeksSelfEmployedFeb   "Weeks Self-Employed in Feb of calendar year
+>  t"
+
+. label var weeksSelfEmployedMar   "Weeks Self-Employed in Mar of calendar year
+>  t"
+
+. label var weeksSelfEmployedApr   "Weeks Self-Employed in Apr of calendar year
+>  t"
+
+. label var weeksSelfEmployedMay   "Weeks Self-Employed in May of calendar year
+>  t"
+
+. label var weeksSelfEmployedJun   "Weeks Self-Employed in Jun of calendar year
+>  t"
+
+. label var weeksSelfEmployedJul   "Weeks Self-Employed in Jul of calendar year
+>  t"
+
+. label var weeksSelfEmployedAug   "Weeks Self-Employed in Aug of calendar year
+>  t"
+
+. label var weeksSelfEmployedSep   "Weeks Self-Employed in Sep of calendar year
+>  t"
+
+. label var weeksSelfEmployedOct   "Weeks Self-Employed in Oct of calendar year
+>  t"
+
+. label var weeksSelfEmployedNov   "Weeks Self-Employed in Nov of calendar year
+>  t"
+
+. label var weeksSelfEmployedDec   "Weeks Self-Employed in Dec of calendar year
+>  t"
+
+. * label var avgHrsWrk        "Annual Hours Worked / Weeks Employed, where N/0
+>  = 0"
+. label var weeksMilitary    "Number of weeks of calendar year t spent in the m
+> ilitary"
+
+. 
+. label var wageJobCPS          "Wage of CPS job (job_current) in calendar year
+>  t"
+
+. label var wageJobMain         "Wage of 'Main' job (Boehm) in calendar year t"
+
+. label var occJobCPS           "Occupation of CPS job (job_current) in calenda
+> r year t"
+
+. label var occJobMain          "Occupation of 'Main' job (Boehm) in calendar y
+> ear t"
+
+. label var indJobCPS           "Industry of CPS job (job_current) in calendar 
+> year t"
+
+. label var indJobMain          "Industry of 'Main' job (Boehm) in calendar yea
+> r t"
+
+. label var hoursJobCPS         "Weekly hours of CPS job (job_current) in calen
+> dar year t"
+
+. label var hoursJobMain        "Weekly hours of 'Main' job (Boehm) in calendar
+>  year t"
+
+. label var selfEmployedJobCPS  "Self-employed status of CPS job (job_current) 
+> in calendar year t"
+
+. label var selfEmployedJobMain "Self-employed status of 'Main' job (Boehm) in 
+> calendar year t"
+
+. 
+. local months "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"
+
+. foreach month in `months' {
+  2.         ren work`month'       atWork`month'
+  3.         
+.         ren workFTRecall`month'      RECALLworkFTRecall`month'      
+  4.         ren workPTRecall`month'      RECALLworkPTRecall`month'      
+  5.         ren militaryRecall`month'    RECALLmilitaryRecall`month'    
+  6.         ren workRecall`month'        RECALLworkRecall`month'        
+  7.         ren workSchRecall`month'     RECALLworkSchRecall`month'     
+  8.         ren workK12Recall`month'     RECALLworkK12Recall`month'     
+  9.         ren workCollegeRecall`month' RECALLworkCollegeRecall`month' 
+ 10.         ren otherRecall`month'       RECALLotherRecall`month'       
+ 11.         ren activityRecall`month'    RECALLactivityRecall`month'    
+ 12.         ren workGradSchRecall`month' RECALLworkGradSchRecall`month'
+ 13. }
+
+. 
+. keep  id year age birthMonth birthYear white black hispanic liveWithMom14 rac
+> e HHsize1979 region weight oversamplePoor oversampleMilitary oversampleRace a
+> nnualHrsWrk gradeCurrent missInt afqt asvabAR asvabCS asvabMK asvabNO asvabPC
+>  asvabWK m_afqt m_asvabAR m_asvabCS m_asvabMK m_asvabNO m_asvabPC m_asvabWK f
+> emale hgc hgcMoth m_hgcMoth hgcFath m_hgcFath foreignBorn famInc1978 m_famInc
+> 1978 femaleHeadHH14 born1957 born1958 born1959 born1960 born1961 born1962 bor
+> n1963 born1964 ageAtMissInt yearMissInt everMissInt missIntCum missIntLength 
+> everMiss3plusInt everReturnAfter3plusMissInt missIntLastSpell fedMinWage cpi 
+> enrK12Jan enrK12Feb enrK12Mar enrK12Apr enrK12May enrK12Jun enrK12Jul enrK12A
+> ug enrK12Sep enrK12Oct enrK12Nov enrK12Dec enrCollegeJan enrCollegeFeb enrCol
+> legeMar enrCollegeApr enrCollegeMay enrCollegeJun enrCollegeJul enrCollegeAug
+>  enrCollegeSep enrCollegeOct enrCollegeNov enrCollegeDec enrGradSchJan enrGra
+> dSchFeb enrGradSchMar enrGradSchApr enrGradSchMay enrGradSchJun enrGradSchJul
+>  enrGradSchAug enrGradSchSep enrGradSchOct enrGradSchNov enrGradSchDec months
+> GradSch monthsCollege monthsK12 annualWeeksWorked weeksLabForce annualWageMea
+> n annualWageMed annualWageMin annualWageMax annualWageMain wageMeanJan wageMe
+> anFeb wageMeanMar wageMeanApr wageMeanMay wageMeanJun wageMeanJul wageMeanAug
+>  wageMeanSep wageMeanOct wageMeanNov wageMeanDec wageAltMeanJan wageAltMeanFe
+> b wageAltMeanMar wageAltMeanApr wageAltMeanMay wageAltMeanJun wageAltMeanJul 
+> wageAltMeanAug wageAltMeanSep wageAltMeanOct wageAltMeanNov wageAltMeanDec wa
+> geMedianJan wageMedianFeb wageMedianMar wageMedianApr wageMedianMay wageMedia
+> nJun wageMedianJul wageMedianAug wageMedianSep wageMedianOct wageMedianNov wa
+> geMedianDec wageAltMedianJan wageAltMedianFeb wageAltMedianMar wageAltMedianA
+> pr wageAltMedianMay wageAltMedianJun wageAltMedianJul wageAltMedianAug wageAl
+> tMedianSep wageAltMedianOct wageAltMedianNov wageAltMedianDec annualOccMin an
+> nualOccMax annualOccMain annualIndMin annualIndMax annualIndMain weeksWorkedJ
+> an weeksWorkedFeb weeksWorkedMar weeksWorkedApr weeksWorkedMay weeksWorkedJun
+>  weeksWorkedJul weeksWorkedAug weeksWorkedSep weeksWorkedOct weeksWorkedNov w
+> eeksWorkedDec weeksSelfEmployedJan weeksSelfEmployedFeb weeksSelfEmployedMar 
+> weeksSelfEmployedApr weeksSelfEmployedMay weeksSelfEmployedJun weeksSelfEmplo
+> yedJul weeksSelfEmployedAug weeksSelfEmployedSep weeksSelfEmployedOct weeksSe
+> lfEmployedNov weeksSelfEmployedDec avgHrsJan avgHrsFeb avgHrsMar avgHrsApr av
+> gHrsMay avgHrsJun avgHrsJul avgHrsAug avgHrsSep avgHrsOct avgHrsNov avgHrsDec
+>  hoursWorkedJan hoursWorkedFeb hoursWorkedMar hoursWorkedApr hoursWorkedMay h
+> oursWorkedJun hoursWorkedJul hoursWorkedAug hoursWorkedSep hoursWorkedOct hou
+> rsWorkedNov hoursWorkedDec weeksMilitaryJan weeksMilitaryFeb weeksMilitaryMar
+>  weeksMilitaryApr weeksMilitaryMay weeksMilitaryJun weeksMilitaryJul weeksMil
+> itaryAug weeksMilitarySep weeksMilitaryOct weeksMilitaryNov weeksMilitaryDec 
+> workFTJan workFTFeb workFTMar workFTApr workFTMay workFTJun workFTJul workFTA
+> ug workFTSep workFTOct workFTNov workFTDec workPTJan workPTFeb workPTMar work
+> PTApr workPTMay workPTJun workPTJul workPTAug workPTSep workPTOct workPTNov w
+> orkPTDec militaryJan militaryFeb militaryMar militaryApr militaryMay military
+> Jun militaryJul militaryAug militarySep militaryOct militaryNov militaryDec a
+> tWorkJan atWorkFeb atWorkMar atWorkApr atWorkMay atWorkJun atWorkJul atWorkAu
+> g atWorkSep atWorkOct atWorkNov atWorkDec workSchJan workSchFeb workSchMar wo
+> rkSchApr workSchMay workSchJun workSchJul workSchAug workSchSep workSchOct wo
+> rkSchNov workSchDec workK12Jan workK12Feb workK12Mar workK12Apr workK12May wo
+> rkK12Jun workK12Jul workK12Aug workK12Sep workK12Oct workK12Nov workK12Dec wo
+> rkCollegeJan workCollegeFeb workCollegeMar workCollegeApr workCollegeMay work
+> CollegeJun workCollegeJul workCollegeAug workCollegeSep workCollegeOct workCo
+> llegeNov workCollegeDec workGradSchJan workGradSchFeb workGradSchMar workGrad
+> SchApr workGradSchMay workGradSchJun workGradSchJul workGradSchAug workGradSc
+> hSep workGradSchOct workGradSchNov workGradSchDec otherJan otherFeb otherMar 
+> otherApr otherMay otherJun otherJul otherAug otherSep otherOct otherNov other
+> Dec activityJan activityFeb activityMar activityApr activityMay activityJun a
+> ctivityJul activityAug activitySep activityOct activityNov activityDec RECALL
+> workFTRecallJan RECALLworkFTRecallFeb RECALLworkFTRecallMar RECALLworkFTRecal
+> lApr RECALLworkFTRecallMay RECALLworkFTRecallJun RECALLworkFTRecallJul RECALL
+> workFTRecallAug RECALLworkFTRecallSep RECALLworkFTRecallOct RECALLworkFTRecal
+> lNov RECALLworkFTRecallDec RECALLworkPTRecallJan RECALLworkPTRecallFeb RECALL
+> workPTRecallMar RECALLworkPTRecallApr RECALLworkPTRecallMay RECALLworkPTRecal
+> lJun RECALLworkPTRecallJul RECALLworkPTRecallAug RECALLworkPTRecallSep RECALL
+> workPTRecallOct RECALLworkPTRecallNov RECALLworkPTRecallDec RECALLmilitaryRec
+> allJan RECALLmilitaryRecallFeb RECALLmilitaryRecallMar RECALLmilitaryRecallAp
+> r RECALLmilitaryRecallMay RECALLmilitaryRecallJun RECALLmilitaryRecallJul REC
+> ALLmilitaryRecallAug RECALLmilitaryRecallSep RECALLmilitaryRecallOct RECALLmi
+> litaryRecallNov RECALLmilitaryRecallDec RECALLworkRecallJan RECALLworkRecallF
+> eb RECALLworkRecallMar RECALLworkRecallApr RECALLworkRecallMay RECALLworkReca
+> llJun RECALLworkRecallJul RECALLworkRecallAug RECALLworkRecallSep RECALLworkR
+> ecallOct RECALLworkRecallNov RECALLworkRecallDec RECALLworkSchRecallJan RECAL
+> LworkSchRecallFeb RECALLworkSchRecallMar RECALLworkSchRecallApr RECALLworkSch
+> RecallMay RECALLworkSchRecallJun RECALLworkSchRecallJul RECALLworkSchRecallAu
+> g RECALLworkSchRecallSep RECALLworkSchRecallOct RECALLworkSchRecallNov RECALL
+> workSchRecallDec RECALLworkK12RecallJan RECALLworkK12RecallFeb RECALLworkK12R
+> ecallMar RECALLworkK12RecallApr RECALLworkK12RecallMay RECALLworkK12RecallJun
+>  RECALLworkK12RecallJul RECALLworkK12RecallAug RECALLworkK12RecallSep RECALLw
+> orkK12RecallOct RECALLworkK12RecallNov RECALLworkK12RecallDec RECALLworkColle
+> geRecallJan RECALLworkCollegeRecallFeb RECALLworkCollegeRecallMar RECALLworkC
+> ollegeRecallApr RECALLworkCollegeRecallMay RECALLworkCollegeRecallJun RECALLw
+> orkCollegeRecallJul RECALLworkCollegeRecallAug RECALLworkCollegeRecallSep REC
+> ALLworkCollegeRecallOct RECALLworkCollegeRecallNov RECALLworkCollegeRecallDec
+>  RECALLworkGradSchRecallJan RECALLworkGradSchRecallFeb RECALLworkGradSchRecal
+> lMar RECALLworkGradSchRecallApr RECALLworkGradSchRecallMay RECALLworkGradSchR
+> ecallJun RECALLworkGradSchRecallJul RECALLworkGradSchRecallAug RECALLworkGrad
+> SchRecallSep RECALLworkGradSchRecallOct RECALLworkGradSchRecallNov RECALLwork
+> GradSchRecallDec RECALLotherRecallJan RECALLotherRecallFeb RECALLotherRecallM
+> ar RECALLotherRecallApr RECALLotherRecallMay RECALLotherRecallJun RECALLother
+> RecallJul RECALLotherRecallAug RECALLotherRecallSep RECALLotherRecallOct RECA
+> LLotherRecallNov RECALLotherRecallDec RECALLactivityRecallJan RECALLactivityR
+> ecallFeb RECALLactivityRecallMar RECALLactivityRecallApr RECALLactivityRecall
+> May RECALLactivityRecallJun RECALLactivityRecallJul RECALLactivityRecallAug R
+> ECALLactivityRecallSep RECALLactivityRecallOct RECALLactivityRecallNov RECALL
+> activityRecallDec gradGraduate yrGradGraduate grad4yr yrGrad4yr grad2yr yrGra
+> d2yr gradHS yrGradHS gradDiploma yrGradDiploma gradGED yrGradGED annualHrsWrk
+> Calc Grad_month BA_month AA_month Diploma_month GED_month HS_month Grad_year 
+> BA_year AA_year Diploma_year GED_year HS_year interview_date lastValidIntDate
+>  lastValidSchoolDate R*interviewDate wageJobCPS wageJobMain occJobCPS occJobM
+> ain indJobCPS indJobMain hoursJobCPS hoursJobMain selfEmployedJobCPS selfEmpl
+> oyedJobMain high_grade_comp_May yearEnteredUS
+
+. order id year age birthMonth birthYear white black hispanic liveWithMom14 rac
+> e HHsize1979 region weight oversamplePoor oversampleMilitary oversampleRace a
+> nnualHrsWrk gradeCurrent missInt afqt asvabAR asvabCS asvabMK asvabNO asvabPC
+>  asvabWK m_afqt m_asvabAR m_asvabCS m_asvabMK m_asvabNO m_asvabPC m_asvabWK f
+> emale hgc hgcMoth m_hgcMoth hgcFath m_hgcFath foreignBorn famInc1978 m_famInc
+> 1978 femaleHeadHH14 born1957 born1958 born1959 born1960 born1961 born1962 bor
+> n1963 born1964 ageAtMissInt yearMissInt everMissInt missIntCum missIntLength 
+> everMiss3plusInt everReturnAfter3plusMissInt missIntLastSpell fedMinWage cpi 
+> enrK12Jan enrK12Feb enrK12Mar enrK12Apr enrK12May enrK12Jun enrK12Jul enrK12A
+> ug enrK12Sep enrK12Oct enrK12Nov enrK12Dec enrCollegeJan enrCollegeFeb enrCol
+> legeMar enrCollegeApr enrCollegeMay enrCollegeJun enrCollegeJul enrCollegeAug
+>  enrCollegeSep enrCollegeOct enrCollegeNov enrCollegeDec enrGradSchJan enrGra
+> dSchFeb enrGradSchMar enrGradSchApr enrGradSchMay enrGradSchJun enrGradSchJul
+>  enrGradSchAug enrGradSchSep enrGradSchOct enrGradSchNov enrGradSchDec months
+> GradSch monthsCollege monthsK12 annualWeeksWorked weeksLabForce annualWageMea
+> n annualWageMed annualWageMin annualWageMax annualWageMain wageMeanJan wageMe
+> anFeb wageMeanMar wageMeanApr wageMeanMay wageMeanJun wageMeanJul wageMeanAug
+>  wageMeanSep wageMeanOct wageMeanNov wageMeanDec wageAltMeanJan wageAltMeanFe
+> b wageAltMeanMar wageAltMeanApr wageAltMeanMay wageAltMeanJun wageAltMeanJul 
+> wageAltMeanAug wageAltMeanSep wageAltMeanOct wageAltMeanNov wageAltMeanDec wa
+> geMedianJan wageMedianFeb wageMedianMar wageMedianApr wageMedianMay wageMedia
+> nJun wageMedianJul wageMedianAug wageMedianSep wageMedianOct wageMedianNov wa
+> geMedianDec wageAltMedianJan wageAltMedianFeb wageAltMedianMar wageAltMedianA
+> pr wageAltMedianMay wageAltMedianJun wageAltMedianJul wageAltMedianAug wageAl
+> tMedianSep wageAltMedianOct wageAltMedianNov wageAltMedianDec annualOccMin an
+> nualOccMax annualOccMain annualIndMin annualIndMax annualIndMain weeksWorkedJ
+> an weeksWorkedFeb weeksWorkedMar weeksWorkedApr weeksWorkedMay weeksWorkedJun
+>  weeksWorkedJul weeksWorkedAug weeksWorkedSep weeksWorkedOct weeksWorkedNov w
+> eeksWorkedDec weeksSelfEmployedJan weeksSelfEmployedFeb weeksSelfEmployedMar 
+> weeksSelfEmployedApr weeksSelfEmployedMay weeksSelfEmployedJun weeksSelfEmplo
+> yedJul weeksSelfEmployedAug weeksSelfEmployedSep weeksSelfEmployedOct weeksSe
+> lfEmployedNov weeksSelfEmployedDec avgHrsJan avgHrsFeb avgHrsMar avgHrsApr av
+> gHrsMay avgHrsJun avgHrsJul avgHrsAug avgHrsSep avgHrsOct avgHrsNov avgHrsDec
+>  hoursWorkedJan hoursWorkedFeb hoursWorkedMar hoursWorkedApr hoursWorkedMay h
+> oursWorkedJun hoursWorkedJul hoursWorkedAug hoursWorkedSep hoursWorkedOct hou
+> rsWorkedNov hoursWorkedDec weeksMilitaryJan weeksMilitaryFeb weeksMilitaryMar
+>  weeksMilitaryApr weeksMilitaryMay weeksMilitaryJun weeksMilitaryJul weeksMil
+> itaryAug weeksMilitarySep weeksMilitaryOct weeksMilitaryNov weeksMilitaryDec 
+> workFTJan workFTFeb workFTMar workFTApr workFTMay workFTJun workFTJul workFTA
+> ug workFTSep workFTOct workFTNov workFTDec workPTJan workPTFeb workPTMar work
+> PTApr workPTMay workPTJun workPTJul workPTAug workPTSep workPTOct workPTNov w
+> orkPTDec militaryJan militaryFeb militaryMar militaryApr militaryMay military
+> Jun militaryJul militaryAug militarySep militaryOct militaryNov militaryDec a
+> tWorkJan atWorkFeb atWorkMar atWorkApr atWorkMay atWorkJun atWorkJul atWorkAu
+> g atWorkSep atWorkOct atWorkNov atWorkDec workSchJan workSchFeb workSchMar wo
+> rkSchApr workSchMay workSchJun workSchJul workSchAug workSchSep workSchOct wo
+> rkSchNov workSchDec workK12Jan workK12Feb workK12Mar workK12Apr workK12May wo
+> rkK12Jun workK12Jul workK12Aug workK12Sep workK12Oct workK12Nov workK12Dec wo
+> rkCollegeJan workCollegeFeb workCollegeMar workCollegeApr workCollegeMay work
+> CollegeJun workCollegeJul workCollegeAug workCollegeSep workCollegeOct workCo
+> llegeNov workCollegeDec workGradSchJan workGradSchFeb workGradSchMar workGrad
+> SchApr workGradSchMay workGradSchJun workGradSchJul workGradSchAug workGradSc
+> hSep workGradSchOct workGradSchNov workGradSchDec otherJan otherFeb otherMar 
+> otherApr otherMay otherJun otherJul otherAug otherSep otherOct otherNov other
+> Dec activityJan activityFeb activityMar activityApr activityMay activityJun a
+> ctivityJul activityAug activitySep activityOct activityNov activityDec RECALL
+> workFTRecallJan RECALLworkFTRecallFeb RECALLworkFTRecallMar RECALLworkFTRecal
+> lApr RECALLworkFTRecallMay RECALLworkFTRecallJun RECALLworkFTRecallJul RECALL
+> workFTRecallAug RECALLworkFTRecallSep RECALLworkFTRecallOct RECALLworkFTRecal
+> lNov RECALLworkFTRecallDec RECALLworkPTRecallJan RECALLworkPTRecallFeb RECALL
+> workPTRecallMar RECALLworkPTRecallApr RECALLworkPTRecallMay RECALLworkPTRecal
+> lJun RECALLworkPTRecallJul RECALLworkPTRecallAug RECALLworkPTRecallSep RECALL
+> workPTRecallOct RECALLworkPTRecallNov RECALLworkPTRecallDec RECALLmilitaryRec
+> allJan RECALLmilitaryRecallFeb RECALLmilitaryRecallMar RECALLmilitaryRecallAp
+> r RECALLmilitaryRecallMay RECALLmilitaryRecallJun RECALLmilitaryRecallJul REC
+> ALLmilitaryRecallAug RECALLmilitaryRecallSep RECALLmilitaryRecallOct RECALLmi
+> litaryRecallNov RECALLmilitaryRecallDec RECALLworkRecallJan RECALLworkRecallF
+> eb RECALLworkRecallMar RECALLworkRecallApr RECALLworkRecallMay RECALLworkReca
+> llJun RECALLworkRecallJul RECALLworkRecallAug RECALLworkRecallSep RECALLworkR
+> ecallOct RECALLworkRecallNov RECALLworkRecallDec RECALLworkSchRecallJan RECAL
+> LworkSchRecallFeb RECALLworkSchRecallMar RECALLworkSchRecallApr RECALLworkSch
+> RecallMay RECALLworkSchRecallJun RECALLworkSchRecallJul RECALLworkSchRecallAu
+> g RECALLworkSchRecallSep RECALLworkSchRecallOct RECALLworkSchRecallNov RECALL
+> workSchRecallDec RECALLworkK12RecallJan RECALLworkK12RecallFeb RECALLworkK12R
+> ecallMar RECALLworkK12RecallApr RECALLworkK12RecallMay RECALLworkK12RecallJun
+>  RECALLworkK12RecallJul RECALLworkK12RecallAug RECALLworkK12RecallSep RECALLw
+> orkK12RecallOct RECALLworkK12RecallNov RECALLworkK12RecallDec RECALLworkColle
+> geRecallJan RECALLworkCollegeRecallFeb RECALLworkCollegeRecallMar RECALLworkC
+> ollegeRecallApr RECALLworkCollegeRecallMay RECALLworkCollegeRecallJun RECALLw
+> orkCollegeRecallJul RECALLworkCollegeRecallAug RECALLworkCollegeRecallSep REC
+> ALLworkCollegeRecallOct RECALLworkCollegeRecallNov RECALLworkCollegeRecallDec
+>  RECALLworkGradSchRecallJan RECALLworkGradSchRecallFeb RECALLworkGradSchRecal
+> lMar RECALLworkGradSchRecallApr RECALLworkGradSchRecallMay RECALLworkGradSchR
+> ecallJun RECALLworkGradSchRecallJul RECALLworkGradSchRecallAug RECALLworkGrad
+> SchRecallSep RECALLworkGradSchRecallOct RECALLworkGradSchRecallNov RECALLwork
+> GradSchRecallDec RECALLotherRecallJan RECALLotherRecallFeb RECALLotherRecallM
+> ar RECALLotherRecallApr RECALLotherRecallMay RECALLotherRecallJun RECALLother
+> RecallJul RECALLotherRecallAug RECALLotherRecallSep RECALLotherRecallOct RECA
+> LLotherRecallNov RECALLotherRecallDec RECALLactivityRecallJan RECALLactivityR
+> ecallFeb RECALLactivityRecallMar RECALLactivityRecallApr RECALLactivityRecall
+> May RECALLactivityRecallJun RECALLactivityRecallJul RECALLactivityRecallAug R
+> ECALLactivityRecallSep RECALLactivityRecallOct RECALLactivityRecallNov RECALL
+> activityRecallDec gradGraduate yrGradGraduate grad4yr yrGrad4yr grad2yr yrGra
+> d2yr gradHS yrGradHS gradDiploma yrGradDiploma gradGED yrGradGED annualHrsWrk
+> Calc Grad_month BA_month AA_month Diploma_month GED_month HS_month Grad_year 
+> BA_year AA_year Diploma_year GED_year HS_year interview_date lastValidIntDate
+>  lastValidSchoolDate R*interviewDate wageJobCPS wageJobMain occJobCPS occJobM
+> ain indJobCPS indJobMain hoursJobCPS hoursJobMain selfEmployedJobCPS selfEmpl
+> oyedJobMain high_grade_comp_May yearEnteredUS
+
+. 
+. label values HHsize1979 .
+
+. 
+. * reshape to monthly data
+. reshape long enrCollege enrK12 weeksWorked weeksSelfEmployed avgHrs hoursWork
+> ed wageMean wageAltMean wageMedian wageAltMedian weeksMilitary workFT workPT 
+> atWork workSch workK12 workCollege workGradSch military other activity RECALL
+> workFTRecall RECALLworkPTRecall RECALLworkRecall RECALLworkSchRecall RECALLwo
+> rkK12Recall RECALLworkCollegeRecall RECALLworkGradSchRecall RECALLmilitaryRec
+> all RECALLotherRecall RECALLactivityRecall , string i(id year) j(month)
+(note: j = Apr Aug Dec Feb Jan Jul Jun Mar May Nov Oct Sep)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                   570870   -> 6.9e+06
+Number of variables                 519   ->     179
+j variable (12 values)                    ->   month
+xij variables:
+enrCollegeApr enrCollegeAug ... enrCollegeSep->enrCollege
+      enrK12Apr enrK12Aug ... enrK12Sep   ->   enrK12
+weeksWorkedApr weeksWorkedAug ... weeksWorkedSep->weeksWorked
+weeksSelfEmployedApr weeksSelfEmployedAug ... weeksSelfEmployedSep->weeksSelfEm
+> ployed
+      avgHrsApr avgHrsAug ... avgHrsSep   ->   avgHrs
+hoursWorkedApr hoursWorkedAug ... hoursWorkedSep->hoursWorked
+wageMeanApr wageMeanAug ... wageMeanSep   ->   wageMean
+wageAltMeanApr wageAltMeanAug ... wageAltMeanSep->wageAltMean
+wageMedianApr wageMedianAug ... wageMedianSep->wageMedian
+wageAltMedianApr wageAltMedianAug ... wageAltMedianSep->wageAltMedian
+weeksMilitaryApr weeksMilitaryAug ... weeksMilitarySep->weeksMilitary
+      workFTApr workFTAug ... workFTSep   ->   workFT
+      workPTApr workPTAug ... workPTSep   ->   workPT
+      atWorkApr atWorkAug ... atWorkSep   ->   atWork
+   workSchApr workSchAug ... workSchSep   ->   workSch
+   workK12Apr workK12Aug ... workK12Sep   ->   workK12
+workCollegeApr workCollegeAug ... workCollegeSep->workCollege
+workGradSchApr workGradSchAug ... workGradSchSep->workGradSch
+militaryApr militaryAug ... militarySep   ->   military
+         otherApr otherAug ... otherSep   ->   other
+activityApr activityAug ... activitySep   ->   activity
+RECALLworkFTRecallApr RECALLworkFTRecallAug ... RECALLworkFTRecallSep->RECALLwo
+> rkFTRecall
+RECALLworkPTRecallApr RECALLworkPTRecallAug ... RECALLworkPTRecallSep->RECALLwo
+> rkPTRecall
+RECALLworkRecallApr RECALLworkRecallAug ... RECALLworkRecallSep->RECALLworkReca
+> ll
+RECALLworkSchRecallApr RECALLworkSchRecallAug ... RECALLworkSchRecallSep->RECAL
+> LworkSchRecall
+RECALLworkK12RecallApr RECALLworkK12RecallAug ... RECALLworkK12RecallSep->RECAL
+> LworkK12Recall
+RECALLworkCollegeRecallApr RECALLworkCollegeRecallAug ... RECALLworkCollegeReca
+> llSep->RECALLworkCollegeRecall
+RECALLworkGradSchRecallApr RECALLworkGradSchRecallAug ... RECALLworkGradSchReca
+> llSep->RECALLworkGradSchRecall
+RECALLmilitaryRecallApr RECALLmilitaryRecallAug ... RECALLmilitaryRecallSep->RE
+> CALLmilitaryRecall
+RECALLotherRecallApr RECALLotherRecallAug ... RECALLotherRecallSep->RECALLother
+> Recall
+RECALLactivityRecallApr RECALLactivityRecallAug ... RECALLactivityRecallSep->RE
+> CALLactivityRecall
+-----------------------------------------------------------------------------
+
+. * ren hgcIn  hgc
+. ren wageMean     wage
+
+. 
+. ren atWork       work
+
+. ren RECALLworkFTRecall      workFTRecall      
+
+. ren RECALLworkPTRecall      workPTRecall      
+
+. ren RECALLmilitaryRecall    militaryRecall    
+
+. ren RECALLworkRecall        workRecall        
+
+. ren RECALLworkSchRecall     workSchRecall     
+
+. ren RECALLworkK12Recall     workK12Recall     
+
+. ren RECALLworkCollegeRecall workCollegeRecall 
+
+. ren RECALLotherRecall       otherRecall       
+
+. ren RECALLactivityRecall    activityRecall    
+
+. ren RECALLworkGradSchRecall workGradSchRecall
+
+. 
+. * convert string month variable to numeric
+. generat month_num = .
+(6,850,440 missing values generated)
+
+. replace month_num = 1  if month=="Jan"
+(570,870 real changes made)
+
+. replace month_num = 2  if month=="Feb"
+(570,870 real changes made)
+
+. replace month_num = 3  if month=="Mar"
+(570,870 real changes made)
+
+. replace month_num = 4  if month=="Apr"
+(570,870 real changes made)
+
+. replace month_num = 5  if month=="May"
+(570,870 real changes made)
+
+. replace month_num = 6  if month=="Jun"
+(570,870 real changes made)
+
+. replace month_num = 7  if month=="Jul"
+(570,870 real changes made)
+
+. replace month_num = 8  if month=="Aug"
+(570,870 real changes made)
+
+. replace month_num = 9  if month=="Sep"
+(570,870 real changes made)
+
+. replace month_num = 10 if month=="Oct"
+(570,870 real changes made)
+
+. replace month_num = 11 if month=="Nov"
+(570,870 real changes made)
+
+. replace month_num = 12 if month=="Dec"
+(570,870 real changes made)
+
+. drop month
+
+. ren month_num month
+
+. 
+. * label months with value label
+. lab def vlMonth 1 "Jan" 2 "Feb" 3 "Mar" 4 "Apr" 5 "May" 6 "Jun" 7 "Jul" 8 "Au
+> g" 9 "Sep" 10 "Oct" 11 "Nov" 12 "Dec"
+
+. lab val month vlMonth
+
+. 
+. * convert our annualized age variable to a monthly basis
+. *  need to assure that it stays sorted in the current order
+. sort id year month
+
+. gen sorter = _n
+
+. gen ageYr = year-birthYear
+
+. gen ageMo = month-birthMonth
+
+. replace ageYr = ageYr-1 if ageMo<0
+(3,136,680 real changes made)
+
+. drop ageMo
+
+. bys id ageYr (sorter): gen ageMo = [_n-1]
+
+. drop age sorter
+
+. ren ageYr age
+
+. 
+. * replace absorbing graduation dummies by new monthly basis:
+. ren gradGraduate gradGraduateAnnual
+
+. ren grad4yr      grad4yrAnnual
+
+. ren grad2yr      grad2yrAnnual
+
+. ren gradDiploma  gradDiplomaAnnual
+
+. ren gradGED      gradGEDAnnual
+
+. ren gradHS       gradHSAnnual
+
+. 
+. bys id: gen gradGraduate = (month>=Grad_month    & year==Grad_year   ) | (yea
+> r>Grad_year   )
+
+. bys id: gen grad4yr      = (month>=BA_month      & year==BA_year     ) | (yea
+> r>BA_year     )
+
+. bys id: gen grad2yr      = (month>=AA_month      & year==AA_year     ) | (yea
+> r>AA_year     )
+
+. bys id: gen gradDiploma  = (month>=Diploma_month & year==Diploma_year) | (yea
+> r>Diploma_year)
+
+. bys id: gen gradGED      = (month>=GED_month     & year==GED_year    ) | (yea
+> r>GED_year    )
+
+. bys id: gen gradHS       = (month>=HS_month      & year==HS_year     ) | (yea
+> r>HS_year     )
+
+. 
+. * impute highest grade completed on a monthly basis
+. * do hgc_monthly_impute.do
+. 
+. sort id year month
+
+. 
+. * drop observations outside of age ranges we want; rectangularize data
+. * drop if !inrange(age,13,28)
+. drop if !inrange(age,13,36)
+(3,196,872 observations deleted)
+
+. 
+. gen uniqueTime = age*100+ageMo+1
+
+. xtset id uniqueTime
+       panel variable:  id (strongly balanced)
+        time variable:  uniqueTime, 1301 to 3612, but with gaps
+                delta:  1 unit
+
+. 
+. compress
+  variable month was float now byte
+  variable age was float now byte
+  variable ageMo was float now byte
+  variable gradGraduate was float now byte
+  variable grad4yr was float now byte
+  variable grad2yr was float now byte
+  variable gradDiploma was float now byte
+  variable gradGED was float now byte
+  variable gradHS was float now byte
+  variable uniqueTime was float now int
+  (105,953,472 bytes saved)
+
+. save y79_all_balanced.dta, replace
+(note: file y79_all_balanced.dta not found)
+file y79_all_balanced.dta saved
+
+. !zip -m y79_all_balanced.dta.zip y79_all_balanced.dta
+
+  adding: y79_all_balanced.dta (deflated 95%)
+
+. 
+. *=================================================
+. * Frequency stats and droppings
+. *=================================================
+. *** "Drop" females and over-samples
+. * Youngins
+. qui count if uniqueTime==1301 & birthYear>=1961
+
+. scalar r0 = r(N)
+
+. qui count if uniqueTime==1301 & birthYear>=1961  &  female
+
+. scalar r1 = r(N)              
+
+. qui count if uniqueTime==1301 & birthYear>=1961  & !female & (oversamplePoor 
+> | oversampleMilitary)
+
+. scalar r2 = r(N)                                
+
+. qui count if uniqueTime==1301 & birthYear>=1961  & !female & !oversamplePoor 
+> & !oversampleMilitary
+
+. scalar r3 = r(N)                                
+
+. 
+. disp "Starting persons  (youngins) "  r0
+Starting persons  (youngins) 5945
+
+. disp "Drop females      (youngins) "  r1
+Drop females      (youngins) 2928
+
+. disp "Drop oversample   (youngins) "  r2
+Drop oversample   (youngins) 351
+
+. disp "Resulting persons (youngins) "  r3
+Resulting persons (youngins) 2666
+
+. 
+. * Oldfolks
+. qui count if uniqueTime==1301 & birthYear<=1960
+
+. scalar r10 = r(N)
+
+. qui count if uniqueTime==1301 & birthYear<=1960  &  female
+
+. scalar r11 = r(N)              
+
+. qui count if uniqueTime==1301 & birthYear<=1960  & !female &  birthYear< 1959
+
+. scalar r11a = r(N)              
+
+. qui count if uniqueTime==1301 & birthYear<=1960  & !female &  birthYear>=1959
+>  & (oversamplePoor | oversampleMilitary)
+
+. scalar r12 = r(N)                                
+
+. qui count if uniqueTime==1301 & birthYear<=1960  & !female &  birthYear>=1959
+>  & !oversamplePoor & !oversampleMilitary
+
+. scalar r13 = r(N)                                
+
+. 
+. disp "Starting persons  (oldfolks) "  r10
+Starting persons  (oldfolks) 6741
+
+. disp "Drop females      (oldfolks) "  r11
+Drop females      (oldfolks) 3355
+
+. disp "Drop older cohorts(oldfolks) "  r11a
+Drop older cohorts(oldfolks) 1698
+
+. disp "Drop oversample   (oldfolks) "  r12
+Drop oversample   (oldfolks) 492
+
+. disp "Resulting persons (oldfolks) "  r13
+Resulting persons (oldfolks) 1196
+
+. 
+. 
+. qui count if uniqueTime==1301 & !female & birthYear==1957 & !oversamplePoor &
+>  !oversampleMilitary
+
+. scalar r57 = r(N)
+
+. qui count if uniqueTime==1301 & !female & birthYear==1958 & !oversamplePoor &
+>  !oversampleMilitary
+
+. scalar r58 = r(N)
+
+. qui count if uniqueTime==1301 & !female & birthYear==1959 & !oversamplePoor &
+>  !oversampleMilitary
+
+. scalar r59 = r(N)
+
+. qui count if uniqueTime==1301 & !female & birthYear==1960 & !oversamplePoor &
+>  !oversampleMilitary
+
+. scalar r60 = r(N)
+
+. qui count if uniqueTime==1301 & !female & birthYear==1961 & !oversamplePoor &
+>  !oversampleMilitary
+
+. scalar r61 = r(N)
+
+. qui count if uniqueTime==1301 & !female & birthYear==1962 & !oversamplePoor &
+>  !oversampleMilitary
+
+. scalar r62 = r(N)
+
+. qui count if uniqueTime==1301 & !female & birthYear==1963 & !oversamplePoor &
+>  !oversampleMilitary
+
+. scalar r63 = r(N)
+
+. qui count if uniqueTime==1301 & !female & birthYear==1964 & !oversamplePoor &
+>  !oversampleMilitary
+
+. scalar r64 = r(N)
+
+. 
+. * For 79:
+. *  dob   age_int  svy_rounds  new svy_rounds   final_rounds (with imputed dat
+> a)
+. *  1964  14-28    15          13               16
+. *  1963  15-28    14          13               16
+. *  1962  16-28    13          13               16
+. *  1961  17-28    12          12               16
+. *  1960  18-28    11          11               16
+. *  1959  19-28    10          10               16
+. *  1958  20-28     9           9               16
+. *  1957  21-28     8           8               16
+. 
+. disp "Survey rounds                      " 13
+Survey rounds                      13
+
+. disp "Survey Person-years     (youngins) " r64*13 + r63*13 + r62*13 + r61*12
+Survey Person-years     (youngins) 33983
+
+. disp "Add Retro data          (youngins) " r64*0  + r63*0  + r62*0  + r61*1
+Add Retro data          (youngins) 675
+
+. disp "Potential person-years  (youngins) " r3*13
+Potential person-years  (youngins) 34658
+
+. disp "Potential person-months (youngins) " r3*13*12
+Potential person-months (youngins) 415896
+
+. 
+. disp "Survey rounds                      " 15
+Survey rounds                      15
+
+. disp "Survey Person-years     (oldfolks) " r60*11 + r59*10
+Survey Person-years     (oldfolks) 12628
+
+. disp "Add Retro data          (oldfolks) " r60*2  + r59*3 
+Add Retro data          (oldfolks) 2920
+
+. disp "Potential person-years  (oldfolks) " r13*13
+Potential person-years  (oldfolks) 15548
+
+. disp "Potential person-months (oldfolks) " r13*13*12
+Potential person-months (oldfolks) 186576
+
+. 
+. drop if oversamplePoor | oversampleMilitary
+(841,824 observations deleted)
+
+. 
+. *** Drop observations after last (valid) interview and more counts
+. * Youngins
+. count    if birthYear>=1961 & !female & ( mdy(month,1,year)> lastValidIntDate
+>  | mdy(month,1,year)> lastValidSchoolDate ) & uniqueTime>=1601
+  54,426
+
+. scalar s0 = r(N)
+
+. xtsum id if birthYear>=1961 & !female &   mdy(month,1,year)<=lastValidIntDate
+>  & mdy(month,1,year)<=lastValidSchoolDate  & uniqueTime>=1601
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+id       overall |  5269.401   3289.026          7      12517 |     N =  617406
+         between |             3295.542          7      12517 |     n =    2656
+         within  |                    0   5269.401   5269.401 |     T = 232.457
+
+. scalar s1 = r(N)
+
+. scalar s2 = r(Tbar)
+
+. xtsum id if birthYear>=1961 & !female &   mdy(month,1,year)<=lastValidIntDate
+>  & mdy(month,1,year)<=lastValidSchoolDate & ageMo==0 & uniqueTime>=1601
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+id       overall |  5269.692    3289.29          7      12517 |     N =   51627
+         between |             3295.542          7      12517 |     n =    2656
+         within  |                    0   5269.692   5269.692 |     T = 19.4379
+
+. scalar s3 = r(N)
+
+. scalar s4 = r(n)
+
+. 
+. disp "Drop missing int months " s0
+Drop missing int months 54426
+
+. disp "Final months "            s1
+Final months 617406
+
+. disp "Final Tbar "              s2
+Final Tbar 232.45708
+
+. 
+. disp "Final years "             s3
+Final years 51627
+
+. disp "Final persons "           s4
+Final persons 2656
+
+. disp "Drop missing int years "  s4*13-s3
+Drop missing int years -17099
+
+. 
+. * Oldfolks
+. count    if inrange(birthYear,1959,1960) & !female & ( mdy(month,1,year)>last
+> ValidIntDate  | mdy(month,1,year)>lastValidSchoolDate ) & uniqueTime>=1601
+  25,447
+
+. scalar s10 = r(N)
+
+. xtsum id if inrange(birthYear,1959,1960) & !female &   mdy(month,1,year)<=las
+> tValidIntDate & mdy(month,1,year)<=lastValidSchoolDate & uniqueTime>=1601
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+id       overall |  5256.263   3230.025          5      12686 |     N =  275945
+         between |             3226.899          5      12686 |     n =    1196
+         within  |                    0   5256.263   5256.263 |     T = 230.723
+
+. scalar s11 = r(N)
+
+. scalar s12 = r(Tbar)
+
+. xtsum id if inrange(birthYear,1959,1960) & !female &   mdy(month,1,year)<=las
+> tValidIntDate & mdy(month,1,year)<=lastValidSchoolDate & ageMo==0 & uniqueTim
+> e>=1601
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+id       overall |  5255.539   3230.459          5      12686 |     N =   23101
+         between |             3226.899          5      12686 |     n =    1196
+         within  |                    0   5255.539   5255.539 |     T = 19.3152
+
+. scalar s13 = r(N)
+
+. scalar s14 = r(n)
+
+. 
+. disp "Drop missing int months " s10
+Drop missing int months 25447
+
+. disp "Final months "            s11
+Final months 275945
+
+. disp "Final Tbar "              s12
+Final Tbar 230.72324
+
+. 
+. disp "Final years "             s13
+Final years 23101
+
+. disp "Final persons "           s14
+Final persons 1196
+
+. disp "Drop missing int years "  s14*13-s13
+Drop missing int years -7553
+
+. 
+. drop     if mdy(month,1,year)>lastValidIntDate
+(184,061 observations deleted)
+
+. drop     if mdy(month,1,year)>lastValidSchoolDate
+(1,333 observations deleted)
+
+. 
+. compress
+  (0 bytes saved)
+
+. save y79_all, replace
+(note: file y79_all.dta not found)
+file y79_all.dta saved
+
+. !zip -m y79_all.dta.zip y79_all.dta
+
+  adding: y79_all.dta (deflated 95%)
+
+. 
+. *============================================================================
+. * Vfill graph of activity over time
+. *============================================================================
+. generate caldate = ym(year,month)
+
+. preserve
+
+.         format caldate  %tm
+
+.         gen tempy = 1
+
+.         collapse (count) tempy, by(activity caldate)
+
+.         xtset activity caldate
+       panel variable:  activity (unbalanced)
+        time variable:  caldate, 1970m1 to 2001m11, but with gaps
+                delta:  1 month
+
+.         fillin activity caldate
+
+.         drop _fillin
+
+.         recode tempy (. = 0)
+(tempy: 439 changes made)
+
+.         sort caldate activity
+
+.         
+.         * collapse sum(tempy), by(activity caldate) ????
+.         
+.         *----------------------------------------------------------------
+.         * Create pct variables for total degrees and education degrees
+.         *  as well as cumulative pct and total/1000
+.         *----------------------------------------------------------------
+.         foreach X in tempy {
+  2.                 bys caldate: egen `X'_denom = total(`X')
+  3.                 gen `X'_pct = `X'/`X'_denom
+  4.         }
+
+.         
+.         * Adjust pct variables so that they can be in an area plot
+.         foreach X in tempy {
+  2.                 * Order in area graph (top2bottom): public, non-profit, fo
+> r-profit
+.                 gen `X'_pct2 = .
+  3.                 bys caldate (activity): replace `X'_pct2 = `X'_pct[1] + `X
+> '_pct[2] + `X'_pct[3] + `X'_pct[4] + `X'_pct[5] + `X'_pct[6] if activity==6
+  4.                 bys caldate (activity): replace `X'_pct2 = `X'_pct[1] + `X
+> '_pct[2] + `X'_pct[3] + `X'_pct[4] + `X'_pct[5]              if activity==5
+  5.                 bys caldate (activity): replace `X'_pct2 = `X'_pct[1] + `X
+> '_pct[2] + `X'_pct[3] + `X'_pct[4]                           if activity==4
+  6.                 bys caldate (activity): replace `X'_pct2 = `X'_pct[1] + `X
+> '_pct[2] + `X'_pct[3]                                        if activity==3
+  7.                 bys caldate (activity): replace `X'_pct2 = `X'_pct[1] + `X
+> '_pct[2]                                                     if activity==2
+  8.                 bys caldate (activity): replace `X'_pct2 = `X'_pct[1]     
+>                                                              if activity==1
+  9.         }
+(2,681 missing values generated)
+(383 real changes made)
+(383 real changes made)
+(383 real changes made)
+(383 real changes made)
+(383 real changes made)
+(383 real changes made)
+
+.         
+.         twoway  (area tempy_pct2 caldate if activity==6, lcolor(midblue) fcol
+> or(eltblue) lwidth(vthin) ) (area tempy_pct2 caldate if activity==5, lcolor(m
+> idgreen) fcolor(eltgreen) lwidth(vthin) ) (area tempy_pct2 caldate if activit
+> y==4, lcolor(cranberry) fcolor(erose) lwidth(vthin)) (area tempy_pct2 caldate
+>  if activity==3, lcolor(dknavy) fcolor(edkblue) lwidth(vthin) ) (area tempy_p
+> ct2 caldate if activity==2, lcolor(sand) fcolor(sandb) lwidth(vthin) ) (area 
+> tempy_pct2 caldate if activity==1, lcolor(brown) fcolor(stone) lwidth(vthin) 
+> )   ,legend(order(6 "{stSerif:School Only}" 5 "{stSerif:Work in School}" 4 "{
+> stSerif:Work PT}" 3 "{stSerif:Work FT}" 2 "{stSerif:Military}" 1 "{stSerif:Ot
+> her}") rows(2) ) title( "") ytitle( "{stSerif:Probability}") xtitle( "{stSeri
+> f:Date}")  xlabel(,format(%tm)) graphregion(fcolor(white) lcolor(white)) note
+> ( "{stSerif:Source: NLSY79}")
+
+.         graph export choiceSharesMonthly.eps, replace
+(file choiceSharesMonthly.eps written in EPS format)
+
+. restore
+
+. 
+. preserve
+
+.         gen monthAlt = ( month-(birthMonth-1) )*( year-age==birthYear ) + ( m
+> onth+(12-birthMonth+1) )*( year-age==birthYear+1  )
+
+.         gen yearmo = year*100+month
+
+.         gen agemo  =  age*100+monthAlt
+
+.         gen tempy = 1
+
+.         collapse (count) tempy, by(activity agemo)
+
+.         xtset activity agemo
+       panel variable:  activity (unbalanced)
+        time variable:  agemo, 1301 to 3612, but with gaps
+                delta:  1 unit
+
+.         fillin activity agemo
+
+.         drop _fillin
+
+.         recode tempy (. = 0)
+(tempy: 248 changes made)
+
+.         sort agemo activity
+
+.         *----------------------------------------------------------------
+.         * Create pct variables for total degrees and education degrees
+.         *  as well as cumulative pct and total/1000
+.         *----------------------------------------------------------------
+.         foreach X in tempy {
+  2.                 bys agemo: egen `X'_denom = total(`X')
+  3.                 gen `X'_pct = `X'/`X'_denom
+  4.         }
+
+.         
+.         * Adjust pct variables so that they can be in an area plot
+.         foreach X in tempy {
+  2.                 * Order in area graph (top2bottom): other, military, workF
+> T, workPT, workSch, SchoolOnly
+.                 gen `X'_pct2 = .
+  3.                 bys agemo (activity): replace `X'_pct2 = `X'_pct[1] + `X'_
+> pct[2] + `X'_pct[3] + `X'_pct[4] + `X'_pct[5] + `X'_pct[6] if activity==6
+  4.                 bys agemo (activity): replace `X'_pct2 = `X'_pct[1] + `X'_
+> pct[2] + `X'_pct[3] + `X'_pct[4] + `X'_pct[5]              if activity==5
+  5.                 bys agemo (activity): replace `X'_pct2 = `X'_pct[1] + `X'_
+> pct[2] + `X'_pct[3] + `X'_pct[4]                           if activity==4
+  6.                 bys agemo (activity): replace `X'_pct2 = `X'_pct[1] + `X'_
+> pct[2] + `X'_pct[3]                                        if activity==3
+  7.                 bys agemo (activity): replace `X'_pct2 = `X'_pct[1] + `X'_
+> pct[2]                                                     if activity==2
+  8.                 bys agemo (activity): replace `X'_pct2 = `X'_pct[1]       
+>                                                            if activity==1
+  9.         }
+(2,016 missing values generated)
+(288 real changes made)
+(288 real changes made)
+(288 real changes made)
+(288 real changes made)
+(288 real changes made)
+(288 real changes made)
+
+.         
+.         replace agemo = agemo/100
+(2,016 real changes made)
+
+.         
+.         twoway  (area tempy_pct2 agemo if activity==6, lcolor(midblue) fcolor
+> (eltblue) lwidth(vthin) ) (area tempy_pct2 agemo if activity==5, lcolor(midgr
+> een) fcolor(eltgreen) lwidth(vthin) ) (area tempy_pct2 agemo if activity==4, 
+> lcolor(cranberry) fcolor(erose) lwidth(vthin)) (area tempy_pct2 agemo if acti
+> vity==3, lcolor(dknavy) fcolor(edkblue) lwidth(vthin) ) (area tempy_pct2 agem
+> o if activity==2, lcolor(sand) fcolor(sandb) lwidth(vthin) ) (area tempy_pct2
+>  agemo if activity==1, lcolor(brown) fcolor(stone) lwidth(vthin) )   ,legend(
+> order(6 "{stSerif:School Only}" 5 "{stSerif:Work in School}" 4 "{stSerif:Work
+>  PT}" 3 "{stSerif:Work FT}" 2 "{stSerif:Military}" 1 "{stSerif:Other}") rows(
+> 2) ) title( "") ytitle( "{stSerif:Probability}") xtitle( "{stSerif:Age}") xla
+> bel(13(2)28) graphregion(fcolor(white) lcolor(white)) note( "{stSerif:Source:
+>  NLSY79}")
+
+.         graph export choiceSharesMonthlyAge.eps, replace
+(file choiceSharesMonthlyAge.eps written in EPS format)
+
+. restore
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/jared/WageReturnsRepo/Data/y79/y79_create_trim.log
+  log type:  text
+ closed on:  29 Jan 2019, 09:31:13
+-------------------------------------------------------------------------------

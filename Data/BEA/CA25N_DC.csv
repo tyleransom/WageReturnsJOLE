@@ -1,0 +1,69 @@
+"FIPS","Region","Table","LineCode","FirstYear","LineTitle","AreaName","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010","2011"
+"11000","2","CA25N","10","2001","Total employment","District of Columbia state total",748355,759233,762534,774165,781648,791323,803456,810340,812706,825796,840244
+"11000","2","CA25N","20","2001","  Wage and salary employment","District of Columbia state total",689218,701132,703636,711241,715764,723167,729092,733517,733350,744878,757818
+"11000","2","CA25N","40","2001","  Proprietors employment","District of Columbia state total",59137,58101,58898,62924,65884,68156,74364,76823,79356,80918,82426
+"11000","2","CA25N","50","2001","    Farm proprietors employment","District of Columbia state total",0,0,0,0,0,0,0,0,0,0,0
+"11000","2","CA25N","60","2001","    Nonfarm proprietors employment 2/","District of Columbia state total",59137,58101,58898,62924,65884,68156,74364,76823,79356,80918,82426
+"11000","2","CA25N","70","2001","  Farm employment","District of Columbia state total",0,0,0,0,0,0,0,0,0,0,0
+"11000","2","CA25N","80","2001","  Nonfarm employment","District of Columbia state total",748355,759233,762534,774165,781648,791323,803456,810340,812706,825796,840244
+"11000","2","CA25N","90","2001","    Private nonfarm employment","District of Columbia state total",503196,508282,507908,520000,528116,537798,553287,558700,554281,557142,572321
+"11000","2","CA25N","100","2001","      Forestry, fishing, and related activities","District of Columbia state total","(D)","(D)",61,67,69,68,72,76,80,72,72
+"11000","2","CA25N","200","2001","      Mining","District of Columbia state total","(D)","(D)",281,219,"(D)",213,222,340,314,433,493
+"11000","2","CA25N","300","2001","      Utilities","District of Columbia state total","(D)","(D)",2611,2539,2619,2479,2421,2376,2489,1876,1867
+"11000","2","CA25N","400","2001","      Construction","District of Columbia state total",13694,14561,15386,14873,"(D)",15277,15480,15709,14417,13413,14890
+"11000","2","CA25N","500","2001","      Manufacturing","District of Columbia state total",3760,"(D)",2911,2800,2468,2134,2111,1997,1887,1716,1496
+"11000","2","CA25N","600","2001","      Wholesale trade","District of Columbia state total",4824,4679,4947,5071,5150,5267,5477,5300,5144,5297,5130
+"11000","2","CA25N","700","2001","      Retail trade","District of Columbia state total",20097,19929,20310,20667,20729,21239,21477,21657,21144,21784,21715
+"11000","2","CA25N","800","2001","      Transportation and warehousing","District of Columbia state total","(D)","(D)",7385,7179,7140,6707,6539,6283,6252,6350,6237
+"11000","2","CA25N","900","2001","      Information","District of Columbia state total","(D)",27466,26890,26250,25186,24968,24704,23293,21757,21215,21134
+"11000","2","CA25N","1000","2001","      Finance and insurance","District of Columbia state total",21700,21197,20949,20916,20947,21097,22147,22054,22438,22803,23304
+"11000","2","CA25N","1100","2001","      Real estate and rental and leasing","District of Columbia state total",18098,17784,18411,19647,20934,21449,23283,22990,23252,23760,24228
+"11000","2","CA25N","1200","2001","      Professional, scientific, and technical services","District of Columbia state total",109818,111631,111995,116185,119569,122603,125479,127977,125470,124809,126788
+"11000","2","CA25N","1300","2001","      Management of companies and enterprises","District of Columbia state total",2565,2584,1761,1625,1650,1598,1581,1803,1680,2383,2371
+"11000","2","CA25N","1400","2001","      Administrative and waste management services","District of Columbia state total",46299,46138,47051,46933,47927,48657,49709,49256,47204,47581,50680
+"11000","2","CA25N","1500","2001","      Educational services","District of Columbia state total",42204,43464,43771,47509,47843,50904,52059,51158,53026,52364,54435
+"11000","2","CA25N","1600","2001","      Health care and social assistance","District of Columbia state total",55277,58889,56988,56929,56842,57239,60518,61260,62688,64903,66781
+"11000","2","CA25N","1700","2001","      Arts, entertainment, and recreation","District of Columbia state total",10552,10582,10831,10848,11564,11595,12239,13447,13523,13588,13655
+"11000","2","CA25N","1800","2001","      Accommodation and food services","District of Columbia state total","(D)",44490,46151,47798,50202,51148,51739,53374,53825,55727,58063
+"11000","2","CA25N","1900","2001","      Other services, except public administration","District of Columbia state total",68679,71165,69218,71945,71792,73156,76030,78350,77691,77068,78982
+"11000","2","CA25N","2000","2001","    Government and government enterprises","District of Columbia state total",245159,250951,254626,254165,253532,253525,250169,251640,258425,268654,267923
+"11000","2","CA25N","2001","2001","      Federal, civilian","District of Columbia state total",183103,188401,192260,191634,191217,192644,190629,192035,198751,208874,210239
+"11000","2","CA25N","2002","2001","      Military","District of Columbia state total",23083,23222,23485,23452,22808,21719,20202,20006,19524,19756,18467
+"11000","2","CA25N","2010","2001","      State and local","District of Columbia state total",38973,39328,38881,39079,39507,39162,39338,39599,40150,40024,39217
+"11000","2","CA25N","2011","2001","        State government","District of Columbia state total",0,0,0,0,0,0,0,0,0,0,0
+"11000","2","CA25N","2012","2001","        Local government","District of Columbia state total",38973,39328,38881,39079,39507,39162,39338,39599,40150,40024,39217
+"11001","2","CA25N","10","2001","Total employment","District of Columbia, DC ",748355,759233,762534,774165,781648,791323,803456,810340,812706,825796,840244
+"11001","2","CA25N","20","2001","  Wage and salary employment","District of Columbia, DC ",689218,701132,703636,711241,715764,723167,729092,733517,733350,744878,757818
+"11001","2","CA25N","40","2001","  Proprietors employment","District of Columbia, DC ",59137,58101,58898,62924,65884,68156,74364,76823,79356,80918,82426
+"11001","2","CA25N","50","2001","    Farm proprietors employment","District of Columbia, DC ",0,0,0,0,0,0,0,0,0,0,0
+"11001","2","CA25N","60","2001","    Nonfarm proprietors employment 2/","District of Columbia, DC ",59137,58101,58898,62924,65884,68156,74364,76823,79356,80918,82426
+"11001","2","CA25N","70","2001","  Farm employment","District of Columbia, DC ",0,0,0,0,0,0,0,0,0,0,0
+"11001","2","CA25N","80","2001","  Nonfarm employment","District of Columbia, DC ",748355,759233,762534,774165,781648,791323,803456,810340,812706,825796,840244
+"11001","2","CA25N","90","2001","    Private nonfarm employment","District of Columbia, DC ",503196,508282,507908,520000,528116,537798,553287,558700,554281,557142,572321
+"11001","2","CA25N","100","2001","      Forestry, fishing, and related activities","District of Columbia, DC ","(D)","(D)",61,67,69,68,72,76,80,72,72
+"11001","2","CA25N","200","2001","      Mining","District of Columbia, DC ","(D)","(D)",281,219,"(D)",213,222,340,314,433,493
+"11001","2","CA25N","300","2001","      Utilities","District of Columbia, DC ","(D)","(D)",2611,2539,2619,2479,2421,2376,2489,1876,1867
+"11001","2","CA25N","400","2001","      Construction","District of Columbia, DC ",13694,14561,15386,14873,"(D)",15277,15480,15709,14417,13413,14890
+"11001","2","CA25N","500","2001","      Manufacturing","District of Columbia, DC ",3760,"(D)",2911,2800,2468,2134,2111,1997,1887,1716,1496
+"11001","2","CA25N","600","2001","      Wholesale trade","District of Columbia, DC ",4824,4679,4947,5071,5150,5267,5477,5300,5144,5297,5130
+"11001","2","CA25N","700","2001","      Retail trade","District of Columbia, DC ",20097,19929,20310,20667,20729,21239,21477,21657,21144,21784,21715
+"11001","2","CA25N","800","2001","      Transportation and warehousing","District of Columbia, DC ","(D)","(D)",7385,7179,7140,6707,6539,6283,6252,6350,6237
+"11001","2","CA25N","900","2001","      Information","District of Columbia, DC ","(D)",27466,26890,26250,25186,24968,24704,23293,21757,21215,21134
+"11001","2","CA25N","1000","2001","      Finance and insurance","District of Columbia, DC ",21700,21197,20949,20916,20947,21097,22147,22054,22438,22803,23304
+"11001","2","CA25N","1100","2001","      Real estate and rental and leasing","District of Columbia, DC ",18098,17784,18411,19647,20934,21449,23283,22990,23252,23760,24228
+"11001","2","CA25N","1200","2001","      Professional, scientific, and technical services","District of Columbia, DC ",109818,111631,111995,116185,119569,122603,125479,127977,125470,124809,126788
+"11001","2","CA25N","1300","2001","      Management of companies and enterprises","District of Columbia, DC ",2565,2584,1761,1625,1650,1598,1581,1803,1680,2383,2371
+"11001","2","CA25N","1400","2001","      Administrative and waste management services","District of Columbia, DC ",46299,46138,47051,46933,47927,48657,49709,49256,47204,47581,50680
+"11001","2","CA25N","1500","2001","      Educational services","District of Columbia, DC ",42204,43464,43771,47509,47843,50904,52059,51158,53026,52364,54435
+"11001","2","CA25N","1600","2001","      Health care and social assistance","District of Columbia, DC ",55277,58889,56988,56929,56842,57239,60518,61260,62688,64903,66781
+"11001","2","CA25N","1700","2001","      Arts, entertainment, and recreation","District of Columbia, DC ",10552,10582,10831,10848,11564,11595,12239,13447,13523,13588,13655
+"11001","2","CA25N","1800","2001","      Accommodation and food services","District of Columbia, DC ","(D)",44490,46151,47798,50202,51148,51739,53374,53825,55727,58063
+"11001","2","CA25N","1900","2001","      Other services, except public administration","District of Columbia, DC ",68679,71165,69218,71945,71792,73156,76030,78350,77691,77068,78982
+"11001","2","CA25N","2000","2001","    Government and government enterprises","District of Columbia, DC ",245159,250951,254626,254165,253532,253525,250169,251640,258425,268654,267923
+"11001","2","CA25N","2001","2001","      Federal, civilian","District of Columbia, DC ",183103,188401,192260,191634,191217,192644,190629,192035,198751,208874,210239
+"11001","2","CA25N","2002","2001","      Military","District of Columbia, DC ",23083,23222,23485,23452,22808,21719,20202,20006,19524,19756,18467
+"11001","2","CA25N","2010","2001","      State and local","District of Columbia, DC ",38973,39328,38881,39079,39507,39162,39338,39599,40150,40024,39217
+"11001","2","CA25N","2011","2001","        State government","District of Columbia, DC ",0,0,0,0,0,0,0,0,0,0,0
+"11001","2","CA25N","2012","2001","        Local government","District of Columbia, DC ",38973,39328,38881,39079,39507,39162,39338,39599,40150,40024,39217
+"Note: See the included footnote file."
+"Source: U.S. Department of Commerce, Bureau of Economic Analysis, Regional Income Division  --  November 2012"

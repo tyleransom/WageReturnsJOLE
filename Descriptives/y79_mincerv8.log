@@ -1,0 +1,881 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/jared/WageReturnsRepo/Descriptives/y79_mincerv8.log
+  log type:  text
+ opened on:  13 Apr 2020, 13:12:55
+
+. 
+. **********************************************************************
+. * Mincerian and other wage specifications for comparison purposes
+. **********************************************************************
+. 
+. if "`c(username)'"=="jared"  global secretdir [REDACTED]
+
+. if "`c(username)'"=="ransom" global secretdir [REDACTED]nl
+> sy/"
+
+. 
+. use if cohortFlag==1979 & ~female & inlist(activity,2,3,4,12,13,14,22,23,24) 
+> using ${secretdir}/yCombined_scaled_t0_16.dta, clear
+
+. drop if inlist(birthYear,1957,1958)
+(149,054 observations deleted)
+
+. 
+. drop lnWage
+
+. rena lnWageNoSelf lnWage
+
+. recode lnWage (-999 = .)
+(lnWage: 146337 changes made)
+
+. 
+. gen inSchWork  = inlist(activity,2,12,22)
+
+. gen PTwork     = inlist(activity,3,13,23)
+
+. local Pvars79  black hispanic born1959 born1960 born1961 born1962 born1963 fo
+> reignBorn
+
+. local Pvars97  black hispanic born1980 born1981 born1982 born1983          fo
+> reignBorn
+
+. local Mvars    empPct incPerCapita
+
+. 
+. local Svars3   c.anySchoolt##c.anySchoolt##c.anySchoolt
+
+. local Zvars3I  c.workK12t    c.workK12t#(c.workK12t c.anySchoolt c.workK12t#c
+> .workK12t)             c.workColleget c.workColleget#(c.workColleget c.anySch
+> oolt c.workColleget#c.workColleget)
+
+. local Evars3I  c.workPTonlyt c.workPTonlyt#(c.workPTonlyt c.anySchoolt c.work
+> PTonlyt#c.workPTonlyt) c.workFTonlyt  c.workFTonlyt#(c.workFTonlyt c.anySchoo
+> lt c.workFTonlyt#c.workFTonlyt)     c.militaryt##c.militaryt##c.militaryt c.o
+> thert##c.othert##c.othert
+
+. 
+. local risk     gradHS grad4yr
+
+. local work     inSchWork PTwork
+
+. 
+. *================================================
+. * Programs
+. *================================================
+. *--------------------------------------------------
+. * Program to export output from most recent run in tab '`1'', with replace op
+> tion '`2''
+. *--------------------------------------------------
+. capture program drop exporter
+
+. program exporter
+  1.         version 13.1
+  2.         qui outreg2 using ${runname},      excel `2' bdec(4) sdec(4) ctitl
+> e(`1')
+  3.         estimates store tmp
+  4.         margins if agemo==2812 , dydx(${tmpvars}) atmeans post
+  5.         qui outreg2 using ${runname}_mfx,  excel `2' bdec(4) sdec(4) ctitl
+> e(mfx`1')
+  6.         estimates restore tmp
+  7.         margins if agemo==3112 , dydx(${tmpvars}) atmeans post
+  8.         qui outreg2 using ${runname}_mfx32,excel `2' bdec(4) sdec(4) ctitl
+> e(mfx`1')
+  9. end
+
+. 
+. *--------------------------------------
+. * Program to run with ml max that allows variance to be different across wage
+>  types
+. *--------------------------------------
+. gen     byte dummy = (2)*( inlist(activity,2,12,22)) + (3)*( inlist(activity,
+> 3,13,23)) + (4)*( inlist(activity,4,14,24))
+
+. global dumbo dummy
+
+. 
+. capture program drop normal
+
+. program normal
+  1.         version 13.1
+  2.         args lnf Xb sigma2 sigma3 sigma4
+  3.         quietly replace `lnf'=( ${dumbo}==2)*ln(normalden(${ML_y1}, `Xb', 
+> `sigma2'))+( ${dumbo}==3)*ln(normalden(${ML_y1}, `Xb', `sigma3'))+( ${dumbo}=
+> =4)*ln(normalden(${ML_y1}, `Xb', `sigma4'))
+  4. end
+
+. 
+. *================================================
+. * Wage OLS coef at all ages; mfx at age 2812 and 3112
+. *================================================
+. * Descriptives
+. reg  lnWage     `risk' `work', vce(cluster id)
+
+Linear regression                               Number of obs     =    464,330
+                                                F(4, 3796)        =     774.31
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.1821
+                                                Root MSE          =     .42512
+
+                                 (Std. Err. adjusted for 3,797 clusters in id)
+------------------------------------------------------------------------------
+             |               Robust
+      lnWage |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      gradHS |   .1905559   .0109533    17.40   0.000     .1690809    .2120309
+     grad4yr |   .4006343   .0160377    24.98   0.000     .3691909    .4320778
+   inSchWork |   -.225303   .0092573   -24.34   0.000    -.2434528   -.2071531
+      PTwork |  -.2079753   .0085143   -24.43   0.000    -.2246684   -.1912823
+       _cons |    1.70681   .0099506   171.53   0.000     1.687301    1.726319
+------------------------------------------------------------------------------
+
+. global tmpvars `risk'
+
+. exporter DescriptiveGraduation replace
+ : 
+Conditional marginal effects                    Number of obs     =      2,489
+Model VCE    : Robust
+
+Expression   : Linear prediction, predict()
+dy/dx w.r.t. : gradHS grad4yr
+at           : gradHS          =    .8774608 (mean)
+               grad4yr         =     .186822 (mean)
+               inSchWork       =    .0441945 (mean)
+               PTwork          =    .0887907 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      gradHS |   .1905559   .0109533    17.40   0.000     .1690809    .2120309
+     grad4yr |   .4006343   .0160377    24.98   0.000     .3691909    .4320778
+------------------------------------------------------------------------------
+ : (results tmp are active now)
+
+Conditional marginal effects                    Number of obs     =      1,589
+Model VCE    : Robust
+
+Expression   : Linear prediction, predict()
+dy/dx w.r.t. : gradHS grad4yr
+at           : gradHS          =    .8797986 (mean)
+               grad4yr         =    .1856514 (mean)
+               inSchWork       =    .0283197 (mean)
+               PTwork          =     .090623 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      gradHS |   .1905559   .0109533    17.40   0.000     .1690809    .2120309
+     grad4yr |   .4006343   .0160377    24.98   0.000     .3691909    .4320778
+------------------------------------------------------------------------------
+ : 
+. 
+. reg  lnWage anySchoolt `work', vce(cluster id)
+
+Linear regression                               Number of obs     =    464,330
+                                                F(3, 3796)        =    1031.98
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.1629
+                                                Root MSE          =     .43009
+
+                                 (Std. Err. adjusted for 3,797 clusters in id)
+------------------------------------------------------------------------------
+             |               Robust
+      lnWage |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  anySchoolt |   .0767271   .0027183    28.23   0.000     .0713976    .0820566
+   inSchWork |   -.310129   .0081864   -37.88   0.000     -.326179   -.2940789
+      PTwork |   -.225283    .008722   -25.83   0.000    -.2423832   -.2081828
+       _cons |   1.704834   .0092293   184.72   0.000     1.686739    1.722928
+------------------------------------------------------------------------------
+
+. global tmpvars anySchoolt
+
+. exporter DescriptiveAnySchool append
+ : 
+Conditional marginal effects                    Number of obs     =      2,489
+Model VCE    : Robust
+
+Expression   : Linear prediction, predict()
+dy/dx w.r.t. : anySchoolt
+at           : anySchoolt      =    3.310533 (mean)
+               inSchWork       =    .0441945 (mean)
+               PTwork          =    .0887907 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  anySchoolt |   .0767271   .0027183    28.23   0.000     .0713976    .0820566
+------------------------------------------------------------------------------
+ : (results tmp are active now)
+
+Conditional marginal effects                    Number of obs     =      1,589
+Model VCE    : Robust
+
+Expression   : Linear prediction, predict()
+dy/dx w.r.t. : anySchoolt
+at           : anySchoolt      =    3.395689 (mean)
+               inSchWork       =    .0283197 (mean)
+               PTwork          =     .090623 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  anySchoolt |   .0767271   .0027183    28.23   0.000     .0713976    .0820566
+------------------------------------------------------------------------------
+ : 
+. 
+. *================================================
+. * Wage MLE coef at all ages; mfx at age 2812 and 3112
+. *================================================
+. * Mincer
+. ml model lf normal (lnWage =                    `Svars3'    c.potExpt##c.potE
+> xpt##c.potExpt                        `risk' `work') /sigma2 /sigma3 /sigma4 
+> , vce(cluster id)
+
+. ml max
+
+initial:       log pseudolikelihood =     -<inf>  (could not be evaluated)
+feasible:      log pseudolikelihood =   -2020093
+rescale:       log pseudolikelihood =  -648500.2
+rescale eq:    log pseudolikelihood = -329042.71
+Iteration 0:   log pseudolikelihood = -329042.71  
+Iteration 1:   log pseudolikelihood = -279255.44  
+Iteration 2:   log pseudolikelihood = -251568.18  
+Iteration 3:   log pseudolikelihood = -245024.13  
+Iteration 4:   log pseudolikelihood = -244956.91  
+Iteration 5:   log pseudolikelihood = -244956.86  
+Iteration 6:   log pseudolikelihood = -244956.86  
+
+                                                Number of obs     =    464,330
+                                                Wald chi2(10)     =    4745.30
+Log pseudolikelihood = -244956.86               Prob > chi2       =     0.0000
+
+                                 (Std. Err. adjusted for 3,797 clusters in id)
+------------------------------------------------------------------------------
+             |               Robust
+      lnWage |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+eq1          |
+  anySchoolt |   .0344665   .0155833     2.21   0.027     .0039238    .0650091
+             |
+          c. |
+  anySchoolt#|
+c.anySchoolt |   .0010924   .0037714     0.29   0.772    -.0062994    .0084842
+             |
+          c. |
+  anySchoolt#|
+          c. |
+  anySchoolt#|
+c.anySchoolt |  -.0001599   .0002491    -0.64   0.521    -.0006482    .0003284
+             |
+     potExpt |   .0453284   .0046068     9.84   0.000     .0362992    .0543576
+             |
+   c.potExpt#|
+   c.potExpt |  -.0009769   .0005922    -1.65   0.099    -.0021376    .0001839
+             |
+   c.potExpt#|
+   c.potExpt#|
+   c.potExpt |  -.0000297    .000022    -1.35   0.177    -.0000727    .0000134
+             |
+      gradHS |   .1004954   .0142088     7.07   0.000     .0726467    .1283441
+     grad4yr |   .2987078   .0230944    12.93   0.000     .2534436    .3439719
+   inSchWork |  -.0841783   .0091133    -9.24   0.000    -.1020401   -.0663166
+      PTwork |  -.1508109   .0086279   -17.48   0.000    -.1677212   -.1339006
+       _cons |   1.443899   .0157993    91.39   0.000     1.412933    1.474865
+-------------+----------------------------------------------------------------
+sigma2       |
+       _cons |   .3754907   .0054295    69.16   0.000     .3648491    .3861324
+-------------+----------------------------------------------------------------
+sigma3       |
+       _cons |   .4700619   .0074377    63.20   0.000     .4554842    .4846395
+-------------+----------------------------------------------------------------
+sigma4       |
+       _cons |   .4076937   .0033923   120.18   0.000     .4010449    .4143425
+------------------------------------------------------------------------------
+
+. global tmpvars anySchoolt potExpt `risk'
+
+. exporter MincerCubic append
+ : 
+Conditional marginal effects                    Number of obs     =      2,489
+Model VCE    : Robust
+
+Expression   : Linear prediction, predict()
+dy/dx w.r.t. : anySchoolt potExpt gradHS grad4yr
+at           : anySchoolt      =    3.310533 (mean)
+               potExpt         =    9.689467 (mean)
+               gradHS          =    .8774608 (mean)
+               grad4yr         =     .186822 (mean)
+               inSchWork       =    .0441945 (mean)
+               PTwork          =    .0887907 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  anySchoolt |   .0364407   .0050535     7.21   0.000     .0265361    .0463453
+     potExpt |   .0180449   .0012211    14.78   0.000     .0156516    .0204383
+      gradHS |   .1004954   .0142088     7.07   0.000     .0726467    .1283441
+     grad4yr |   .2987078   .0230944    12.93   0.000     .2534436    .3439719
+------------------------------------------------------------------------------
+ : (results tmp are active now)
+
+Conditional marginal effects                    Number of obs     =      1,589
+Model VCE    : Robust
+
+Expression   : Linear prediction, predict()
+dy/dx w.r.t. : anySchoolt potExpt gradHS grad4yr
+at           : anySchoolt      =    3.395689 (mean)
+               potExpt         =    12.60431 (mean)
+               gradHS          =    .8797986 (mean)
+               grad4yr         =    .1856514 (mean)
+               inSchWork       =    .0283197 (mean)
+               PTwork          =     .090623 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  anySchoolt |   .0363527   .0051299     7.09   0.000     .0262983    .0464072
+     potExpt |   .0065689   .0011956     5.49   0.000     .0042255    .0089122
+      gradHS |   .1004954   .0142088     7.07   0.000     .0726467    .1283441
+     grad4yr |   .2987078   .0230944    12.93   0.000     .2534436    .3439719
+------------------------------------------------------------------------------
+ : 
+. 
+. * HLT
+. ml model lf normal (lnWage =  black hispanic    `Svars3'    c.potExpt##c.potE
+> xpt##c.potExpt c.anySchoolt#c.potExpt `risk' `work') /sigma2 /sigma3 /sigma4 
+> , vce(cluster id)
+
+. ml max
+
+initial:       log pseudolikelihood =     -<inf>  (could not be evaluated)
+feasible:      log pseudolikelihood =   -2020093
+rescale:       log pseudolikelihood =  -648500.2
+rescale eq:    log pseudolikelihood = -329042.71
+Iteration 0:   log pseudolikelihood = -329042.71  
+Iteration 1:   log pseudolikelihood =  -275151.9  
+Iteration 2:   log pseudolikelihood = -244357.74  
+Iteration 3:   log pseudolikelihood = -237318.79  
+Iteration 4:   log pseudolikelihood = -237206.57  
+Iteration 5:   log pseudolikelihood = -237206.23  
+Iteration 6:   log pseudolikelihood = -237206.23  
+
+                                                Number of obs     =    464,330
+                                                Wald chi2(13)     =    4971.27
+Log pseudolikelihood = -237206.23               Prob > chi2       =     0.0000
+
+                                 (Std. Err. adjusted for 3,797 clusters in id)
+------------------------------------------------------------------------------
+             |               Robust
+      lnWage |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+eq1          |
+       black |  -.1605498   .0117412   -13.67   0.000    -.1835622   -.1375374
+    hispanic |  -.0309555   .0140818    -2.20   0.028    -.0585553   -.0033557
+  anySchoolt |   .0053587   .0148311     0.36   0.718    -.0237097    .0344271
+             |
+          c. |
+  anySchoolt#|
+c.anySchoolt |   .0013539   .0036122     0.37   0.708    -.0057259    .0084337
+             |
+          c. |
+  anySchoolt#|
+          c. |
+  anySchoolt#|
+c.anySchoolt |  -.0001414   .0002392    -0.59   0.554    -.0006102    .0003274
+             |
+     potExpt |   .0535082   .0045545    11.75   0.000     .0445817    .0624348
+             |
+   c.potExpt#|
+   c.potExpt |  -.0038361   .0006182    -6.21   0.000    -.0050478   -.0026245
+             |
+   c.potExpt#|
+   c.potExpt#|
+   c.potExpt |   .0000867   .0000231     3.76   0.000     .0000415    .0001319
+             |
+          c. |
+  anySchoolt#|
+   c.potExpt |   .0045199   .0004498    10.05   0.000     .0036383    .0054015
+             |
+      gradHS |   .1020319    .013971     7.30   0.000     .0746492    .1294145
+     grad4yr |   .2613195   .0231665    11.28   0.000      .215914    .3067249
+   inSchWork |  -.0829891   .0090122    -9.21   0.000    -.1006527   -.0653255
+      PTwork |   -.141647   .0086881   -16.30   0.000    -.1586754   -.1246186
+       _cons |   1.534498   .0154313    99.44   0.000     1.504253    1.564742
+-------------+----------------------------------------------------------------
+sigma2       |
+       _cons |   .3753427   .0055379    67.78   0.000     .3644887    .3861968
+-------------+----------------------------------------------------------------
+sigma3       |
+       _cons |   .4654854   .0076878    60.55   0.000     .4504176    .4805532
+-------------+----------------------------------------------------------------
+sigma4       |
+       _cons |   .3994659   .0033713   118.49   0.000     .3928582    .4060736
+------------------------------------------------------------------------------
+
+. global tmpvars anySchoolt potExpt `risk'
+
+. exporter HLTcubicInterRace append
+ : 
+Conditional marginal effects                    Number of obs     =      2,489
+Model VCE    : Robust
+
+Expression   : Linear prediction, predict()
+dy/dx w.r.t. : anySchoolt potExpt gradHS grad4yr
+at           : black           =    .2828445 (mean)
+               hispanic        =    .1952591 (mean)
+               anySchoolt      =    3.310533 (mean)
+               potExpt         =    9.689467 (mean)
+               gradHS          =    .8774608 (mean)
+               grad4yr         =     .186822 (mean)
+               inSchWork       =    .0441945 (mean)
+               PTwork          =    .0887907 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  anySchoolt |   .0534691   .0053919     9.92   0.000     .0429011     .064037
+     potExpt |   .0185431   .0012118    15.30   0.000     .0161681    .0209181
+      gradHS |   .1020319    .013971     7.30   0.000     .0746492    .1294145
+     grad4yr |   .2613195   .0231665    11.28   0.000      .215914    .3067249
+------------------------------------------------------------------------------
+ : (results tmp are active now)
+
+Conditional marginal effects                    Number of obs     =      1,589
+Model VCE    : Robust
+
+Expression   : Linear prediction, predict()
+dy/dx w.r.t. : anySchoolt potExpt gradHS grad4yr
+at           : black           =    .2737571 (mean)
+               hispanic        =    .1938326 (mean)
+               anySchoolt      =    3.395689 (mean)
+               potExpt         =    12.60431 (mean)
+               gradHS          =    .8797986 (mean)
+               grad4yr         =    .1856514 (mean)
+               inSchWork       =    .0283197 (mean)
+               PTwork          =     .090623 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  anySchoolt |   .0666321   .0061462    10.84   0.000     .0545857    .0786785
+     potExpt |   .0134611   .0012891    10.44   0.000     .0109346    .0159877
+      gradHS |   .1020319    .013971     7.30   0.000     .0746492    .1294145
+     grad4yr |   .2613195   .0231665    11.28   0.000      .215914    .3067249
+------------------------------------------------------------------------------
+ : 
+. 
+. * HLT + Background
+. ml model lf normal (lnWage =  `Pvars79' `Mvars' `Svars3'    c.potExpt##c.potE
+> xpt##c.potExpt c.anySchoolt#c.potExpt `risk' `work') /sigma2 /sigma3 /sigma4 
+> , vce(cluster id)
+
+. ml max
+
+initial:       log pseudolikelihood =     -<inf>  (could not be evaluated)
+feasible:      log pseudolikelihood =   -2020093
+rescale:       log pseudolikelihood =  -648500.2
+rescale eq:    log pseudolikelihood = -329042.71
+Iteration 0:   log pseudolikelihood = -329042.71  
+Iteration 1:   log pseudolikelihood = -272757.43  
+Iteration 2:   log pseudolikelihood = -228584.83  
+Iteration 3:   log pseudolikelihood = -222527.29  
+Iteration 4:   log pseudolikelihood =  -222377.4  
+Iteration 5:   log pseudolikelihood = -222377.18  
+Iteration 6:   log pseudolikelihood = -222377.18  
+
+                                                Number of obs     =    464,330
+                                                Wald chi2(21)     =    5850.32
+Log pseudolikelihood = -222377.18               Prob > chi2       =     0.0000
+
+                                 (Std. Err. adjusted for 3,797 clusters in id)
+------------------------------------------------------------------------------
+             |               Robust
+      lnWage |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+eq1          |
+       black |  -.1502956    .011203   -13.42   0.000    -.1722531   -.1283381
+    hispanic |  -.0233557   .0139809    -1.67   0.095    -.0507578    .0040464
+    born1959 |   .1471013   .0174161     8.45   0.000     .1129663    .1812363
+    born1960 |   .1091215   .0161095     6.77   0.000     .0775474    .1406956
+    born1961 |   .0735368   .0152138     4.83   0.000     .0437182    .1033554
+    born1962 |   .0748936   .0154758     4.84   0.000     .0445615    .1052257
+    born1963 |   .0376112    .014809     2.54   0.011     .0085862    .0666362
+ foreignBorn |  -.0213104   .0204592    -1.04   0.298    -.0614097     .018789
+      empPct |  -.1875772   .0197234    -9.51   0.000    -.2262342   -.1489201
+incPerCapita |   .0332962    .001588    20.97   0.000     .0301838    .0364086
+  anySchoolt |   .0015514   .0141982     0.11   0.913    -.0262765    .0293794
+             |
+          c. |
+  anySchoolt#|
+c.anySchoolt |   .0006625   .0034558     0.19   0.848    -.0061106    .0074357
+             |
+          c. |
+  anySchoolt#|
+          c. |
+  anySchoolt#|
+c.anySchoolt |  -.0000898   .0002287    -0.39   0.694    -.0005382    .0003585
+             |
+     potExpt |   .0447895   .0043895    10.20   0.000     .0361863    .0533927
+             |
+   c.potExpt#|
+   c.potExpt |  -.0034691   .0005991    -5.79   0.000    -.0046433    -.002295
+             |
+   c.potExpt#|
+   c.potExpt#|
+   c.potExpt |   .0000787   .0000224     3.52   0.000     .0000348    .0001226
+             |
+          c. |
+  anySchoolt#|
+   c.potExpt |   .0041603   .0004385     9.49   0.000     .0033008    .0050198
+             |
+      gradHS |   .1043279   .0130178     8.01   0.000     .0788134    .1298423
+     grad4yr |   .2381242   .0222036    10.72   0.000     .1946059    .2816424
+   inSchWork |  -.0852772    .008602    -9.91   0.000    -.1021369   -.0684176
+      PTwork |  -.1376328    .008441   -16.31   0.000    -.1541767   -.1210888
+       _cons |   1.207272   .0241796    49.93   0.000      1.15988    1.254663
+-------------+----------------------------------------------------------------
+sigma2       |
+       _cons |    .364933   .0054293    67.22   0.000     .3542918    .3755742
+-------------+----------------------------------------------------------------
+sigma3       |
+       _cons |   .4574152   .0076801    59.56   0.000     .4423625    .4724679
+-------------+----------------------------------------------------------------
+sigma4       |
+       _cons |   .3858394   .0032055   120.37   0.000     .3795567    .3921221
+------------------------------------------------------------------------------
+
+. global tmpvars anySchoolt potExpt `risk'
+
+. exporter HLTplusBack append
+ : 
+Conditional marginal effects                    Number of obs     =      2,489
+Model VCE    : Robust
+
+Expression   : Linear prediction, predict()
+dy/dx w.r.t. : anySchoolt potExpt gradHS grad4yr
+at           : black           =    .2828445 (mean)
+               hispanic        =    .1952591 (mean)
+               born1959        =    .1382081 (mean)
+               born1960        =    .1719566 (mean)
+               born1961        =     .179992 (mean)
+               born1962        =    .1811973 (mean)
+               born1963        =    .1787867 (mean)
+               foreignBorn     =    .0678988 (mean)
+               empPct          =    .8520532 (mean)
+               incPerCapita    =    14.93334 (mean)
+               anySchoolt      =    3.310533 (mean)
+               potExpt         =    9.689467 (mean)
+               gradHS          =    .8774608 (mean)
+               grad4yr         =     .186822 (mean)
+               inSchWork       =    .0441945 (mean)
+               PTwork          =    .0887907 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  anySchoolt |    .043295   .0052007     8.32   0.000     .0331018    .0534882
+     potExpt |   .0135103    .001203    11.23   0.000     .0111524    .0158683
+      gradHS |   .1043279   .0130178     8.01   0.000     .0788134    .1298423
+     grad4yr |   .2381242   .0222036    10.72   0.000     .1946059    .2816424
+------------------------------------------------------------------------------
+ : (results tmp are active now)
+
+Conditional marginal effects                    Number of obs     =      1,589
+Model VCE    : Robust
+
+Expression   : Linear prediction, predict()
+dy/dx w.r.t. : anySchoolt potExpt gradHS grad4yr
+at           : black           =    .2737571 (mean)
+               hispanic        =    .1938326 (mean)
+               born1959        =    .1919446 (mean)
+               born1960        =    .2529893 (mean)
+               born1961        =    .2699811 (mean)
+               born1962        =    .2057898 (mean)
+               born1963        =    .0006293 (mean)
+               foreignBorn     =    .0698553 (mean)
+               empPct          =    .8561446 (mean)
+               incPerCapita    =    14.95247 (mean)
+               anySchoolt      =    3.395689 (mean)
+               potExpt         =    12.60431 (mean)
+               gradHS          =    .8797986 (mean)
+               grad4yr         =    .1856514 (mean)
+               inSchWork       =    .0283197 (mean)
+               PTwork          =     .090623 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  anySchoolt |   .0553805   .0059563     9.30   0.000     .0437064    .0670546
+     potExpt |     .00899   .0012744     7.05   0.000     .0064922    .0114879
+      gradHS |   .1043279   .0130178     8.01   0.000     .0788134    .1298423
+     grad4yr |   .2381242   .0222036    10.72   0.000     .1946059    .2816424
+------------------------------------------------------------------------------
+ : 
+. 
+. * + Actual Experience (each exp term enters as a cubic; each exp term is inte
+> racted with schooling, except for military and other)
+. ml model lf normal (lnWage = `Pvars79' `Mvars' `Svars3'    `Zvars3I' `Evars3I
+> '                                     `risk' `work') /sigma2 /sigma3 /sigma4 
+> , vce(cluster id)
+
+. ml max
+
+initial:       log pseudolikelihood =     -<inf>  (could not be evaluated)
+feasible:      log pseudolikelihood =   -2020093
+rescale:       log pseudolikelihood =  -648500.2
+rescale eq:    log pseudolikelihood = -329042.71
+Iteration 0:   log pseudolikelihood = -329042.71  
+Iteration 1:   log pseudolikelihood = -258526.67  
+Iteration 2:   log pseudolikelihood = -211657.73  
+Iteration 3:   log pseudolikelihood = -200937.37  
+Iteration 4:   log pseudolikelihood = -200272.28  
+Iteration 5:   log pseudolikelihood = -200266.18  
+Iteration 6:   log pseudolikelihood = -200266.18  
+
+                                                Number of obs     =    464,330
+                                                Wald chi2(39)     =    7285.32
+Log pseudolikelihood = -200266.18               Prob > chi2       =     0.0000
+
+                                 (Std. Err. adjusted for 3,797 clusters in id)
+------------------------------------------------------------------------------
+             |               Robust
+      lnWage |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+eq1          |
+       black |  -.0905784   .0107198    -8.45   0.000    -.1115889   -.0695679
+    hispanic |  -.0083431    .013202    -0.63   0.527    -.0342185    .0175324
+    born1959 |   .1434552   .0168438     8.52   0.000      .110442    .1764683
+    born1960 |   .1081809   .0154894     6.98   0.000     .0778222    .1385395
+    born1961 |    .071623    .014541     4.93   0.000     .0431231    .1001229
+    born1962 |   .0680265   .0144545     4.71   0.000     .0396961    .0963568
+    born1963 |   .0325182   .0142367     2.28   0.022     .0046148    .0604216
+ foreignBorn |   -.021269   .0190073    -1.12   0.263    -.0585226    .0159845
+      empPct |  -.1683335   .0182586    -9.22   0.000    -.2041197   -.1325473
+incPerCapita |   .0318507   .0014822    21.49   0.000     .0289456    .0347557
+  anySchoolt |  -.0148588   .0156511    -0.95   0.342    -.0455345    .0158169
+             |
+          c. |
+  anySchoolt#|
+c.anySchoolt |   .0037075   .0041387     0.90   0.370    -.0044042    .0118193
+             |
+          c. |
+  anySchoolt#|
+          c. |
+  anySchoolt#|
+c.anySchoolt |  -.0001103   .0003109    -0.35   0.723    -.0007196     .000499
+             |
+    workK12t |   .0878406   .0342376     2.57   0.010     .0207362     .154945
+             |
+  c.workK12t#|
+  c.workK12t |   -.033354   .0301671    -1.11   0.269    -.0924804    .0257725
+             |
+  c.workK12t#|
+c.anySchoolt |  -.0040081   .0039504    -1.01   0.310    -.0117507    .0037345
+             |
+  c.workK12t#|
+  c.workK12t#|
+  c.workK12t |   .0009663   .0073534     0.13   0.895    -.0134462    .0153788
+             |
+workColleget |   .1126666   .0245465     4.59   0.000     .0645564    .1607768
+             |
+          c. |
+workColleget#|
+          c. |
+workColleget |  -.0164776   .0092609    -1.78   0.075    -.0346287    .0016734
+             |
+          c. |
+workColleget#|
+c.anySchoolt |  -.0066138   .0072631    -0.91   0.363    -.0208491    .0076216
+             |
+          c. |
+workColleget#|
+          c. |
+workColleget#|
+          c. |
+workColleget |   .0016986   .0006599     2.57   0.010     .0004052     .002992
+             |
+ workPTonlyt |  -.0569419   .0173025    -3.29   0.001    -.0908542   -.0230297
+             |
+          c. |
+ workPTonlyt#|
+          c. |
+ workPTonlyt |   .0140099   .0053305     2.63   0.009     .0035622    .0244576
+             |
+          c. |
+ workPTonlyt#|
+c.anySchoolt |  -.0079966    .002704    -2.96   0.003    -.0132963    -.002697
+             |
+          c. |
+ workPTonlyt#|
+          c. |
+ workPTonlyt#|
+          c. |
+ workPTonlyt |  -.0007931   .0004303    -1.84   0.065    -.0016365    .0000503
+             |
+ workFTonlyt |   .1024542   .0046373    22.09   0.000     .0933654    .1115431
+             |
+          c. |
+ workFTonlyt#|
+          c. |
+ workFTonlyt |  -.0101319   .0007132   -14.21   0.000    -.0115297    -.008734
+             |
+          c. |
+ workFTonlyt#|
+c.anySchoolt |   .0029844   .0005029     5.93   0.000     .0019988      .00397
+             |
+          c. |
+ workFTonlyt#|
+          c. |
+ workFTonlyt#|
+          c. |
+ workFTonlyt |   .0003329   .0000326    10.23   0.000     .0002691    .0003967
+             |
+   militaryt |   .0038104   .0182027     0.21   0.834    -.0318661     .039487
+             |
+ c.militaryt#|
+ c.militaryt |   .0031224   .0055276     0.56   0.572    -.0077116    .0139564
+             |
+ c.militaryt#|
+ c.militaryt#|
+ c.militaryt |  -.0003072   .0003726    -0.82   0.410    -.0010374     .000423
+             |
+      othert |  -.0661004   .0118797    -5.56   0.000    -.0893843   -.0428166
+             |
+    c.othert#|
+    c.othert |    .005143   .0028845     1.78   0.075    -.0005105    .0107966
+             |
+    c.othert#|
+    c.othert#|
+    c.othert |  -.0000985   .0001781    -0.55   0.580    -.0004476    .0002505
+             |
+      gradHS |   .0724135   .0120869     5.99   0.000     .0487236    .0961034
+     grad4yr |   .2039393   .0205934     9.90   0.000     .1635769    .2443016
+   inSchWork |  -.1006001   .0077565   -12.97   0.000    -.1158025   -.0853976
+      PTwork |  -.0432179   .0068603    -6.30   0.000    -.0566639   -.0297718
+       _cons |   1.240504   .0234697    52.86   0.000     1.194504    1.286503
+-------------+----------------------------------------------------------------
+sigma2       |
+       _cons |   .3489294   .0052198    66.85   0.000     .3386988      .35916
+-------------+----------------------------------------------------------------
+sigma3       |
+       _cons |   .4447434   .0075595    58.83   0.000      .429927    .4595597
+-------------+----------------------------------------------------------------
+sigma4       |
+       _cons |   .3666642   .0030796   119.06   0.000     .3606283       .3727
+------------------------------------------------------------------------------
+
+. global tmpvars anySchoolt workK12t workColleget workPTonlyt workFTonlyt milit
+> aryt othert `risk'
+
+. exporter FullCubicInterBack append
+ : 
+Conditional marginal effects                    Number of obs     =      2,489
+Model VCE    : Robust
+
+Expression   : Linear prediction, predict()
+dy/dx w.r.t. : anySchoolt workK12t workColleget workPTonlyt workFTonlyt
+               militaryt othert gradHS grad4yr
+at           : black           =    .2828445 (mean)
+               hispanic        =    .1952591 (mean)
+               born1959        =    .1382081 (mean)
+               born1960        =    .1719566 (mean)
+               born1961        =     .179992 (mean)
+               born1962        =    .1811973 (mean)
+               born1963        =    .1787867 (mean)
+               foreignBorn     =    .0678988 (mean)
+               empPct          =    .8520532 (mean)
+               incPerCapita    =    14.93334 (mean)
+               anySchoolt      =    3.310533 (mean)
+               workK12t        =    .7069774 (mean)
+               workColleget    =     .929088 (mean)
+               workPTonlyt     =    1.222613 (mean)
+               workFTonlyt     =    6.446464 (mean)
+               militaryt       =    .3934311 (mean)
+               othert          =    1.455504 (mean)
+               gradHS          =    .8774608 (mean)
+               grad4yr         =     .186822 (mean)
+               inSchWork       =    .0441945 (mean)
+               PTwork          =    .0887907 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  anySchoolt |    .006545   .0079114     0.83   0.408    -.0089611    .0220512
+    workK12t |   .0288596   .0100295     2.88   0.004     .0092022    .0485171
+workColleget |   .0645518   .0115111     5.61   0.000     .0419904    .0871132
+ workPTonlyt |  -.0527143   .0072611    -7.26   0.000    -.0669458   -.0384829
+ workFTonlyt |    .023208   .0014085    16.48   0.000     .0204474    .0259686
+   militaryt |   .0061247   .0142406     0.43   0.667    -.0217863    .0340356
+      othert |  -.0517553   .0057037    -9.07   0.000    -.0629343   -.0405763
+      gradHS |   .0724135   .0120869     5.99   0.000     .0487236    .0961034
+     grad4yr |   .2039393   .0205934     9.90   0.000     .1635769    .2443016
+------------------------------------------------------------------------------
+ : (results tmp are active now)
+
+Conditional marginal effects                    Number of obs     =      1,589
+Model VCE    : Robust
+
+Expression   : Linear prediction, predict()
+dy/dx w.r.t. : anySchoolt workK12t workColleget workPTonlyt workFTonlyt
+               militaryt othert gradHS grad4yr
+at           : black           =    .2737571 (mean)
+               hispanic        =    .1938326 (mean)
+               born1959        =    .1919446 (mean)
+               born1960        =    .2529893 (mean)
+               born1961        =    .2699811 (mean)
+               born1962        =    .2057898 (mean)
+               born1963        =    .0006293 (mean)
+               foreignBorn     =    .0698553 (mean)
+               empPct          =    .8561446 (mean)
+               incPerCapita    =    14.95247 (mean)
+               anySchoolt      =    3.395689 (mean)
+               workK12t        =    .6650409 (mean)
+               workColleget    =    .9910845 (mean)
+               workPTonlyt     =    1.416929 (mean)
+               workFTonlyt     =    8.924166 (mean)
+               militaryt       =    .4309838 (mean)
+               othert          =    1.660531 (mean)
+               gradHS          =    .8797986 (mean)
+               grad4yr         =    .1856514 (mean)
+               inSchWork       =    .0283197 (mean)
+               PTwork          =     .090623 (mean)
+
+------------------------------------------------------------------------------
+             |            Delta-method
+             |      dy/dx   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+  anySchoolt |    .012586   .0084454     1.49   0.136    -.0039666    .0291386
+    workK12t |    .031149   .0103516     3.01   0.003     .0108604    .0514377
+workColleget |   .0625521   .0112861     5.54   0.000     .0404317    .0846724
+ workPTonlyt |   -.049171   .0068056    -7.23   0.000    -.0625097   -.0358322
+ workFTonlyt |   .0112895    .001441     7.83   0.000     .0084651    .0141138
+   militaryt |   .0063306   .0138844     0.46   0.648    -.0208823    .0335436
+      othert |  -.0498352   .0051463    -9.68   0.000    -.0599218   -.0397487
+      gradHS |   .0724135   .0120869     5.99   0.000     .0487236    .0961034
+     grad4yr |   .2039393   .0205934     9.90   0.000     .1635769    .2443016
+------------------------------------------------------------------------------
+ : 
+. 
+. * Cleanup--only use xml files, thus rm txt files
+. !rm ${runname}*txt
+
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/jared/WageReturnsRepo/Descriptives/y79_mincerv8.log
+  log type:  text
+ closed on:  13 Apr 2020, 13:50:40
+-------------------------------------------------------------------------------

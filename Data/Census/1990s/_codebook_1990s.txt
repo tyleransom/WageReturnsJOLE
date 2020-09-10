@@ -1,0 +1,39 @@
+               Estimates of the Population of Counties
+                   by Age and Sex:  1990-1999
+
+Source:  U.S. Census Bureau
+Internet Release date:  August 30, 2000
+
+This file contains estimates of the population of the State total and
+and the counties in each state (1999 geography) by single year of age
+(0, 1, 2, ..., 84, 85 and over) by sex (male, female) for July 1 of each
+year from 1990 to 1999.
+
+   Character    Item Description
+
+       1-2        FIPS State Code
+       3-5        FIPS County Code 
+       6          Blank
+       7-8        Age Indicator:
+                       0 = Under 1 year
+                       1 = 1 year
+                       2 = 2 years
+                         .
+                         :
+                      83 = 83 years
+                      84 = 84 years
+                      85 = 85 years and over
+       9          Blank
+      10          Sex indicator (1=male 2=female)
+      11-17       July 1, 1990
+      18-24       July 1, 1991
+      25-31       July 1, 1992
+      32-38       July 1, 1993
+      39-45       July 1, 1994
+      46-52       July 1, 1995
+      53-59       July 1, 1996
+      60-66       July 1, 1997
+      67-73       July 1, 1998
+      74-80       July 1, 1999
+
+JKA note: each file represents one state, labeled by FIPS (01=Alabama, etc)

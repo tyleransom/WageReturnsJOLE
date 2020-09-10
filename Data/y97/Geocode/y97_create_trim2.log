@@ -1,0 +1,53 @@
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  [REDACTED]y97/Geocode/y97_create_trim2.log
+  log type:  text
+ opened on:   8 Feb 2019, 15:31:54
+
+. 
+. *****************************************************************************
+. * Merge geocode data into the main file
+. *****************************************************************************
+. !unzip -u ../y97_all.dta.zip
+
+
+. use y97_all, clear
+
+. !rm y97_all.dta
+
+
+. 
+. !unzip y97_geocode3.dta.zip
+
+
+. merge 1:1 id year month using y97_geocode3.dta, assert(match) keepusing(empPct empPctFinal incPerCapita incPerCapitaFinal numBA numAA tuitionBApublic tuitionBAprivate)
+(label vlMonth already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                         1,883,461  (_merge==3)
+    -----------------------------------------
+
+. ! rm y97_geocode3.dta
+
+
+. 
+. save y97_all2.dta, replace
+(note: file y97_all2.dta not found)
+file y97_all2.dta saved
+
+. ! chmod 774 y97_all2.dta
+
+
+. 
+. !zip -m y97_all2.dta.zip y97_all2.dta
+
+
+. 
+. log close
+      name:  <unnamed>
+       log:  [REDACTED]y97/Geocode/y97_create_trim2.log
+  log type:  text
+ closed on:   8 Feb 2019, 15:32:17
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

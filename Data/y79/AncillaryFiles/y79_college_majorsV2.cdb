@@ -1,0 +1,2073 @@
+R00001.00    [CASEID]                                       Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             IDENTIFICATION CODE
+ 
+ORIGINAL QUESTION NAME: CASEID
+ 
+NOTE: THIS NUMBER WAS ASSIGNED ACCORDING TO THE RECORD NUMBER OF EACH RESPONDENT
+ON THE TAPE. THE FIRST RESPONDENT WAS ASSIGNED ID#1, THE SECOND WAS ASSIGNED 
+ID#2, ETC.
+ 
+ACTUAL NUMBER
+ 
+UNIVERSE: All
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              1        Max:          12686        Mean:              6343.5
+ 
+Lead In: None.
+Default Next Question: R00001.49
+--------------------------------------------------------------------------------
+R00216.00    [Q3-23_1]                                      Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT CURRENT OR LAST COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: S04Q23D
+ 
+WHAT (IS/WAS) YOUR FIELD OF STUDY? (PROBE IF NECESSARY: WHAT (ARE/WERE ) YOU 
+MAJORING IN?)
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: All except those without any formal schooling; attended >= 9; 
+currently not enrolled;  attended 1st year of college or higher
+ 
+      33           0
+     220           1 TO 499
+    1040         500 TO 999
+     410        1000 TO 1499
+     125        1500 TO 1999
+     319        2000 TO 2499
+      76        4500 TO 4999
+      75        5000 TO 9999999: 5000+
+  -------
+    2298
+ 
+Refusal(-1)            0
+Don't Know(-2)        20
+Invalid Skip(-3)     112
+TOTAL =========>    2430   VALID SKIP(-4)   10256     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:           9996        Mean:             1409.65
+ 
+Lead In: R00215.00[Default]
+Default Next Question: R00217.00
+--------------------------------------------------------------------------------
+R02309.00    [Q3-23_1]                                      Survey Year: 1980
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT CURRENT OR LAST COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: S04Q13
+ 
+HWAT (IS/WAS) YOUR FIELD OF STUDY? PROBE IF NECESSARY: WHAT (ARE/WERE) YOU 
+MAJORING IN?
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R attended >= 13 OR had HS diploma or equivalent at DLI; is/was 
+enrolled at college since DLI
+ 
+     127           0
+       0           1 TO 99
+      25         100 TO 199
+      20         200 TO 299
+       2         300 TO 399
+     110         400 TO 499
+     571         500 TO 599
+      72         600 TO 699
+      89         700 TO 799
+     228         800 TO 899
+     178         900 TO 999
+     874        1000 TO 9999999: 1000+
+  -------
+    2296
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)      85
+TOTAL =========>    2381   VALID SKIP(-4)    9760     NON-INTERVIEW(-5)     545
+ 
+Min:              0        Max:           9996        Mean:             1183.92
+ 
+Lead In: R02308.00[Default]
+Default Next Question: R02310.00
+--------------------------------------------------------------------------------
+R04191.00    [Q3-23_1]                                      Survey Year: 1981
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT CURRENT OR LAST COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: S04D0510
+ 
+WHAT (IS/WAS) YOUR FIELD OF STUDY? (PROBE IF NECESSARY: WHAT (ARE/WERE) YOU 
+MAJORING IN?)
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R attended >= 13 OR had HS diploma or equivalent at DLI; is/was 
+enrolled at college since DLI
+ 
+     126           0
+     165           1 TO 499
+    1361         500 TO 999
+     423        1000 TO 1499
+     104        1500 TO 1999
+     334        2000 TO 2499
+       0        2500 TO 2999
+       0        3000 TO 3499
+       0        3500 TO 3999
+       0        4000 TO 4499
+      70        4500 TO 4999
+      70        5000 TO 9999999: 5000+
+  -------
+    2653
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)      53
+TOTAL =========>    2706   VALID SKIP(-4)    9489     NON-INTERVIEW(-5)     491
+ 
+Min:              0        Max:           9996        Mean:             1270.41
+ 
+Lead In: R04190.00[Default]
+Default Next Question: R04192.00
+--------------------------------------------------------------------------------
+R06662.00    [Q3-23_1]                                      Survey Year: 1982
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT CURRENT OR LAST COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: S03D0753
+ 
+WHAT (IS/WAS) YOUR FIELD OF STUDY? (PROBE IF NECESSARY: WHAT (ARE/
+WERE) YOU MAJORING IN?)
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R attended >= 13 OR had HS diploma or equivalent at DLI; is/was 
+enrolled at college since DLI
+ 
+      98           0
+       3           1 TO 99
+      44         100 TO 199
+      32         200 TO 299
+       2         300 TO 399
+     101         400 TO 499
+     727         500 TO 599
+      85         600 TO 699
+     213         700 TO 799
+     222         800 TO 899
+     293         900 TO 999
+    1089        1000 TO 9999999: 1000+
+  -------
+    2909
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)      82
+TOTAL =========>    2991   VALID SKIP(-4)    9132     NON-INTERVIEW(-5)     563
+ 
+Min:              0        Max:           9996        Mean:             1246.18
+ 
+Lead In: R06661.00[Default]
+Default Next Question: R06663.00
+--------------------------------------------------------------------------------
+R09075.00    [Q3-23_1]                                      Survey Year: 1983
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT CURRENT OR LAST COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q0352
+ 
+WHAT (IS/WAS) YOUR FIELD OF STUDY? RECORD VERBATIM. PROBE IF NECESSARY: WHAT 
+(ARE/WERE) YOU MAJORING IN?
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R attended >= 13 OR had HS diploma or equivalent at DLI; is/was 
+enrolled at college since DLI
+ 
+     127           0
+       1           1 TO 99
+      51         100 TO 199
+      34         200 TO 299
+       1         300 TO 399
+      94         400 TO 499
+     770         500 TO 599
+      93         600 TO 699
+     273         700 TO 799
+     267         800 TO 899
+     300         900 TO 999
+    1090        1000 TO 9999999: 1000+
+  -------
+    3101
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)      57
+TOTAL =========>    3158   VALID SKIP(-4)    9063     NON-INTERVIEW(-5)     465
+ 
+Min:              0        Max:           9996        Mean:             1176.88
+ 
+Lead In: R09074.00[Default]
+Default Next Question: R09076.00
+--------------------------------------------------------------------------------
+R12078.00    [Q3-23_1]                                      Survey Year: 1984
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q0373
+ 
+WHAT (IS/WAS) YOUR FIELD OF STUDY AT (NAME OF SCHOOL)? PROBE IF
+NECESSARY: WHAT (ARE/WERE) YOUR MAJORING IN?
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending college/university
+ 
+     327           0
+       0           1 TO 99
+      73         100 TO 199
+      55         200 TO 299
+       0         300 TO 399
+     156         400 TO 499
+    1401         500 TO 599
+     141         600 TO 699
+     362         700 TO 799
+     440         800 TO 899
+     406         900 TO 999
+    1930        1000 TO 9999999: 1000+
+  -------
+    5291
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       2
+TOTAL =========>    5293   VALID SKIP(-4)    6776     NON-INTERVIEW(-5)     617
+ 
+Min:              0        Max:           9996        Mean:             1233.85
+ 
+Lead In: R12077.00[Default]
+Default Next Question: R12079.00
+--------------------------------------------------------------------------------
+R12087.00    [Q3-23_2]                                      Survey Year: 1984
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT 2ND MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q0473
+ 
+SEE R(12078.)
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending more than 1 college/university
+ 
+     217           0
+       0           1 TO 99
+      18         100 TO 199
+      15         200 TO 299
+       0         300 TO 399
+      87         400 TO 499
+     315         500 TO 599
+      43         600 TO 699
+      74         700 TO 799
+     176         800 TO 899
+     125         900 TO 999
+     619        1000 TO 9999999: 1000+
+  -------
+    1689
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       5
+TOTAL =========>    1694   VALID SKIP(-4)   10375     NON-INTERVIEW(-5)     617
+ 
+Min:              0        Max:           9996        Mean:             1168.38
+ 
+Lead In: R12086.00[Default]
+Default Next Question: R12088.00
+--------------------------------------------------------------------------------
+R12096.00    [Q3-23_3]                                      Survey Year: 1984
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT 3RD MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q0573
+ 
+SEE R(12078.)
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending more than 2 college/university
+ 
+      74           0
+       0           1 TO 99
+       6         100 TO 199
+       2         200 TO 299
+       0         300 TO 399
+      20         400 TO 499
+      67         500 TO 599
+       5         600 TO 699
+       7         700 TO 799
+      44         800 TO 899
+      28         900 TO 999
+     139        1000 TO 9999999: 1000+
+  -------
+     392
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>     392   VALID SKIP(-4)   11677     NON-INTERVIEW(-5)     617
+ 
+Min:              0        Max:           9996        Mean:              1094.7
+ 
+Lead In: R12095.00[Default]
+Default Next Question: R12097.00
+--------------------------------------------------------------------------------
+R16070.00    [Q3-23_1]                                      Survey Year: 1985
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q0373
+ 
+WHAT (IS/WAS) YOUR FIELD OF STUDY AT (NAME OF SCHOOL)? WHAT (ARE/WERE) YOU 
+MAJORING IN?  SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending college/university
+ 
+      55           0
+       0           1 TO 99
+      31         100 TO 199
+      26         200 TO 299
+       3         300 TO 399
+      56         400 TO 499
+     529         500 TO 599
+      73         600 TO 699
+     164         700 TO 799
+     180         800 TO 899
+     178         900 TO 999
+     796        1000 TO 9999999: 1000+
+  -------
+    2091
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)      35
+TOTAL =========>    2126   VALID SKIP(-4)    8768     NON-INTERVIEW(-5)    1792
+ 
+Min:              0        Max:           9996        Mean:             1263.82
+ 
+Lead In: R16069.00[Default]
+Default Next Question: R16071.00
+--------------------------------------------------------------------------------
+R16079.00    [Q3-23_2]                                      Survey Year: 1985
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT 2ND MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q0473
+ 
+SEE R(16070.)
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending more than 1 college/university
+ 
+      19           0
+       0           1 TO 99
+       3         100 TO 199
+       4         200 TO 299
+       0         300 TO 399
+       8         400 TO 499
+      38         500 TO 599
+       5         600 TO 699
+      17         700 TO 799
+      17         800 TO 899
+      18         900 TO 999
+      95        1000 TO 9999999: 1000+
+  -------
+     224
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       3
+TOTAL =========>     227   VALID SKIP(-4)   10667     NON-INTERVIEW(-5)    1792
+ 
+Min:              0        Max:           9996        Mean:             1298.72
+ 
+Lead In: R16078.00[Default]
+Default Next Question: R16080.00
+--------------------------------------------------------------------------------
+R16088.00    [Q3-23_3]                                      Survey Year: 1985
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT 3RD MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q0573
+ 
+SEE R(16070.)
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending more than 2 college/university
+ 
+       2           0
+       0           1 TO 99
+       0         100 TO 199
+       0         200 TO 299
+       0         300 TO 399
+       0         400 TO 499
+       2         500 TO 599
+       1         600 TO 699
+       1         700 TO 799
+       0         800 TO 899
+       1         900 TO 999
+       9        1000 TO 9999999: 1000+
+  -------
+      16
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>      16   VALID SKIP(-4)   10878     NON-INTERVIEW(-5)    1792
+ 
+Min:              0        Max:           4901        Mean:             1360.44
+ 
+Lead In: R16087.00[Default]
+Default Next Question: R16089.00
+--------------------------------------------------------------------------------
+R19074.00    [Q3-23.01]                                     Survey Year: 1986
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q0373
+ 
+WHAT (IS/WAS) YOUR FIELD OF STUDY AT (NAME OF SCHOOL)? WHAT (ARE/WERE) YOU 
+MAJORING IN?
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending college/university
+ 
+      14           0
+       1           1 TO 99
+      14         100 TO 199
+      25         200 TO 299
+       2         300 TO 399
+      39         400 TO 499
+     437         500 TO 599
+      52         600 TO 699
+     124         700 TO 799
+     202         800 TO 899
+     166         900 TO 999
+     675        1000 TO 9999999: 1000+
+  -------
+    1751
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       7
+TOTAL =========>    1758   VALID SKIP(-4)    8897     NON-INTERVIEW(-5)    2031
+ 
+Min:              0        Max:           9998        Mean:              1228.5
+ 
+Lead In: R19073.00[Default]
+Default Next Question: R19075.00
+--------------------------------------------------------------------------------
+R19083.00    [Q3-23.02]                                     Survey Year: 1986
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT 2ND MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q0473
+ 
+SEE R(19074.)
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending more than 1 college/university
+ 
+       1           0
+       0           1 TO 99
+       2         100 TO 199
+       3         200 TO 299
+       0         300 TO 399
+      10         400 TO 499
+      34         500 TO 599
+       2         600 TO 699
+      11         700 TO 799
+      18         800 TO 899
+      16         900 TO 999
+      66        1000 TO 9999999: 1000+
+  -------
+     163
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       1
+TOTAL =========>     164   VALID SKIP(-4)   10491     NON-INTERVIEW(-5)    2031
+ 
+Min:              0        Max:           4901        Mean:             1258.56
+ 
+Lead In: R19082.00[Default]
+Default Next Question: R19084.00
+--------------------------------------------------------------------------------
+R19092.00    [Q3-23.03]                                     Survey Year: 1986
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT 3RD MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q0573
+ 
+SEE R(19074.)
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending more than 2 college/university
+ 
+       0           0
+       0           1 TO 99
+       0         100 TO 199
+       0         200 TO 299
+       0         300 TO 399
+       1         400 TO 499
+       1         500 TO 599
+       0         600 TO 699
+       0         700 TO 799
+       0         800 TO 899
+       1         900 TO 999
+       4        1000 TO 9999999: 1000+
+  -------
+       7
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>       7   VALID SKIP(-4)   10648     NON-INTERVIEW(-5)    2031
+ 
+Min:            401        Max:           4901        Mean:             1589.86
+ 
+Lead In: R19091.00[Default]
+Default Next Question: R19093.00
+--------------------------------------------------------------------------------
+R25113.00    [Q3-23_1]                                      Survey Year: 1988
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q3.201
+ 
+WHAT (IS/WAS) YOUR FIELD OF STUDY AT (NAME OF SCHOOL)?
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending college/university
+ 
+      22           0
+       0           1 TO 99
+      14         100 TO 199
+      17         200 TO 299
+       1         300 TO 399
+      34         400 TO 499
+     411         500 TO 599
+      38         600 TO 699
+     124         700 TO 799
+     227         800 TO 899
+     140         900 TO 999
+     627        1000 TO 9999999: 1000+
+  -------
+    1655
+ 
+Refusal(-1)            0
+Don't Know(-2)         1
+Invalid Skip(-3)      59
+TOTAL =========>    1715   VALID SKIP(-4)    8750     NON-INTERVIEW(-5)    2221
+ 
+Min:              0        Max:           9996        Mean:             1228.23
+ 
+Lead In: R25112.00[Default]
+Default Next Question: R25114.00
+--------------------------------------------------------------------------------
+R25128.00    [Q3-23_2]                                      Survey Year: 1988
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT 2ND MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q3.202
+ 
+SEE R(25113.)
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending more than 1 college/university
+ 
+       6           0
+       1           1 TO 99
+       3         100 TO 199
+       4         200 TO 299
+       1         300 TO 399
+       2         400 TO 499
+      47         500 TO 599
+       4         600 TO 699
+      13         700 TO 799
+      35         800 TO 899
+       6         900 TO 999
+      75        1000 TO 9999999: 1000+
+  -------
+     197
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)      12
+TOTAL =========>     209   VALID SKIP(-4)   10256     NON-INTERVIEW(-5)    2221
+ 
+Min:              0        Max:           9996        Mean:             1248.53
+ 
+Lead In: R25127.00[Default]
+Default Next Question: R25129.00
+--------------------------------------------------------------------------------
+R25142.00    [Q3-23_3]                                      Survey Year: 1988
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT 3RD MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q3.203
+ 
+SEE R(25113.)
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending more than 2 college/university
+ 
+       0           0
+       0           1 TO 99
+       0         100 TO 199
+       0         200 TO 299
+       0         300 TO 399
+       0         400 TO 499
+       1         500 TO 599
+       0         600 TO 699
+       1         700 TO 799
+       4         800 TO 899
+       2         900 TO 999
+       8        1000 TO 9999999: 1000+
+  -------
+      16
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       6
+TOTAL =========>      22   VALID SKIP(-4)   10443     NON-INTERVIEW(-5)    2221
+ 
+Min:            506        Max:           4901        Mean:             1445.56
+ 
+Lead In: R25141.00[Default]
+Default Next Question: R25143.00
+--------------------------------------------------------------------------------
+R29102.00    [Q3-23_1]                                      Survey Year: 1989
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q0469
+ 
+WHAT (IS/WAS) YOUR FIELD OF STUDY AT (NAME OF SCHOOL)? WHAT (ARE/WERE)
+YOU MAJORING IN?
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending college/university
+ 
+      10           0
+       3           1 TO 99
+      10         100 TO 199
+       7         200 TO 299
+       4         300 TO 399
+      17         400 TO 499
+     233         500 TO 599
+      11         600 TO 699
+      76         700 TO 799
+     188         800 TO 899
+      76         900 TO 999
+     324        1000 TO 9999999: 1000+
+  -------
+     959
+ 
+Refusal(-1)            1
+Don't Know(-2)         2
+Invalid Skip(-3)       8
+TOTAL =========>     970   VALID SKIP(-4)    9635     NON-INTERVIEW(-5)    2081
+ 
+Min:              0        Max:           9996        Mean:             1143.16
+ 
+Lead In: R29101.00[Default]
+Default Next Question: R29103.00
+--------------------------------------------------------------------------------
+R29117.00    [Q3-23_2]                                      Survey Year: 1989
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT 2ND MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q0569
+ 
+SEE R(29102.)
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending more than 1 college/university
+ 
+       4           0
+       0           1 TO 99
+       1         100 TO 199
+       0         200 TO 299
+       0         300 TO 399
+       1         400 TO 499
+      12         500 TO 599
+       2         600 TO 699
+       2         700 TO 799
+      18         800 TO 899
+       2         900 TO 999
+      16        1000 TO 9999999: 1000+
+  -------
+      58
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       2
+TOTAL =========>      60   VALID SKIP(-4)   10545     NON-INTERVIEW(-5)    2081
+ 
+Min:              0        Max:           4901        Mean:              900.03
+ 
+Lead In: R29116.00[Default]
+Default Next Question: R29118.00
+--------------------------------------------------------------------------------
+R29131.00    [Q3-23_3]                                      Survey Year: 1989
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT 3RD MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q0669
+ 
+SEE R(29102.)
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending more than 2 college/university
+ 
+       1           0
+       0           1 TO 99
+       0         100 TO 199
+       0         200 TO 299
+       0         300 TO 399
+       0         400 TO 499
+       0         500 TO 599
+       0         600 TO 699
+       1         700 TO 799
+       1         800 TO 899
+       0         900 TO 999
+       1        1000 TO 9999999: 1000+
+  -------
+       4
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>       4   VALID SKIP(-4)   10601     NON-INTERVIEW(-5)    2081
+ 
+Min:              0        Max:           1299        Mean:                 706
+ 
+Lead In: R29130.00[Default]
+Default Next Question: R29132.00
+--------------------------------------------------------------------------------
+R31122.00    [Q3-23_1]                                      Survey Year: 1990
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q0545
+ 
+WHAT (IS/WAS) YOUR FIELD OF STUDY AT (NAME OF SCHOOL)? WHAT
+(ARE/WERE) YOU MAJORING IN?
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending college/university
+ 
+       3           0
+       0           1 TO 99
+       7         100 TO 199
+       3         200 TO 299
+       0         300 TO 399
+      20         400 TO 499
+     230         500 TO 599
+      10         600 TO 699
+      61         700 TO 799
+     150         800 TO 899
+      54         900 TO 999
+     392        1000 TO 9999999: 1000+
+  -------
+     930
+ 
+Refusal(-1)            1
+Don't Know(-2)         3
+Invalid Skip(-3)      16
+TOTAL =========>     950   VALID SKIP(-4)    9486     NON-INTERVIEW(-5)    2250
+ 
+Min:              0        Max:           9996        Mean:             1258.86
+ 
+Lead In: R31121.00[Default]
+Default Next Question: R31123.00
+--------------------------------------------------------------------------------
+R31137.00    [Q3-23_2]                                      Survey Year: 1990
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT 2ND MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q0645
+ 
+SEE R(31122.)
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending more than 1 college/university
+ 
+       1           0
+       0           1 TO 99
+       1         100 TO 199
+       0         200 TO 299
+       0         300 TO 399
+       0         400 TO 499
+       8         500 TO 599
+       1         600 TO 699
+       4         700 TO 799
+       9         800 TO 899
+       3         900 TO 999
+      23        1000 TO 9999999: 1000+
+  -------
+      50
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)      11
+TOTAL =========>      61   VALID SKIP(-4)   10375     NON-INTERVIEW(-5)    2250
+ 
+Min:              0        Max:           4901        Mean:              1082.2
+ 
+Lead In: R31136.00[Default]
+Default Next Question: R31138.00
+--------------------------------------------------------------------------------
+R31151.00    [Q3-23_3]                                      Survey Year: 1990
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT 3RD MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q0745
+ 
+SEE R(31122.)
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending more than 2 college/university
+ 
+       0           0
+       0           1 TO 99
+       0         100 TO 199
+       0         200 TO 299
+       0         300 TO 399
+       0         400 TO 499
+       0         500 TO 599
+       0         600 TO 699
+       1         700 TO 799
+       1         800 TO 899
+       0         900 TO 999
+       1        1000 TO 9999999: 1000+
+  -------
+       3
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>       3   VALID SKIP(-4)   10433     NON-INTERVIEW(-5)    2250
+ 
+Min:            701        Max:           1701        Mean:             1067.67
+ 
+Lead In: R31150.00[Default]
+Default Next Question: R31152.00
+--------------------------------------------------------------------------------
+R37127.00    [Q3-23_1]                                      Survey Year: 1992
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q0572
+ 
+WHAT (IS/WAS) YOUR FIELD OF STUDY AT (NAME OF SCHOOL)? WHAT
+(ARE/WERE) YOU MAJORING IN?
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending college/university
+ 
+       2           0
+       0           1 TO 99
+       7         100 TO 199
+       7         200 TO 299
+       4         300 TO 399
+      21         400 TO 499
+     201         500 TO 599
+      10         600 TO 699
+      53         700 TO 799
+     119         800 TO 899
+      49         900 TO 999
+     424        1000 TO 9999999: 1000+
+  -------
+     897
+ 
+Refusal(-1)            0
+Don't Know(-2)         1
+Invalid Skip(-3)      13
+TOTAL =========>     911   VALID SKIP(-4)    8105     NON-INTERVIEW(-5)    3670
+ 
+Min:              0        Max:           9996        Mean:             1391.89
+ 
+Lead In: R37126.00[Default]
+Default Next Question: R37128.00
+--------------------------------------------------------------------------------
+R37142.00    [Q3-23_2]                                      Survey Year: 1992
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT 2ND MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q0677
+ 
+SEE R(37127.)
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending more than 1 college/university
+ 
+       0           0
+       0           1 TO 99
+       1         100 TO 199
+       0         200 TO 299
+       0         300 TO 399
+       0         400 TO 499
+      15         500 TO 599
+       2         600 TO 699
+       3         700 TO 799
+      12         800 TO 899
+       3         900 TO 999
+      49        1000 TO 9999999: 1000+
+  -------
+      85
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       2
+TOTAL =========>      87   VALID SKIP(-4)    8929     NON-INTERVIEW(-5)    3670
+ 
+Min:            108        Max:           9996        Mean:             1900.96
+ 
+Lead In: R37141.00[Default]
+Default Next Question: R37143.00
+--------------------------------------------------------------------------------
+R37156.00    [Q3-23_3]                                      Survey Year: 1992
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT 3RD MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q0777
+ 
+SEE R(37127.)
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending more than 2 college/university
+ 
+       0           0
+       1           1 TO 99
+       0         100 TO 199
+       0         200 TO 299
+       0         300 TO 399
+       0         400 TO 499
+       2         500 TO 599
+       0         600 TO 699
+       0         700 TO 799
+       1         800 TO 899
+       1         900 TO 999
+       7        1000 TO 9999999: 1000+
+  -------
+      12
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       1
+TOTAL =========>      13   VALID SKIP(-4)    9003     NON-INTERVIEW(-5)    3670
+ 
+Min:             22        Max:           2206        Mean:             1038.83
+ 
+Lead In: R37155.00[Default]
+Default Next Question: R37157.00
+--------------------------------------------------------------------------------
+R41403.00    [Q3-23.01]                                     Survey Year: 1993
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q3-23.1
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended (college 1)](13)? (RECORD VERBATIM. PROBE IF NECESSARY:) What 
+(are/were) you majoring in?     SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending college/university
+ 
+      23           0
+       0           1 TO 99
+       1         100 TO 199
+       4         200 TO 299
+       1         300 TO 399
+      17         400 TO 499
+     137         500 TO 599
+       8         600 TO 699
+      55         700 TO 799
+      95         800 TO 899
+      43         900 TO 999
+     292        1000 TO 9999999: 1000+
+  -------
+     676
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>     676   VALID SKIP(-4)    8335     NON-INTERVIEW(-5)    3675
+ 
+Min:              0        Max:           4903        Mean:             1133.63
+ 
+Lead In: R41402.01[Default]
+Default Next Question: R41404.00
+--------------------------------------------------------------------------------
+R41419.00    [Q3-23.02]                                     Survey Year: 1993
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT 2ND MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q3-23.2
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended (college 2)]?
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending more than 1 college/university
+ 
+       1           0
+       0           1 TO 99
+       0         100 TO 199
+       1         200 TO 299
+       0         300 TO 399
+       1         400 TO 499
+       7         500 TO 599
+       0         600 TO 699
+       2         700 TO 799
+       3         800 TO 899
+       6         900 TO 999
+      20        1000 TO 9999999: 1000+
+  -------
+      41
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>      41   VALID SKIP(-4)    8970     NON-INTERVIEW(-5)    3675
+ 
+Min:              0        Max:           4901        Mean:             1312.17
+ 
+Lead In: R41418.01[Default]
+Default Next Question: R41420.00
+--------------------------------------------------------------------------------
+R41434.00    [Q3-23.03]                                     Survey Year: 1993
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT 3RD MOST RECENT COLLEGE ATTENDED
+ 
+ORIGINAL QUESTION NAME: Q3-23.3
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended (college 3)]?
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+ 
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+UNIVERSE: R is/was attending more than 2 college/university
+ 
+       0           0
+       0           1 TO 99
+       0         100 TO 199
+       0         200 TO 299
+       0         300 TO 399
+       0         400 TO 499
+       0         500 TO 599
+       0         600 TO 699
+       0         700 TO 799
+       0         800 TO 899
+       0         900 TO 999
+       1        1000 TO 9999999: 1000+
+  -------
+       1
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>       1   VALID SKIP(-4)    9010     NON-INTERVIEW(-5)    3675
+ 
+Min:           2304        Max:           2304        Mean:                2304
+ 
+Lead In: R41433.01[Default]
+Default Next Question: R41435.00
+--------------------------------------------------------------------------------
+R45287.00    [Q3-23.1]                                      Survey Year: 1994
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT MOST RECENT COLLEGE ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended (college 1)](2)?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:)  What (are/were) you majoring in?
+ 
+      15           0
+       0           1 TO 99
+       5         100 TO 199
+       2         200 TO 299
+       1         300 TO 399
+      10         400 TO 499
+     150         500 TO 599
+       9         600 TO 699
+      37         700 TO 799
+      75         800 TO 899
+      43         900 TO 999
+     279        1000 TO 99999999: 1000+
+  -------
+     626
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       9
+TOTAL =========>     635   VALID SKIP(-4)    8256     NON-INTERVIEW(-5)    3795
+ 
+Min:              0        Max:           9996        Mean:             1372.66
+ 
+Lead In: R45286.00[Default]  R45283.00[1:1]
+Default Next Question: R45288.00
+--------------------------------------------------------------------------------
+R45300.00    [Q3-23.2]                                      Survey Year: 1994
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT 2ND MOST RECENT COLLEGE ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended (college 2)]?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:)  What (are/were) you majoring in?
+ 
+       2           0
+       1           1 TO 99
+       0         100 TO 199
+       0         200 TO 299
+       0         300 TO 399
+       0         400 TO 499
+       5         500 TO 599
+       1         600 TO 699
+       3         700 TO 799
+      10         800 TO 899
+       1         900 TO 999
+      21        1000 TO 99999999: 1000+
+  -------
+      44
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>      44   VALID SKIP(-4)    8847     NON-INTERVIEW(-5)    3795
+ 
+Min:              0        Max:           4901        Mean:             1309.64
+ 
+Lead In: R45299.00[Default]  R45296.00[1:1]
+Default Next Question: R45301.00
+--------------------------------------------------------------------------------
+R45311.00    [Q3-23.3]                                      Survey Year: 1994
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT 3RD MOST RECENT COLLEGE ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended (college 3)]?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:)  What (are/were) you majoring in?
+ 
+       0           0
+       0           1 TO 99
+       0         100 TO 199
+       0         200 TO 299
+       0         300 TO 399
+       0         400 TO 499
+       0         500 TO 599
+       0         600 TO 699
+       1         700 TO 799
+       0         800 TO 899
+       0         900 TO 999
+       1        1000 TO 99999999: 1000+
+  -------
+       2
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>       2   VALID SKIP(-4)    8889     NON-INTERVIEW(-5)    3795
+ 
+Min:            704        Max:           1701        Mean:              1202.5
+ 
+Lead In: R45310.00[Default]
+Default Next Question: R45312.00
+--------------------------------------------------------------------------------
+R52240.00    [Q3-23.01]                                     Survey Year: 1996
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT MOST RECENT COLLEGE ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended (college 1)]?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:)  What (are/were) you majoring in?
+SEE ATTACHMENT 4, FIELDS OF STUDY IN COLLEGE
+ 
+       0           0
+       0           1 TO 99
+       3         100 TO 199
+       3         200 TO 299
+       0         300 TO 399
+       9         400 TO 499
+     135         500 TO 599
+       9         600 TO 699
+      57         700 TO 799
+     112         800 TO 899
+      33         900 TO 999
+     284        1000 TO 99999999: 1000+
+  -------
+     645
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)      20
+TOTAL =========>     665   VALID SKIP(-4)    7971     NON-INTERVIEW(-5)    4050
+ 
+Min:            107        Max:           9999        Mean:             1522.79
+ 
+Lead In: R52239.00[Default]  R52236.00[1:1]
+Default Next Question: R52241.00
+--------------------------------------------------------------------------------
+R52253.00    [Q3-23.02]                                     Survey Year: 1996
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT 2ND MOST RECENT COLLEGE ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended (college 2)]?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:)  What (are/were) you majoring in?
+ 
+       0           0
+       0           1 TO 99
+       0         100 TO 199
+       0         200 TO 299
+       1         300 TO 399
+       0         400 TO 499
+       3         500 TO 599
+       0         600 TO 699
+       2         700 TO 799
+      10         800 TO 899
+       2         900 TO 999
+      26        1000 TO 99999999: 1000+
+  -------
+      44
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       1
+TOTAL =========>      45   VALID SKIP(-4)    8591     NON-INTERVIEW(-5)    4050
+ 
+Min:            399        Max:           9996        Mean:             1880.98
+ 
+Lead In: R52252.00[Default]  R52249.00[1:1]
+Default Next Question: R52254.00
+--------------------------------------------------------------------------------
+R52265.00    [Q3-23.03]                                     Survey Year: 1996
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT 3RD MOST RECENT COLLEGE ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended (college 3)]?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:)  What (are/were) you majoring in?
+ 
+       0           0
+       0           1 TO 99
+       0         100 TO 199
+       0         200 TO 299
+       0         300 TO 399
+       0         400 TO 499
+       0         500 TO 599
+       0         600 TO 699
+       0         700 TO 799
+       1         800 TO 899
+       1         900 TO 999
+       0        1000 TO 99999999: 1000+
+  -------
+       2
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>       2   VALID SKIP(-4)    8634     NON-INTERVIEW(-5)    4050
+ 
+Min:            835        Max:            909        Mean:                 872
+ 
+Lead In: R52264.00[Default]
+Default Next Question: R52266.00
+--------------------------------------------------------------------------------
+R64678.00    [Q3-23_CODE.01]                                Survey Year: 1998
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 01 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+       9           0
+       0           1 TO 99
+       2         100 TO 199
+       4         200 TO 299
+       1         300 TO 399
+       8         400 TO 499
+     112         500 TO 599
+      11         600 TO 699
+      38         700 TO 799
+      98         800 TO 899
+      30         900 TO 999
+     245        1000 TO 99999999: 1000+
+  -------
+     558
+ 
+Refusal(-1)            1
+Don't Know(-2)        14
+TOTAL =========>     573   VALID SKIP(-4)    7826     NON-INTERVIEW(-5)    4287
+ 
+Min:              0        Max:           9996        Mean:             1260.15
+ 
+Lead In: R58245.00[Default]
+Default Next Question: R58248.00
+--------------------------------------------------------------------------------
+R64679.00    [Q3-23_CODE.02]                                Survey Year: 1998
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 02 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+       1           0
+       0           1 TO 99
+       0         100 TO 199
+       0         200 TO 299
+       1         300 TO 399
+       3         400 TO 499
+      30         500 TO 599
+       0         600 TO 699
+      12         700 TO 799
+      17         800 TO 899
+       5         900 TO 999
+      48        1000 TO 99999999: 1000+
+  -------
+     117
+ 
+Refusal(-1)            0
+Don't Know(-2)       124
+TOTAL =========>     241   VALID SKIP(-4)    8158     NON-INTERVIEW(-5)    4287
+ 
+Min:              0        Max:           4901        Mean:             1185.03
+ 
+Lead In: R58246.00[Default]
+Default Next Question: R58249.00
+--------------------------------------------------------------------------------
+R64680.00    [Q3-23_CODE.03]                                Survey Year: 1998
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 03 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+       0           0
+       0           1 TO 99
+       0         100 TO 199
+       0         200 TO 299
+       0         300 TO 399
+       0         400 TO 499
+       1         500 TO 599
+       0         600 TO 699
+       0         700 TO 799
+       2         800 TO 899
+       0         900 TO 999
+       2        1000 TO 99999999: 1000+
+  -------
+       5
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>       5   VALID SKIP(-4)    8394     NON-INTERVIEW(-5)    4287
+ 
+Min:            506        Max:           2004        Mean:              1067.8
+ 
+Lead In: R58247.00[Default]
+Default Next Question: R58250.00
+--------------------------------------------------------------------------------
+R65433.00    [Q3-23_CODE.01]                                Survey Year: 2000
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 01 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]?
+ 
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:)  What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+       0           0
+       0           1 TO 99
+       1         100 TO 199
+       2         200 TO 299
+       1         300 TO 399
+       4         400 TO 499
+     122         500 TO 599
+       9         600 TO 699
+      54         700 TO 799
+      78         800 TO 899
+      23         900 TO 999
+     188        1000 TO 99999999: 1000+
+  -------
+     482
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)      49
+TOTAL =========>     531   VALID SKIP(-4)    7502     NON-INTERVIEW(-5)    4653
+ 
+Min:            101        Max:           9999        Mean:             1272.26
+ 
+Lead In: R65430.00[Default]
+Default Next Question: R65436.00
+--------------------------------------------------------------------------------
+R65434.00    [Q3-23_CODE.02]                                Survey Year: 2000
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 02 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]?
+ 
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:)  What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+       0           0
+       0           1 TO 99
+       1         100 TO 199
+       0         200 TO 299
+       0         300 TO 399
+       0         400 TO 499
+       6         500 TO 599
+       0         600 TO 699
+       7         700 TO 799
+      10         800 TO 899
+       1         900 TO 999
+      13        1000 TO 99999999: 1000+
+  -------
+      38
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>      38   VALID SKIP(-4)    7995     NON-INTERVIEW(-5)    4653
+ 
+Min:            108        Max:           9996        Mean:             1270.03
+ 
+Lead In: R65431.00[Default]
+Default Next Question: R65437.00
+--------------------------------------------------------------------------------
+R65435.00    [Q3-23_CODE.03]                                Survey Year: 2000
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 03 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]?
+ 
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:)  What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+       0           0
+       0           1 TO 99
+       0         100 TO 199
+       0         200 TO 299
+       0         300 TO 399
+       0         400 TO 499
+       1         500 TO 599
+       0         600 TO 699
+       1         700 TO 799
+       2         800 TO 899
+       0         900 TO 999
+       0        1000 TO 99999999: 1000+
+  -------
+       4
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>       4   VALID SKIP(-4)    8029     NON-INTERVIEW(-5)    4653
+ 
+Min:            501        Max:            801        Mean:              701.75
+ 
+Lead In: R65432.00[Default]
+Default Next Question: R65438.00
+--------------------------------------------------------------------------------
+R71065.00    [Q3-23_CODE.01]                                Survey Year: 2002
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 01 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+       2           0
+       0           1 TO 99
+       3         100 TO 199
+       1         200 TO 299
+       0         300 TO 399
+       4         400 TO 499
+      76         500 TO 599
+       1         600 TO 699
+      44         700 TO 799
+      71         800 TO 899
+       9         900 TO 999
+     179        1000 TO 99999999: 1000+
+  -------
+     390
+ 
+Refusal(-1)            0
+Don't Know(-2)         2
+Invalid Skip(-3)       3
+TOTAL =========>     395   VALID SKIP(-4)    7329     NON-INTERVIEW(-5)    4962
+ 
+Min:              0        Max:           9996        Mean:             1441.31
+ 
+Lead In: R71062.00[Default]
+Default Next Question: R71068.00
+--------------------------------------------------------------------------------
+R71066.00    [Q3-23_CODE.02]                                Survey Year: 2002
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 02 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+       0           0
+       0           1 TO 99
+       0         100 TO 199
+       0         200 TO 299
+       0         300 TO 399
+       1         400 TO 499
+       2         500 TO 599
+       0         600 TO 699
+       4         700 TO 799
+       9         800 TO 899
+       0         900 TO 999
+      10        1000 TO 99999999: 1000+
+  -------
+      26
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       1
+TOTAL =========>      27   VALID SKIP(-4)    7697     NON-INTERVIEW(-5)    4962
+ 
+Min:            401        Max:           9996        Mean:             1448.85
+ 
+Lead In: R71063.00[Default]
+Default Next Question: R71069.00
+--------------------------------------------------------------------------------
+R71067.00    [Q3-23_CODE.03]                                Survey Year: 2002
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 03 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+       0           0
+       0           1 TO 99
+       0         100 TO 199
+       0         200 TO 299
+       0         300 TO 399
+       0         400 TO 499
+       0         500 TO 599
+       0         600 TO 699
+       0         700 TO 799
+       1         800 TO 899
+       0         900 TO 999
+       1        1000 TO 99999999: 1000+
+  -------
+       2
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>       2   VALID SKIP(-4)    7722     NON-INTERVIEW(-5)    4962
+ 
+Min:            801        Max:           4901        Mean:                2851
+ 
+Lead In: R71064.00[Default]
+Default Next Question: R71070.00
+--------------------------------------------------------------------------------
+R78133.02    [Q3-23_CODE.01]                                Survey Year: 2004
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 1 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]([sch-loop1 counter])?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)      11
+TOTAL =========>     424   VALID SKIP(-4)    7237     NON-INTERVIEW(-5)    5025
+ 
+Min:              0        Max:           9995        Mean:              1130.4
+ 
+Lead In: None.
+Default Next Question: R78134.00
+--------------------------------------------------------------------------------
+R78133.03    [Q3-23_CODE.02]                                Survey Year: 2004
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 2 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]([sch-loop1 counter])?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>      30   VALID SKIP(-4)    7631     NON-INTERVIEW(-5)    5025
+ 
+Min:              0        Max:           4901        Mean:             1111.87
+ 
+Lead In: None.
+Default Next Question: R78134.00
+--------------------------------------------------------------------------------
+R78133.04    [Q3-23_CODE.03]                                Survey Year: 2004
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 3 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]([sch-loop1 counter])?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+Refusal(-1)            0
+Don't Know(-2)         1
+TOTAL =========>       4   VALID SKIP(-4)    7657     NON-INTERVIEW(-5)    5025
+ 
+Min:            801        Max:            909        Mean:                 837
+ 
+Lead In: None.
+Default Next Question: R78134.00
+--------------------------------------------------------------------------------
+R78133.05    [Q3-23_CODE.04]                                Survey Year: 2004
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 4 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]([sch-loop1 counter])?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>       1   VALID SKIP(-4)    7660     NON-INTERVIEW(-5)    5025
+ 
+Min:            899        Max:            899        Mean:                 899
+ 
+Lead In: None.
+Default Next Question: R78134.00
+--------------------------------------------------------------------------------
+R78133.06    [Q3-23_CODE.05]                                Survey Year: 2004
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 4 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]([sch-loop1 counter])?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>       1   VALID SKIP(-4)    7660     NON-INTERVIEW(-5)    5025
+ 
+Min:            899        Max:            899        Mean:                 899
+ 
+Lead In: None.
+Default Next Question: R78134.00
+--------------------------------------------------------------------------------
+T00173.00    [Q3-23_CODE.01]                                Survey Year: 2006
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 01 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]([sch-loop1 counter])?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)      21
+TOTAL =========>     396   VALID SKIP(-4)    7258     NON-INTERVIEW(-5)    5032
+ 
+Min:              0        Max:           2301        Mean:              963.06
+ 
+Lead In: None.
+Default Next Question: T00176.00
+--------------------------------------------------------------------------------
+T00174.00    [Q3-23_CODE.02]                                Survey Year: 2006
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 02 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]([sch-loop1 counter])?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       2
+TOTAL =========>      29   VALID SKIP(-4)    7625     NON-INTERVIEW(-5)    5032
+ 
+Min:              0        Max:           2301        Mean:              1122.3
+ 
+Lead In: None.
+Default Next Question: T00177.00
+--------------------------------------------------------------------------------
+T00175.00    [Q3-23_CODE.03]                                Survey Year: 2006
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 03 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]([sch-loop1 counter])?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       1
+TOTAL =========>       3   VALID SKIP(-4)    7651     NON-INTERVIEW(-5)    5032
+ 
+Min:              0        Max:            801        Mean:               400.5
+ 
+Lead In: None.
+Default Next Question: T00178.00
+--------------------------------------------------------------------------------
+T12177.00    [Q3-23_CODE.01]                                Survey Year: 2008
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 01 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]([sch-loop1 counter])?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+Refusal(-1)            0
+Don't Know(-2)         3
+Invalid Skip(-3)       9
+TOTAL =========>     369   VALID SKIP(-4)    7388     NON-INTERVIEW(-5)    4929
+ 
+Min:              0        Max:           9995        Mean:             1254.72
+ 
+Lead In: None.
+Default Next Question: T12179.00
+--------------------------------------------------------------------------------
+T12178.00    [Q3-23_CODE.02]                                Survey Year: 2008
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 02 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]([sch-loop1 counter])?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>      25   VALID SKIP(-4)    7732     NON-INTERVIEW(-5)    4929
+ 
+Min:              0        Max:           4901        Mean:             1354.28
+ 
+Lead In: None.
+Default Next Question: T12180.00
+--------------------------------------------------------------------------------
+T22757.00    [Q3-23_CODE.01]                                Survey Year: 2010
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 01 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]([sch-loop1 counter])?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+Refusal(-1)            0
+Don't Know(-2)         1
+Invalid Skip(-3)       3
+TOTAL =========>     328   VALID SKIP(-4)    7237     NON-INTERVIEW(-5)    5121
+ 
+Min:              0        Max:           9996        Mean:             1391.41
+ 
+Lead In: None.
+Default Next Question: T22759.00
+--------------------------------------------------------------------------------
+T22758.00    [Q3-23_CODE.02]                                Survey Year: 2010
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 02 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]([sch-loop1 counter])?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       1
+TOTAL =========>      20   VALID SKIP(-4)    7545     NON-INTERVIEW(-5)    5121
+ 
+Min:            501        Max:           4901        Mean:             1563.32
+ 
+Lead In: None.
+Default Next Question: T22760.00
+--------------------------------------------------------------------------------
+T32163.00    [Q3-23_CODE.01]                                Survey Year: 2012
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 01 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]([sch-loop1 counter])?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)      13
+TOTAL =========>     313   VALID SKIP(-4)    6988     NON-INTERVIEW(-5)    5385
+ 
+Min:              0        Max:           4903        Mean:             1252.95
+ 
+Lead In: None.
+Default Next Question: T32165.00
+--------------------------------------------------------------------------------
+T32164.00    [Q3-23_CODE.02]                                Survey Year: 2012
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 02 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]([sch-loop1 counter])?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>      35   VALID SKIP(-4)    7266     NON-INTERVIEW(-5)    5385
+ 
+Min:            428        Max:           2304        Mean:             1284.77
+ 
+Lead In: None.
+Default Next Question: T32166.00
+--------------------------------------------------------------------------------
+T42059.00    [Q3-23_CODE.01]                                Survey Year: 2014
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 01 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]([sch-loop1 counter])?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+Refusal(-1)            0
+Don't Know(-2)         1
+Invalid Skip(-3)      15
+TOTAL =========>     218   VALID SKIP(-4)    6853     NON-INTERVIEW(-5)    5615
+ 
+Min:              0        Max:           9995        Mean:             1382.48
+ 
+Lead In: None.
+Default Next Question: T42062.00
+--------------------------------------------------------------------------------
+T42060.00    [Q3-23_CODE.02]                                Survey Year: 2014
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 02 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]([sch-loop1 counter])?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       2
+TOTAL =========>      15   VALID SKIP(-4)    7056     NON-INTERVIEW(-5)    5615
+ 
+Min:            428        Max:           2104        Mean:              931.85
+ 
+Lead In: None.
+Default Next Question: T42063.00
+--------------------------------------------------------------------------------
+T42061.00    [Q3-23_CODE.03]                                Survey Year: 2014
+  PRIMARY VARIABLE
+
+ 
+             MAJOR FIELD OF STUDY AT COLLEGE 03 ATTENDED
+ 
+What (is/was) your field of study at [Name of college or university respondent 
+attended]([sch-loop1 counter])?
+ 
+(RECORD VERBATIM. PROBE IF NECESSARY:) What (are/were) you majoring in?
+SEE ATTACHMENT 4,  FIELDS OF STUDY IN COLLEGE
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       1
+TOTAL =========>       1   VALID SKIP(-4)    7070     NON-INTERVIEW(-5)    5615
+ 
+Min:        Max:        Mean:                   0
+ 
+Lead In: None.
+Default Next Question: T42064.00

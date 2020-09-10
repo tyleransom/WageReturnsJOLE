@@ -1,0 +1,29 @@
+\begin{table}[ht]
+\caption{Schooling attainment and graduation probabilities at age 32}
+\label{tab:degree}
+\centering
+\scalebox{1.0}[1.0]{% 
+\begin{threeparttable}
+\begin{tabular}{lrrr@{}l}
+\toprule 
+Variable & NLSY79 & NLSY97 & \multicolumn{2}{c}{97--79} \\
+\midrule 
+\multicolumn{5}{l}{\emph{Schooling Attainment:}} \\
+~~\% HS Dropouts                      & 0.10 & 0.09 & -0.02 &    ** \\ 
+~~\% HS Graduates                     & 0.29 & 0.24 & -0.05 &   *** \\ 
+~~\% Some College                     & 0.38 & 0.40 & 0.01 &      \\ 
+~~\% College Graduates                & 0.23 & 0.28 & 0.05 &   *** \\ 
+\vspace{-6pt}  \\
+\multicolumn{5}{l}{\emph{Graduation Probabilities and Time to Degree:}} \\
+%~~Pr(Grad HS)                         & 0.90 & 0.91 & 0.02 &       ** \\ 
+~~Pr(Start College)                   & 0.61 & 0.67 & 0.06 &     *** \\ 
+%~~Pr(Grad College)                    & 0.23 & 0.28 & 0.05 &      *** \\ 
+~~Pr(Grad College $\vert$ Start Col)  & 0.37 & 0.41 & 0.04 &  ** \\ 
+~~Time to College Degree (years)      & 5.35 & 5.85 & 0.49 &   *** \\ 
+%~~Time to College Degree (months)    & 64.25 & 70.17 & 5.92 &  *** \\ 
+\bottomrule 
+\end{tabular} 
+\footnotesize{Notes: \emph{HS Graduates} included in this table are those who have either a GED or a diploma but who never attended college. \emph{Some College} are those who attended college but did not graduate with a 4-year degree. \emph{College Graduates} are those who graduated with a 4-year degree. As in \citep{bound2012}, time to college degree is defined as how many months passed between high school graduation and graduation. Statistics weighted by NLSY sampling weights. Significance reported at the 1\% (***), 5\% (**), and 10\% (*) levels.}
+\end{threeparttable} 
+} 
+\end{table} 

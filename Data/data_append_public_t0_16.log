@@ -1,0 +1,1405 @@
+
+. 
+. ********************************************************************
+. * This do-file appends the 79 and 97 datasets for ease of comparison
+. *  for tabulations, etc.
+. * It also creates the time-changing variables as well as the
+. *   interaction terms.
+. ********************************************************************
+. 
+. !unzip -u    y79/y79_all.dta.zip
+
+
+. use              y79_all.dta
+
+. !rm              y79_all.dta
+
+
+. !unzip -u    y97/y97_all.dta.zip
+
+
+. append using     y97_all.dta, generate(cohortFlag)
+(note: variable gradeCurrent was byte, now float to accommodate using data's values)
+(note: variable R17interviewDate was byte, now int to accommodate using data's values)
+(label vlMonth already defined)
+
+. !rm              y97_all.dta
+
+
+. 
+. recode  cohortFlag (0 = 1979) (1 = 1997)
+(cohortFlag: 4509811 changes made)
+
+. lab var cohortFlag "Cohort Flag (1979 or 1997)"
+
+. 
+. recode  born19?? (.=0)
+(born1957: 1883461 changes made)
+(born1958: 1883461 changes made)
+(born1959: 1883461 changes made)
+(born1960: 1883461 changes made)
+(born1961: 1883461 changes made)
+(born1962: 1883461 changes made)
+(born1963: 1883461 changes made)
+(born1964: 1883461 changes made)
+(born1980: 2626350 changes made)
+(born1981: 2626350 changes made)
+(born1982: 2626350 changes made)
+(born1983: 2626350 changes made)
+(born1984: 2626350 changes made)
+
+. 
+. drop if age<=15
+(667,938 observations deleted)
+
+. 
+. tempfile holder2
+
+. 
+. sort    cohortFlag id year month
+
+. 
+. *consolidate the cohort-specific variables:
+. generat famInc   = famInc1978
+(1,566,773 missing values generated)
+
+. replace famInc   = famInc1996 if cohortFlag==1997
+(1,566,773 real changes made)
+
+. generat m_famInc = m_famInc1978
+(1,566,773 missing values generated)
+
+. replace m_famInc = m_famInc1996 if cohortFlag==1997
+(1,566,773 real changes made)
+
+. 
+. replace femaleHeadHH14 = femaleHeadHH1997 if cohortFlag==1997
+(1,566,773 real changes made)
+
+. replace HHsize1979     = HHsize1997 if cohortFlag==1997
+(1,566,773 real changes made)
+
+. 
+. keep  cohortFlag id year month age birthMonth birthYear female white black hispanic race region weight oversampleRace annualHrsWrk missInt afqt asvabAR asvabCS asvab
+> MK asvabNO asvabPC asvabWK m_afqt m_asvabAR m_asvabCS m_asvabMK m_asvabNO m_asvabPC m_asvabWK hgcMoth m_hgcMoth hgcFath m_hgcFath foreignBorn famInc m_famInc liveWit
+> hMom14 femaleHeadHH14 HHsize19?? born1957 born1958 born1959 born1960 born1961 born1962 born1963 born1964 born1980 born1981 born1982 born1983 born1984 ageAtMissInt ye
+> arMissInt everMissInt missIntCum missIntLength everMiss3plusInt everReturnAfter3plusMissInt missIntLastSpell fedMinWage cpi hgc gradeCurrent  enrK12 enrCollege enr2y
+> r enr4yr enrGradSch weeksEmployed wage wageAlt wageAltMean comp compAlt wageMedian wageAltMedian compMedian compAltMedian annualWageMean annualWageMed annualWageMin 
+> annualWageMax annualWageMain annualCompMean annualCompMed annualCompMin annualCompMax annualCompMain annualOccMin annualOccMax annualOccMain annualIndMin annualIndMa
+> x annualIndMain weeksWorked avgHrs hoursWorked weeksMilitary workFT workPT military work workSch workK12 workCollege other activity gradGraduate yrGradGraduate grad4
+> yr yrGrad4yr grad2yr yrGrad2yr gradHS yrGradHS gradDiploma yrGradDiploma gradGED yrGradGED annualHrsWrkCalc annualHrsWrkCalcCalc annualHrsWrkRaw annualHrsWrkOld  BA_
+> year BA_month Diploma_year Diploma_month GED_year GED_month HS_year HS_month R*interviewDate wageJobCPS wageJobMain compJobCPS compJobMain occJobCPS occJobMain indJo
+> bCPS indJobMain hoursJobCPS hoursJobMain weeksSelfEmployed selfEmployedJobCPS selfEmployedJobMain high_grade_comp_May Highest_degree_ever // empPct empPctFinal incPe
+> rCapita incPerCapitaFinal numBAperCapita numAAperCapita tuitionFlagship
+
+. order cohortFlag id year month age birthMonth birthYear female white black hispanic race region weight oversampleRace annualHrsWrk missInt afqt asvabAR asvabCS asvab
+> MK asvabNO asvabPC asvabWK m_afqt m_asvabAR m_asvabCS m_asvabMK m_asvabNO m_asvabPC m_asvabWK hgcMoth m_hgcMoth hgcFath m_hgcFath foreignBorn famInc m_famInc liveWit
+> hMom14 femaleHeadHH14 HHsize19?? born1957 born1958 born1959 born1960 born1961 born1962 born1963 born1964 born1980 born1981 born1982 born1983 born1984 ageAtMissInt ye
+> arMissInt everMissInt missIntCum missIntLength everMiss3plusInt everReturnAfter3plusMissInt missIntLastSpell fedMinWage cpi hgc gradeCurrent  enrK12 enrCollege enr2y
+> r enr4yr enrGradSch weeksEmployed wage wageAlt wageAltMean comp compAlt wageMedian wageAltMedian compMedian compAltMedian annualWageMean annualWageMed annualWageMin 
+> annualWageMax annualWageMain annualCompMean annualCompMed annualCompMin annualCompMax annualCompMain annualOccMin annualOccMax annualOccMain annualIndMin annualIndMa
+> x annualIndMain weeksWorked avgHrs hoursWorked weeksMilitary workFT workPT military work workSch workK12 workCollege other activity gradGraduate yrGradGraduate grad4
+> yr yrGrad4yr grad2yr yrGrad2yr gradHS yrGradHS gradDiploma yrGradDiploma gradGED yrGradGED annualHrsWrkCalc annualHrsWrkCalcCalc annualHrsWrkRaw annualHrsWrkOld  BA_
+> year BA_month Diploma_year Diploma_month GED_year GED_month HS_year HS_month R*interviewDate wageJobCPS wageJobMain compJobCPS compJobMain occJobCPS occJobMain indJo
+> bCPS indJobMain hoursJobCPS hoursJobMain weeksSelfEmployed selfEmployedJobCPS selfEmployedJobMain high_grade_comp_May Highest_degree_ever // empPct empPctFinal incPe
+> rCapita incPerCapitaFinal numBAperCapita numAAperCapita tuitionFlagship
+
+. 
+. bys cohortFlag id: gen firstObs     = (_n==1)
+
+. lab def RACE 1 "White" 2 "Black" 3 "Hispanic"
+
+. lab val race RACE
+
+. 
+. *=====================================================================
+. * Wages:*
+. *  Use monthly imputed wage variable OR
+. *  'main' wage from Boehm
+. *
+. *  Flag/drop wages that are obviously miscoded or otherwise outlying:
+. *   1: drop all wages above the top_limit, $50/hr (in 1982-1984 dollars)
+. *      and below $2/hr
+. *   2: drop wages if selfEmployed
+. *   3: ignore missing wages
+. *  Convert wages from cents to dollars
+. *=====================================================================
+. * Create Hybrid wage variable - This will be the main variable
+. foreach V in  wage occ ind hours selfEmployed {
+  2.         gen     `V'JobHybrid  = `V'JobCPS  if cohortFlag==1979
+  3.         replace `V'JobHybrid  = `V'JobMain if cohortFlag==1997
+  4. }
+(2,589,352 missing values generated)
+(1,095,364 real changes made)
+(2,672,865 missing values generated)
+(1,119,513 real changes made, 2,642 to missing)
+(2,617,395 missing values generated)
+(1,061,310 real changes made, 2,560 to missing)
+(2,667,121 missing values generated)
+(0 real changes made)
+(1,566,773 missing values generated)
+(1,119,513 real changes made)
+
+. 
+. replace wageAlt       = wageAltMean   if cohortFlag==1979
+(1,248,203 real changes made)
+
+. replace comp          = wage          if cohortFlag==1979
+(1,243,916 real changes made)
+
+. replace compAlt       = wageAltMean   if cohortFlag==1979
+(1,248,203 real changes made)
+
+. replace compMedian    = wageMedian    if cohortFlag==1979
+(1,243,916 real changes made)
+
+. replace compAltMedian = wageAltMedian if cohortFlag==1979
+(1,248,203 real changes made)
+
+. replace compJobCPS    = wageJobCPS    if cohortFlag==1979
+(1,252,521 real changes made)
+
+. replace compJobMain   = wageJobMain   if cohortFlag==1979
+(1,845,952 real changes made, 406,517 to missing)
+
+. generat compJobHybrid = wageJobCPS    if cohortFlag==1979
+(2,589,352 missing values generated)
+
+. replace compJobHybrid = compJobMain   if cohortFlag==1997
+(1,039,992 real changes made)
+
+. 
+. * Wage variables of potential interest that should be cleaned
+. local wages     wage wageAlt wageMedian wageAltMedian  wageJobCPS wageJobMain  wageJobHybrid comp compAlt compMedian compAltMedian compJobCPS compJobMain  compJobHyb
+> rid
+
+. tab activity cohortFlag
+
+           | Cohort Flag (1979 or
+           |         1997)
+  activity |      1979       1997 |     Total
+-----------+----------------------+----------
+         1 |   224,399    187,946 |   412,345 
+         2 |   186,909    273,300 |   460,209 
+         3 |   254,434    197,563 |   451,997 
+         4 | 1,067,738    591,888 | 1,659,626 
+         5 |    39,108     25,170 |    64,278 
+         6 |   486,859    290,906 |   777,765 
+-----------+----------------------+----------
+     Total | 2,259,447  1,566,773 | 3,826,220 
+
+
+. 
+. scalar top_limit   = 5000
+
+. scalar bot_limit   = 200
+
+. 
+. capture noisily drop tester*
+variable tester* not found
+
+. 
+. * Drop wages below 200 or above 5000 (actual dropping happens later)
+. foreach X in `wages' {
+  2.         bys cohortFlag id year: gen `X'OutOfRange = ~inrange(`X',bot_limit,top_limit) & ~mi(`X')
+  3.         * replace `X' = .z         if `X'OutOfRange==1
+. 
+.         count if `X'OutOfRange==1 & cohortFlag==1979
+  4.         count if `X'OutOfRange==1 & cohortFlag==1997
+  5. }
+  33,381
+  78,997
+  34,626
+  46,086
+  33,793
+  79,195
+  35,086
+  46,373
+  42,318
+  6,964
+  42,288
+  54,962
+  42,318
+  54,962
+  33,381
+  99,697
+  34,626
+  26,310
+  33,793
+  99,842
+  35,086
+  26,412
+  42,318
+  3,518
+  42,288
+  31,163
+  42,318
+  31,163
+
+. 
+. * Self-employed
+. gen selfEmployedJob = (weeksSelfEmployed>0)
+
+. foreach X in  CPS Main Hybrid {
+  2.         * replace wageJob`X' = .z if selfEmployedJob`X'==1
+.         * replace compJob`X' = .z if selfEmployedJob`X'==1
+.         count if selfEmployedJob`X'==1 & cohortFlag==1979
+  3.         count if selfEmployedJob`X'==1 & cohortFlag==1997
+  4. }
+  63,244
+  9,727
+  63,829
+  59,461
+  63,244
+  59,461
+
+. 
+. * Convert cents to dollars
+. foreach X in `wages' {
+  2.         replace `X' = `X'/100 if !mi(`X')
+  3. }
+(2,166,192 real changes made)
+(2,170,915 real changes made)
+(2,165,882 real changes made)
+(2,170,788 real changes made)
+(1,396,314 real changes made)
+(2,525,496 real changes made)
+(2,338,582 real changes made)
+(2,133,718 real changes made)
+(2,137,260 real changes made)
+(2,132,969 real changes made)
+(2,137,192 real changes made)
+(1,388,380 real changes made)
+(2,474,763 real changes made)
+(2,287,849 real changes made)
+
+. replace fedMinWage = fedMinWage/100
+(3,602,976 real changes made)
+
+. 
+. * create "current month" wage variables for relevant wages
+. gen current = inlist(mdy(month,1,year),dofm(R1interviewDate),dofm(R2interviewDate),dofm(R3interviewDate),dofm(R4interviewDate),dofm(R5interviewDate),dofm(R6interview
+> Date),dofm(R7interviewDate),dofm(R8interviewDate),dofm(R9interviewDate),dofm(R10interviewDate),dofm(R11interviewDate),dofm(R12interviewDate),dofm(R13interviewDate),d
+> ofm(R14interviewDate),dofm(R15interviewDate),dofm(R16interviewDate),dofm(R17interviewDate),dofm(R18interviewDate))
+
+. 
+. gen wageCurrent       = wage          if current
+(3,681,720 missing values generated)
+
+. gen wageCurrentHybrid = wageJobHybrid if current
+(3,659,408 missing values generated)
+
+. gen wageCurrentMain   = wageJobMain   if current
+(3,648,271 missing values generated)
+
+. gen wageCurrentAlt    = wageAlt       if current
+(3,683,071 missing values generated)
+
+. gen compCurrent       = comp          if current
+(3,681,720 missing values generated)
+
+. gen compCurrentHybrid = compJobHybrid if current
+(3,663,379 missing values generated)
+
+. gen compCurrentMain   = compJobMain   if current
+(3,652,242 missing values generated)
+
+. gen compCurrentAlt    = compAlt       if current
+(3,685,883 missing values generated)
+
+. 
+. * Top-code annual hours at 5000
+. replace annualHrsWrk = 5000 if annualHrsWrk>5000 & annualHrsWrk<.
+(6,811 real changes made)
+
+. 
+. *-------------------------------------------------------------------------------
+. * Create period variable (=1 for each person in first period, regardless of age)
+. *  and uniqueid to xtset data
+. *-------------------------------------------------------------------------------
+. gen monthAlt = ( month-(birthMonth-1) )*( year-age==birthYear ) + ( month+(12-birthMonth+1) )*( year-age==birthYear+1  )
+
+. 
+. gen yearmo = year*100+month
+
+. gen agemo  =  age*100+monthAlt
+
+. gen ageInMonths = age*12+monthAlt
+
+. bys cohortFlag id (year month): gen period = _n
+
+. gen uniqueid = (cohortFlag-1900)*100000 + id
+
+. 
+. * Check Stata
+. bys uniqueid (year month): gen period2 = _n
+
+. assert period==period2
+
+. drop period2
+
+. 
+. xtset uniqueid period
+       panel variable:  uniqueid (unbalanced)
+        time variable:  period, 1 to 252
+                delta:  1 unit
+
+. 
+. *=====================================================================
+. * Create education, experience and activity variables
+. *=====================================================================
+. *-----------------------------
+. * New activity variable
+. *-----------------------------
+. * Deciding not to model attrition
+. drop if activity==7
+(0 observations deleted)
+
+. assert  activity~=7
+
+. 
+. tab activity cohortFlag
+
+           | Cohort Flag (1979 or
+           |         1997)
+  activity |      1979       1997 |     Total
+-----------+----------------------+----------
+         1 |   224,399    187,946 |   412,345 
+         2 |   186,909    273,300 |   460,209 
+         3 |   254,434    197,563 |   451,997 
+         4 | 1,067,738    591,888 | 1,659,626 
+         5 |    39,108     25,170 |    64,278 
+         6 |   486,859    290,906 |   777,765 
+-----------+----------------------+----------
+     Total | 2,259,447  1,566,773 | 3,826,220 
+
+
+. 
+. * Create a new, more-detailed activity variable. Keep the old one and label
+. *  it as activity_simple
+. gen activity_simple = activity
+(15,653 missing values generated)
+
+. 
+. replace activity = 11 if activity_simple==1 & gradHS==1
+(161,717 real changes made)
+
+. replace activity = 12 if activity_simple==2 & gradHS==1
+(315,231 real changes made)
+
+. replace activity = 13 if activity_simple==3 & gradHS==1
+(360,559 real changes made)
+
+. replace activity = 14 if activity_simple==4 & gradHS==1
+(1,460,348 real changes made)
+
+. replace activity = 15 if activity_simple==5 & gradHS==1
+(62,273 real changes made)
+
+. replace activity = 16 if activity_simple==6 & gradHS==1
+(505,041 real changes made)
+
+. 
+. replace activity = 21 if activity_simple==1 & grad4yr==1
+(14,409 real changes made)
+
+. replace activity = 22 if activity_simple==2 & grad4yr==1
+(45,542 real changes made)
+
+. replace activity = 23 if activity_simple==3 & grad4yr==1
+(50,728 real changes made)
+
+. replace activity = 24 if activity_simple==4 & grad4yr==1
+(323,321 real changes made)
+
+. replace activity = 25 if activity_simple==5 & grad4yr==1
+(5,332 real changes made)
+
+. replace activity = 26 if activity_simple==6 & grad4yr==1
+(44,041 real changes made)
+
+. 
+. bys cohortFlag id: replace activity = 7  if gradHS[_n]==1  & gradHS[_n-1]==0
+(15,709 real changes made)
+
+. bys cohortFlag id: replace activity = 17 if grad4yr[_n]==1 & grad4yr[_n-1]==0
+(3,917 real changes made)
+
+. 
+. lab def vlactivityStoch ///
+> 1  "School Only, no HS Diploma or GED" ///
+> 2  "Work in school, no HS Diploma or GED" ///
+> 3  "Part-time Work, no HS Diploma or GED" ///
+> 4  "Full-time Work, no HS Diploma or GED" ///
+> 5  "Military, no HS Diploma or GED" ///
+> 6  "Other Activities, no HS Diploma or GED" ///
+> 7  "HS Grad this month, regardless of work/military/school" ///
+>   ///
+> 11 "School Only, HS Grad or GED Holder" ///
+> 12 "Work in school, HS Grad or GED Holder" ///
+> 13 "Part-time Work, HS Grad or GED Holder" ///
+> 14 "Full-time Work, HS Grad or GED Holder" ///
+> 15 "Military, HS Grad or GED Holder" ///
+> 16 "Other Activities, HS Grad or GED Holder" ///
+> 17 "4yr Grad this month, regardless of work/military/school" ///
+>   ///
+> 21 "School Only, 4yr College Grad" ///
+> 22 "Work in school, 4yr College Grad" ///
+> 23 "Part-time Work, 4yr College Grad" ///
+> 24 "Full-time Work, 4yr College Grad" ///
+> 25 "Military, 4yr College Grad" ///
+> 26 "Other Activities, 4yr College Grad" ///
+> 
+
+. lab val activity vlactivityStoch
+
+. 
+. * What month did they graduate?
+. bys cohortFlag id (year month): gen monthGradHS = gradHS[_n]==1 & gradHS[_n-1]==0
+
+. bys cohortFlag id (year month): gen monthGradBA = grad4yr[_n]==1 & grad4yr[_n-1]==0
+
+. 
+. * What is activity experience of people at various ages?
+. foreach oldie in workSch military other enrK12 enrCollege enr2yr enr4yr workFT workPT workK12 workCollege {
+  2.         replace `oldie' = 0 if inlist(activity,7,17)
+  3. }
+(8,835 real changes made)
+(67 real changes made)
+(2,883 real changes made)
+(10,505 real changes made)
+(3,548 real changes made)
+(10,114 real changes made)
+(12,040 real changes made)
+(4,312 real changes made)
+(7,167 real changes made)
+(6,350 real changes made)
+(2,485 real changes made)
+
+. gen     schoolOnly  = inlist(activity,1,11,21)
+
+. gen     anySchool   = inlist(activity,1,2,11,12,21,22)
+
+. gen     workPTonly  = inlist(activity,3,13,23)
+
+. gen     workFTonly  = inlist(activity,4,14,24)
+
+. replace workCollege = inlist(activity,12,22)
+(1,087 real changes made)
+
+. gen     workGradSch = inlist(activity,22)
+
+. 
+. * Running cumulative choice variables
+. * Sum of these (+ graduation dummies) should equal agemo
+. bys uniqueid (period): gen schoolOnlyt  = sum(L.schoolOnly)
+
+. bys uniqueid (period): gen workScht     = sum(L.workSch)
+
+. bys uniqueid (period): gen workPTonlyt  = sum(L.workPTonly)
+
+. bys uniqueid (period): gen workFTonlyt  = sum(L.workFTonly)
+
+. bys uniqueid (period): gen militaryt    = sum(L.military)
+
+. bys uniqueid (period): gen othert       = sum(L.other)
+
+. 
+. * Running sums of interesting vars that are not perfect partitions
+. *  of choice space
+. * bys uniqueid (period): gen enrSchoolt    = sum(enrSchool)
+. bys uniqueid (period): gen enrK12t       = sum(L.enrK12)
+
+. bys uniqueid (period): gen enrColleget   = sum(L.enrCollege)
+
+. bys uniqueid (period): gen enr2yrt       = sum(L.enr2yr)
+
+. bys uniqueid (period): gen enr4yrt       = sum(L.enr4yr)
+
+. bys uniqueid (period): gen anySchoolt    = sum(L.anySchool)
+
+. bys uniqueid (period): gen workFTt       = sum(L.workFT)
+
+. bys uniqueid (period): gen workPTt       = sum(L.workPT)
+
+. bys uniqueid (period): gen workK12t      = sum(L.workK12)
+
+. bys uniqueid (period): gen workColleget  = sum(L.workCollege)
+
+. bys uniqueid (period): gen workGradScht  = sum(L.workGradSch)
+
+. 
+. bys uniqueid (period): gen cumHoursWorked = sum(hoursWorked)
+
+. 
+. * create high order and race interaction terms of mother's education, father's education, and family income
+. gen hgcMothBlack    = hgcMoth*black
+
+. gen hgcMothHisp     = hgcMoth*hispanic
+
+. gen hgcMothSq       = hgcMoth^2
+
+. gen hgcMothSqBlack  = hgcMoth^2*black
+
+. gen hgcMothSqHisp   = hgcMoth^2*hispanic
+
+. gen hgcMothCu       = hgcMoth^3
+
+. gen hgcMothCuBlack  = hgcMoth^3*black
+
+. gen hgcMothCuHisp   = hgcMoth^3*hispanic
+
+. gen hgcMothQr       = hgcMoth^4
+
+. gen hgcFathBlack    = hgcFath*black
+
+. gen hgcFathHisp     = hgcFath*hispanic
+
+. gen hgcFathSq       = hgcFath^2
+
+. gen hgcFathSqBlack  = hgcFath^2*black
+
+. gen hgcFathSqHisp   = hgcFath^2*hispanic
+
+. gen hgcFathCu       = hgcFath^3
+
+. gen hgcFathCuBlack  = hgcFath^3*black
+
+. gen hgcFathCuHisp   = hgcFath^3*hispanic
+
+. gen hgcFathQr       = hgcFath^4
+
+. gen famIncBlack     = famInc*black
+
+. gen famIncHisp      = famInc*hispanic
+
+. gen famIncSq        = famInc^2
+
+. gen famIncSqBlack   = famInc^2*black
+
+. gen famIncSqHisp    = famInc^2*hispanic
+
+. gen famIncCu        = famInc^3
+
+. gen famIncCuBlack   = famInc^3*black
+
+. gen famIncCuHisp    = famInc^3*hispanic
+
+. gen famIncQr        = famInc^4
+
+. 
+. gen m_hgcMothBlack  = m_hgcMoth*black
+
+. gen m_hgcMothHisp   = m_hgcMoth*hispanic
+
+. gen m_hgcFathBlack  = m_hgcFath*black
+
+. gen m_hgcFathHisp   = m_hgcFath*hispanic
+
+. gen m_famIncBlack   = m_famInc*black
+
+. gen m_famIncHisp    = m_famInc*hispanic
+
+. 
+. * create potential experience: ageMo - anySchoolt - [baseline age]
+. gen potExpClassict  = ageInMonths - anySchoolt - 6*12
+
+. gen potExpClassicSq = potExpClassict^2
+
+. gen potExpClassicCu = potExpClassict^3
+
+. gen potExpt         = ageInMonths - anySchoolt - 16*12
+
+. gen potExpSq        = potExpt^2
+
+. gen potExpCu        = potExpt^3
+
+. 
+. * create race interactions of cumulative indicators (use convention hgcBlack, hgcHisp, schoolOnlytBlack, schoolOnlytHisp, hgcSq)
+. gen hgcBlack              = hgc*black
+(285,566 missing values generated)
+
+. gen hgcHisp               = hgc*hispanic
+(285,566 missing values generated)
+
+. gen hgcSq                 = hgc^2
+(285,566 missing values generated)
+
+. gen schoolOnlyBlack       = schoolOnlyt*black
+
+. gen schoolOnlyHisp        = schoolOnlyt*hispanic
+
+. gen schoolOnlySq          = schoolOnlyt^2
+
+. gen schoolOnlySqBlack     = schoolOnlyt^2*black
+
+. gen schoolOnlySqHisp      = schoolOnlyt^2*hispanic
+
+. gen schoolOnlyCu          = schoolOnlyt^3
+
+. gen schoolOnlyCuBlack     = schoolOnlyt^3*black
+
+. gen schoolOnlyCuHisp      = schoolOnlyt^3*hispanic
+
+. gen schoolOnlyQr          = schoolOnlyt^4
+
+. gen anySchoolBlack        = anySchoolt*black
+
+. gen anySchoolHisp         = anySchoolt*hispanic
+
+. gen anySchoolSq           = anySchoolt^2
+
+. gen anySchoolSqBlack      = anySchoolt^2*black
+
+. gen anySchoolSqHisp       = anySchoolt^2*hispanic
+
+. gen anySchoolCu           = anySchoolt^3
+
+. gen anySchoolCuBlack      = anySchoolt^3*black
+
+. gen anySchoolCuHisp       = anySchoolt^3*hispanic
+
+. gen anySchoolQr           = anySchoolt^4
+
+. gen workK12Black          = workK12t*black
+
+. gen workK12Hisp           = workK12t*hispanic
+
+. gen workK12Sq             = workK12t^2
+
+. gen workK12schoolOnly     = workK12t*schoolOnlyt
+
+. gen workK12anySchool      = workK12t*anySchoolt 
+
+. gen workK12SqBlack        = workK12t^2*black
+
+. gen workK12SqHisp         = workK12t^2*hispanic
+
+. gen workK12Cu             = workK12t^3
+
+. gen workK12CuBlack        = workK12t^3*black
+
+. gen workK12CuHisp         = workK12t^3*hispanic
+
+. gen workK12Qr             = workK12t^4
+
+. gen workCollegeBlack      = workColleget*black
+
+. gen workCollegeHisp       = workColleget*hispanic
+
+. gen workCollegeSq         = workColleget^2
+
+. gen workCollegeschoolOnly = workColleget*schoolOnlyt
+
+. gen workCollegeanySchool  = workColleget*anySchoolt
+
+. gen workCollegeworkK12    = workColleget*workK12t
+
+. gen workCollegeSqBlack    = workColleget^2*black
+
+. gen workCollegeSqHisp     = workColleget^2*hispanic
+
+. gen workCollegeCu         = workColleget^3
+
+. gen workCollegeCuBlack    = workColleget^3*black
+
+. gen workCollegeCuHisp     = workColleget^3*hispanic
+
+. gen workCollegeQr         = workColleget^4
+
+. gen workGradSchBlack      = workGradScht*black
+
+. gen workGradSchHisp       = workGradScht*hispanic
+
+. gen workGradSchSq         = workGradScht^2
+
+. gen workGradSchschoolOnly = workGradScht*schoolOnlyt
+
+. gen workGradSchanySchool  = workGradScht*anySchoolt
+
+. gen workGradSchworkK12    = workGradScht*workK12t
+
+. gen workGradSchSqBlack    = workGradScht^2*black
+
+. gen workGradSchSqHisp     = workGradScht^2*hispanic
+
+. gen workGradSchCu         = workGradScht^3
+
+. gen workGradSchCuBlack    = workGradScht^3*black
+
+. gen workGradSchCuHisp     = workGradScht^3*hispanic
+
+. gen workGradSchQr         = workGradScht^4
+
+. gen workPTBlack           = workPTonlyt*black
+
+. gen workPTHisp            = workPTonlyt*hispanic
+
+. gen workPTSq              = workPTonlyt^2
+
+. gen workPTschoolOnly      = workPTonlyt*schoolOnlyt
+
+. gen workPTanySchool       = workPTonlyt*anySchoolt
+
+. gen workPTworkK12         = workPTonlyt*workK12t
+
+. gen workPTworkCollege     = workPTonlyt*workColleget
+
+. gen workPTworkGradSch     = workPTonlyt*workGradScht
+
+. gen workPTSqBlack         = workPTonlyt^2*black
+
+. gen workPTSqHisp          = workPTonlyt^2*hispanic
+
+. gen workPTCu              = workPTonlyt^3
+
+. gen workPTCuBlack         = workPTonlyt^3*black
+
+. gen workPTCuHisp          = workPTonlyt^3*hispanic
+
+. gen workPTQr              = workPTonlyt^4
+
+. gen workFTBlack           = workFTonlyt*black
+
+. gen workFTHisp            = workFTonlyt*hispanic
+
+. gen workFTSq              = workFTonlyt^2
+
+. gen workFTschoolOnly      = workFTonlyt*schoolOnlyt
+
+. gen workFTanySchool       = workFTonlyt*anySchoolt
+
+. gen workFTworkK12         = workFTonlyt*workK12t
+
+. gen workFTworkCollege     = workFTonlyt*workColleget
+
+. gen workFTworkGradSch     = workFTonlyt*workGradScht
+
+. gen workFTworkPT          = workFTonlyt*workPTonlyt
+
+. gen workFTSqBlack         = workFTonlyt^2*black
+
+. gen workFTSqHisp          = workFTonlyt^2*hispanic
+
+. gen workFTCu              = workFTonlyt^3
+
+. gen workFTCuBlack         = workFTonlyt^3*black
+
+. gen workFTCuHisp          = workFTonlyt^3*hispanic
+
+. gen workFTQr              = workFTonlyt^4
+
+. gen militaryBlack         = militaryt*black
+
+. gen militaryHisp          = militaryt*hispanic
+
+. gen militarySq            = militaryt^2
+
+. gen militarySqBlack       = militaryt^2*black
+
+. gen militarySqHisp        = militaryt^2*hispanic
+
+. gen militaryCu            = militaryt^3
+
+. gen militaryCuBlack       = militaryt^3*black
+
+. gen militaryCuHisp        = militaryt^3*hispanic
+
+. gen militaryQr            = militaryt^4
+
+. gen otherBlack            = othert*black
+
+. gen otherHisp             = othert*hispanic
+
+. gen otherSq               = othert^2
+
+. gen otherSqBlack          = othert^2*black
+
+. gen otherSqHisp           = othert^2*hispanic
+
+. gen otherCu               = othert^3
+
+. gen otherCuBlack          = othert^3*black
+
+. gen otherCuHisp           = othert^3*hispanic
+
+. gen otherQr               = othert^4
+
+. 
+. tab activity cohortFlag
+
+                      | Cohort Flag (1979 or
+                      |         1997)
+             activity |      1979       1997 |     Total
+----------------------+----------------------+----------
+School Only, no HS Di |   142,217    108,411 |   250,628 
+Work in school, no HS |    57,535     87,443 |   144,978 
+Part-time Work, no HS |    49,587     41,851 |    91,438 
+Full-time Work, no HS |   133,353     65,925 |   199,278 
+Military, no HS Diplo |     1,746        259 |     2,005 
+Other Activities, no  |   175,298     97,426 |   272,724 
+HS Grad this month, r |     8,278      7,431 |    15,709 
+School Only, HS Grad  |    73,416     69,755 |   143,171 
+Work in school, HS Gr |   105,708    157,631 |   263,339 
+Part-time Work, HS Gr |   176,878    131,810 |   308,688 
+Full-time Work, HS Gr |   753,461    382,346 | 1,135,807 
+Military, HS Grad or  |    34,194     22,687 |    56,881 
+Other Activities, HS  |   286,041    172,160 |   458,201 
+4yr Grad this month,  |     1,797      2,120 |     3,917 
+School Only, 4yr Coll |     6,390      6,956 |    13,346 
+Work in school, 4yr C |    20,295     22,762 |    43,057 
+Part-time Work, 4yr C |    27,050     23,561 |    50,611 
+Full-time Work, 4yr C |   179,956    143,204 |   323,160 
+Military, 4yr College |     3,103      2,222 |     5,325 
+Other Activities, 4yr |    23,144     20,813 |    43,957 
+----------------------+----------------------+----------
+                Total | 2,259,447  1,566,773 | 3,826,220 
+
+
+. 
+. *-----------------------------------
+. * Generate various college variables
+. *-----------------------------------
+. * Gen absorbing dummy for having any degree
+. bys cohortFlag id: gen gradCol = max(grad2yr, grad4yr)
+
+. 
+. * Gen months enrCollege
+. by cohortFlag id: egen monthsCol = max(enrColleget)
+
+. by cohortFlag id: egen months2yr = max(enr2yrt)
+
+. by cohortFlag id: egen months4yr = max(enr4yrt)
+
+. 
+. * Gen month started college variable
+. generat enrCollege1    = (enrColleget==1) & enrCollege==1
+
+. generat enr2yr1        = (enr2yrt    ==1) & enr2yr==1
+
+. generat enr4yr1        = (enr4yrt    ==1) & enr4yr==1
+
+. 
+. * Gen month last attended college variable
+. by cohortFlag id: gen enrCollegeN = (enrColleget==monthsCol) & enrCollege==1
+
+. by cohortFlag id: gen enr2yrN     = (enr2yrt    ==months2yr) & enr2yr==1
+
+. by cohortFlag id: gen enr4yrN     = (enr4yrt    ==months4yr) & enr4yr==1
+
+. 
+. * Gen variables for date started college and date last attended college
+. * Started
+. generat BA_start_year  = year*enrCollege1
+
+. generat BA_start_month = month*enrCollege1
+
+. bys cohortFlag id: egen BAstartYr = max(BA_start_year)
+
+. bys cohortFlag id: egen BAstartMo = max(BA_start_month)
+
+. recode  BAstartYr (0=.)
+(BAstartYr: 1476448 changes made)
+
+. recode  BAstartMo (0=.)
+(BAstartMo: 1476448 changes made)
+
+. generat BAstartYrMo = ym(BAstartYr,BAstartMo)
+(1,476,448 missing values generated)
+
+. format  BAstartYrMo %tm
+
+. generat BAstartDate = mdy(BAstartMo,1,BAstartYr)
+(1,476,448 missing values generated)
+
+. format  BAstartDate %td
+
+. generat BAendDate = mdy(BA_month,1,BA_year)
+(2,916,918 missing values generated)
+
+. format  BAendDate %td
+
+. generat ageBAstartYr1 = age if year==BAstartYr
+(3,710,479 missing values generated)
+
+. bys cohortFlag id: egen ageBAstartYr = max(ageBAstartYr1)
+(1476448 missing values generated)
+
+. generat ageBAendYr1 = age if year==BA_year
+(3,794,833 missing values generated)
+
+. bys cohortFlag id: egen ageBAendYr = max(ageBAendYr1)
+(2970155 missing values generated)
+
+. 
+. * Ended
+. generat BA_stop_year  = year*enrCollegeN
+
+. generat BA_stop_month = month*enrCollegeN
+
+. bys cohortFlag id: egen BAstopYr = max(BA_stop_year)
+
+. bys cohortFlag id: egen BAstopMo = max(BA_stop_month)
+
+. recode  BAstopYr (0=.)
+(BAstopYr: 3648413 changes made)
+
+. recode  BAstopMo (0=.)
+(BAstopMo: 3648413 changes made)
+
+. generat BAstopYrMo = ym(BAstopYr,BAstopMo)
+(3,648,413 missing values generated)
+
+. format  BAstopYrMo %tm
+
+. 
+. * Gen months b/t start college and last attended college
+. gen monthsAtRiskCol = BAstopYrMo - BAstartYrMo + 1
+(3,649,337 missing values generated)
+
+. recode monthsCol monthsAtRiskCol (0=.)
+(monthsCol: 1436376 changes made)
+(monthsAtRiskCol: 0 changes made)
+
+. 
+. * Gen age first started college
+. generat ageFirstCol1 = age*enrCollege1
+
+. generat ageFirst2yr1 = age*enr2yr1
+
+. generat ageFirst4yr1 = age*enr4yr1
+
+. bys cohortFlag id: egen ageFirstCol = max(ageFirstCol1)
+
+. bys cohortFlag id: egen ageFirst2yr = max(ageFirst2yr1)
+
+. bys cohortFlag id: egen ageFirst4yr = max(ageFirst4yr1)
+
+. 
+. generat everCol = (ageFirstCol<=age) & (ageFirstCol>0)
+
+. generat ever2yr = (ageFirst2yr<=age) & (ageFirst2yr>0)
+
+. generat ever4yr = (ageFirst4yr<=age) & (ageFirst4yr>0)
+
+. 
+. *---------------------------------------
+. * Generate various work status variables
+. *---------------------------------------
+. 
+. * Gen "age at first post-grad FT job" variable(s)
+. * First get highest degree ever received variables
+. bys cohortFlag id: gen HSgradOnly   = (gradHS[_N]==1 & grad2yr[_N]==0 & grad4yr[_N]==0 & gradGraduate[_N]==0)
+
+. bys cohortFlag id: gen AAgradOnly   = (                grad2yr[_N]==1 & grad4yr[_N]==0 & gradGraduate[_N]==0)
+
+. bys cohortFlag id: gen BAgradOnly   = (                                 grad4yr[_N]==1 & gradGraduate[_N]==0)
+
+. bys cohortFlag id: gen GradgradOnly = (                                                  gradGraduate[_N]==1)
+
+. gen NoHSgradEver = 1-HSgradOnly-AAgradOnly-BAgradOnly-GradgradOnly
+
+. 
+. * Now get first month they were working full-time once the highest degree was received
+. generat firstFT1noHS = (activity==4 & gradHS==0)  if NoHSgradEver==1
+(3,378,932 missing values generated)
+
+. recode  firstFT1noHS (0=.)
+(firstFT1noHS: 297920 changes made)
+
+. generat ageFirstFT1noHS = age*firstFT1noHS
+(3,676,852 missing values generated)
+
+. generat firstFT1HS   = (activity==4 & gradHS==1) if HSgradOnly==1 | AAgradOnly==1
+(1,329,859 missing values generated)
+
+. recode  firstFT1HS (0=.)
+(firstFT1HS: 2512014 changes made)
+
+. generat ageFirstFT1HS = age*firstFT1HS
+(3,841,873 missing values generated)
+
+. generat firstFT1BA   = (activity==4 & grad4yr==1) if BAgradOnly==1 | GradgradOnly==1
+(2,974,955 missing values generated)
+
+. recode  firstFT1BA (0=.)
+(firstFT1BA: 866918 changes made)
+
+. generat ageFirstFT1BA = age*firstFT1BA
+(3,841,873 missing values generated)
+
+. bys cohortFlag id: egen ageFirstFTnoHS = min(ageFirstFT1noHS) if NoHSgradEver==1
+(3415634 missing values generated)
+
+. bys cohortFlag id: egen ageFirstFTHS = min(ageFirstFT1HS) if HSgradOnly==1 | AAgradOnly==1
+(3841873 missing values generated)
+
+. bys cohortFlag id: egen ageFirstFTBA = min(ageFirstFT1BA) if BAgradOnly==1 | GradgradOnly==1
+(3841873 missing values generated)
+
+. generat ageFirstFT = ageFirstFTnoHS if NoHSgradEver==1
+(3,415,634 missing values generated)
+
+. replace ageFirstFT = ageFirstFTHS if HSgradOnly==1 | AAgradOnly==1
+(0 real changes made)
+
+. replace ageFirstFT = ageFirstFTBA if BAgradOnly==1 | GradgradOnly==1
+(0 real changes made)
+
+. 
+. generat everFirstFT = (ageFirstFT<=age)
+
+. 
+. drop firstObs
+
+. bys cohortFlag id: gen firstObs = (_n==1)
+
+. 
+. *---------------------------------------
+. * Z-score afqt/asvabs
+. *---------------------------------------
+. foreach X in  afqt asvabAR asvabCS asvabMK asvabNO asvabPC asvabWK {
+  2.         qui sum `X' if !m_`X' & firstObs & !female
+  3.         replace `X'=!m_`X'*(`X'-r(mean))/r(sd)
+  4. }
+(3,437,109 real changes made)
+(3,456,297 real changes made)
+(3,437,507 real changes made)
+(3,453,404 real changes made)
+(3,437,109 real changes made)
+(3,455,028 real changes made)
+(3,456,042 real changes made)
+
+. 
+. * compress
+. * save        yCombined_t0_16.dta, replace
+. 
+. * Counts for dropped/excluded wages
+. *   Only keep current interview (this drops the other interviews)
+. *   Non-working observations
+. *   Drop self-employed
+. *   Truncated observations
+. *   Missing wages
+. 
+. * tab current cohortFlag if !female & current==1
+. * tab current cohortFlag if !female & current==1 &  inlist(activity,1,5,6,7,11,15,16,17,21,25,26) 
+. * tab current cohortFlag if !female & current==1 & ~inlist(activity,1,5,6,7,11,15,16,17,21,25,26) 
+. * tab current cohortFlag if !female & current==1 & ~inlist(activity,1,5,6,7,11,15,16,17,21,25,26) & selfEmployedJob==1
+. * tab current cohortFlag if !female & current==1 & ~inlist(activity,1,5,6,7,11,15,16,17,21,25,26) & selfEmployedJob==0 & wageOutOfRange==1
+. * tab current cohortFlag if !female & current==1 & ~inlist(activity,1,5,6,7,11,15,16,17,21,25,26) & selfEmployedJob==0 & wageOutOfRange==0 & ~mi(wage)
+. * recode cohortFlag (1979=19791) if born1961==1 | born1962==1 | born1963==1 | born1964==1
+. tab cohortFlag if ~female & ~born1957 & ~born1958 & ~inlist(activity,1,5,6,7,11,15,16,17,21,25,26) 
+
+Cohort Flag |
+   (1979 or |
+      1997) |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       1979 |    651,281       54.73       54.73
+       1997 |    538,648       45.27      100.00
+------------+-----------------------------------
+      Total |  1,189,929      100.00
+
+. tab cohortFlag if ~female & ~born1957 & ~born1958 & ~inlist(activity,1,5,6,7,11,15,16,17,21,25,26) & selfEmployedJob==1
+
+Cohort Flag |
+   (1979 or |
+      1997) |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       1979 |     31,246       49.21       49.21
+       1997 |     32,252       50.79      100.00
+------------+-----------------------------------
+      Total |     63,498      100.00
+
+. tab cohortFlag if ~female & ~born1957 & ~born1958 & ~inlist(activity,1,5,6,7,11,15,16,17,21,25,26) & selfEmployedJob==0 & wageOutOfRange==1
+
+Cohort Flag |
+   (1979 or |
+      1997) |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       1979 |      8,563       20.22       20.22
+       1997 |     33,780       79.78      100.00
+------------+-----------------------------------
+      Total |     42,343      100.00
+
+. tab cohortFlag if ~female & ~born1957 & ~born1958 & ~inlist(activity,1,5,6,7,11,15,16,17,21,25,26) & selfEmployedJob==0 & wageOutOfRange==0 &  mi(wage)
+
+Cohort Flag |
+   (1979 or |
+      1997) |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       1979 |    134,681       72.74       72.74
+       1997 |     50,480       27.26      100.00
+------------+-----------------------------------
+      Total |    185,161      100.00
+
+. tab cohortFlag if ~female & ~born1957 & ~born1958 & ~inlist(activity,1,5,6,7,11,15,16,17,21,25,26) & selfEmployedJob==0 & wageOutOfRange==0 & ~mi(wage)
+
+Cohort Flag |
+   (1979 or |
+      1997) |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       1979 |    476,791       53.04       53.04
+       1997 |    422,136       46.96      100.00
+------------+-----------------------------------
+      Total |    898,927      100.00
+
+. * recode cohortFlag (19791=1979)
+. 
+. sum wage wageAlt wageJobMain wageJobHybrid
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+        wage |  2,209,856    9.491383    213.9802          0   51126.27
+     wageAlt |  2,179,683    9.815111    217.8053          0   51126.27
+ wageJobMain |  2,534,799    9.309822    224.9385          0   45915.05
+wageJobHyb~d |  2,347,885    8.979292    228.3733          0   45915.05
+
+. gen     wageNoSelf    = wage
+(1,632,017 missing values generated)
+
+. gen     wageAltNoSelf = wageAlt
+(1,662,190 missing values generated)
+
+. 
+. replace wage          = . if              inlist(activity,1,5,6,7,11,15,16,17,21,25,26) | wageOutOfRange==1                           
+(121,605 real changes made, 121,605 to missing)
+
+. replace wageAlt       = . if              inlist(activity,1,5,6,7,11,15,16,17,21,25,26) | wageAltOutOfRange==1                           
+(89,961 real changes made, 89,961 to missing)
+
+. replace wageNoSelf    = . if              inlist(activity,1,5,6,7,11,15,16,17,21,25,26) | wageOutOfRange==1         | selfEmployedJob==1       
+(223,500 real changes made, 223,500 to missing)
+
+. replace wageAltNoSelf = . if              inlist(activity,1,5,6,7,11,15,16,17,21,25,26) | wageAltOutOfRange==1      | selfEmployedJob==1       
+(190,599 real changes made, 190,599 to missing)
+
+. replace wageJobMain   = . if current~=1 | inlist(activity,1,5,6,7,11,15,16,17,21,25,26) | wageJobMainOutOfRange==1  | selfEmployedJobMain==1   
+(2,786,893 real changes made, 2,786,893 to missing)
+
+. replace wageJobHybrid = . if current~=1 | inlist(activity,1,5,6,7,11,15,16,17,21,25,26) | wageJobHybridOutOfRange==1| selfEmployedJobHybrid==1 
+(2,203,759 real changes made, 2,203,759 to missing)
+
+. sum wage wageAlt wageNoSelf wageAltNoSelf wageJobMain wageJobHybrid
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+        wage |  2,088,251    6.937942    4.232095          2   49.98557
+     wageAlt |  2,089,722    6.968264    4.290496          2   49.96774
+  wageNoSelf |  1,986,356    6.824956    4.000356          2   49.96774
+wageAltNoS~f |  1,989,084    6.839036    4.022897          2   49.96774
+ wageJobMain |    150,449    6.647242    3.862087          2   49.96774
+-------------+---------------------------------------------------------
+wageJobHyb~d |    144,126    6.444828    3.601596          2   49.72203
+
+. 
+. /*
+> *---------------------------------------
+> * re-scale number of colleges per capita variables, by multiplying by 100,000
+> * (this means they are "number of colleges per 100,000 people")
+> *---------------------------------------
+> foreach var in numBAperCapita numAAperCapita {
+>         replace `var' = `var'*1e5
+> }
+> gen byte numBAzero = numBAperCapita==0
+> gen byte numAAzero = numAAperCapita==0
+> */
+. 
+. keep if agemo<=3512
+(99,979 observations deleted)
+
+. 
+. compress
+  variable m_famInc was float now byte
+  variable occJobHybrid was float now int
+  variable indJobHybrid was float now int
+  variable hoursJobHybrid was float now int
+  variable selfEmployedJobHybrid was float now byte
+  variable wageOutOfRange was float now byte
+  variable wageAltOutOfRange was float now byte
+  variable wageMedianOutOfRange was float now byte
+  variable wageAltMedianOutOfRange was float now byte
+  variable wageJobCPSOutOfRange was float now byte
+  variable wageJobMainOutOfRange was float now byte
+  variable wageJobHybridOutOfRange was float now byte
+  variable compOutOfRange was float now byte
+  variable compAltOutOfRange was float now byte
+  variable compMedianOutOfRange was float now byte
+  variable compAltMedianOutOfRange was float now byte
+  variable compJobCPSOutOfRange was float now byte
+  variable compJobMainOutOfRange was float now byte
+  variable compJobHybridOutOfRange was float now byte
+  variable selfEmployedJob was float now byte
+  variable current was float now byte
+  variable monthAlt was float now byte
+  variable agemo was float now int
+  variable ageInMonths was float now int
+  variable period was float now int
+  variable activity_simple was float now byte
+  variable monthGradHS was float now byte
+  variable monthGradBA was float now byte
+  variable schoolOnly was float now byte
+  variable anySchool was float now byte
+  variable workPTonly was float now byte
+  variable workFTonly was float now byte
+  variable workGradSch was float now byte
+  variable schoolOnlyt was float now int
+  variable workScht was float now int
+  variable workPTonlyt was float now int
+  variable workFTonlyt was float now int
+  variable militaryt was float now int
+  variable othert was float now int
+  variable enrK12t was float now int
+  variable enrColleget was float now int
+  variable enr2yrt was float now int
+  variable enr4yrt was float now int
+  variable anySchoolt was float now int
+  variable workFTt was float now int
+  variable workPTt was float now int
+  variable workK12t was float now byte
+  variable workColleget was float now int
+  variable workGradScht was float now int
+  variable hgcMothBlack was float now byte
+  variable hgcMothHisp was float now byte
+  variable hgcMothSq was float now int
+  variable hgcMothSqBlack was float now int
+  variable hgcMothSqHisp was float now int
+  variable hgcMothCu was float now int
+  variable hgcMothCuBlack was float now int
+  variable hgcMothCuHisp was float now int
+  variable hgcFathBlack was float now byte
+  variable hgcFathHisp was float now byte
+  variable hgcFathSq was float now int
+  variable hgcFathSqBlack was float now int
+  variable hgcFathSqHisp was float now int
+  variable hgcFathCu was float now int
+  variable hgcFathCuBlack was float now int
+  variable hgcFathCuHisp was float now int
+  variable m_hgcMothBlack was float now byte
+  variable m_hgcMothHisp was float now byte
+  variable m_hgcFathBlack was float now byte
+  variable m_hgcFathHisp was float now byte
+  variable m_famIncBlack was float now byte
+  variable m_famIncHisp was float now byte
+  variable potExpClassict was float now int
+  variable potExpt was float now int
+  variable schoolOnlyBlack was float now int
+  variable schoolOnlyHisp was float now int
+  variable schoolOnlySq was float now int
+  variable schoolOnlySqBlack was float now int
+  variable schoolOnlySqHisp was float now int
+  variable anySchoolBlack was float now int
+  variable anySchoolHisp was float now int
+  variable workK12Black was float now byte
+  variable workK12Hisp was float now byte
+  variable workK12Sq was float now int
+  variable workK12schoolOnly was float now int
+  variable workK12anySchool was float now int
+  variable workK12SqBlack was float now int
+  variable workK12SqHisp was float now int
+  variable workCollegeBlack was float now int
+  variable workCollegeHisp was float now int
+  variable workCollegeSq was float now int
+  variable workCollegeschoolOnly was float now int
+  variable workCollegeworkK12 was float now int
+  variable workCollegeSqBlack was float now int
+  variable workCollegeSqHisp was float now int
+  variable workGradSchBlack was float now int
+  variable workGradSchHisp was float now byte
+  variable workGradSchSq was float now int
+  variable workGradSchschoolOnly was float now int
+  variable workGradSchanySchool was float now int
+  variable workGradSchworkK12 was float now int
+  variable workGradSchSqBlack was float now int
+  variable workGradSchSqHisp was float now int
+  variable workPTBlack was float now int
+  variable workPTHisp was float now int
+  variable workPTschoolOnly was float now int
+  variable workPTanySchool was float now int
+  variable workPTworkK12 was float now int
+  variable workPTworkCollege was float now int
+  variable workPTworkGradSch was float now int
+  variable workPTSqBlack was float now int
+  variable workFTBlack was float now int
+  variable workFTHisp was float now int
+  variable workFTschoolOnly was float now int
+  variable workFTanySchool was float now int
+  variable workFTworkK12 was float now int
+  variable workFTworkCollege was float now int
+  variable workFTworkGradSch was float now int
+  variable workFTworkPT was float now int
+  variable militaryBlack was float now int
+  variable militaryHisp was float now int
+  variable otherBlack was float now int
+  variable otherHisp was float now int
+  variable gradCol was float now byte
+  variable monthsCol was float now int
+  variable months2yr was float now int
+  variable months4yr was float now int
+  variable enrCollege1 was float now byte
+  variable enr2yr1 was float now byte
+  variable enr4yr1 was float now byte
+  variable enrCollegeN was float now byte
+  variable enr2yrN was float now byte
+  variable enr4yrN was float now byte
+  variable BA_start_year was float now int
+  variable BA_start_month was float now byte
+  variable BAstartYr was float now int
+  variable BAstartMo was float now byte
+  variable BAstartYrMo was float now int
+  variable BAstartDate was float now int
+  variable BAendDate was float now int
+  variable ageBAstartYr1 was float now byte
+  variable ageBAstartYr was float now byte
+  variable ageBAendYr1 was float now byte
+  variable ageBAendYr was float now byte
+  variable BA_stop_year was float now int
+  variable BA_stop_month was float now byte
+  variable BAstopYr was float now int
+  variable BAstopMo was float now byte
+  variable BAstopYrMo was float now int
+  variable monthsAtRiskCol was float now int
+  variable ageFirstCol1 was float now byte
+  variable ageFirst2yr1 was float now byte
+  variable ageFirst4yr1 was float now byte
+  variable ageFirstCol was float now byte
+  variable ageFirst2yr was float now byte
+  variable ageFirst4yr was float now byte
+  variable everCol was float now byte
+  variable ever2yr was float now byte
+  variable ever4yr was float now byte
+  variable HSgradOnly was float now byte
+  variable AAgradOnly was float now byte
+  variable BAgradOnly was float now byte
+  variable GradgradOnly was float now byte
+  variable NoHSgradEver was float now byte
+  variable firstFT1noHS was float now byte
+  variable ageFirstFT1noHS was float now byte
+  variable firstFT1HS was float now byte
+  variable ageFirstFT1HS was float now byte
+  variable firstFT1BA was float now byte
+  variable ageFirstFT1BA was float now byte
+  variable ageFirstFTnoHS was float now byte
+  variable ageFirstFTHS was float now byte
+  variable ageFirstFTBA was float now byte
+  variable ageFirstFT was float now byte
+  variable everFirstFT was float now byte
+  variable firstObs was float now byte
+  (1,616,498,208 bytes saved)
+
+. save       yCombinedAnalysisPublic_t0_16.dta, replace
+(note: file yCombinedAnalysisPublic_t0_16.dta not found)
+file yCombinedAnalysisPublic_t0_16.dta saved
+
+. !chmod 776 yCombined*.dta
+
+
+. !zip -m    yCombinedAnalysisPublic_t0_16.dta.zip yCombinedAnalysisPublic_t0_16.dta
+
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /hpc/group/econ/tmr17/WageReturnsRepo/Data/data_append_public_t0_16.log
+  log type:  text
+ closed on:   9 Apr 2020, 14:20:43
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------

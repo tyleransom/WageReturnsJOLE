@@ -1,0 +1,2799 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/data/ransom/WageReturnsRepo/Data/y97/y97_create_trim.log
+  log type:  text
+ opened on:  11 Feb 2019, 10:17:30
+
+. 
+. !unzip y97_master.dta.zip
+
+Archive:  y97_master.dta.zip
+  inflating: y97_master.dta          
+
+. use y97_master.dta
+
+. !rm y97_master.dta
+
+
+. 
+. local months Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+
+. 
+. foreach x of local months {
+  2.     replace  activity`x' = 1  if schOnly`x'                               
+> // School Only
+  3.     replace  activity`x' = 2  if workSch`x'                               
+> // School and Work using defn A
+  4.     replace  activity`x' = 3  if !military`x' & !In_school`x' & workPT`x' 
+> // Part-Time Work Only using defn A
+  5.     replace  activity`x' = 4  if !military`x' & !In_school`x' & workFT`x' 
+> // Full-Time Work Only
+  6.     replace  activity`x' = 5  if military`x'                              
+> // Military
+  7.     replace  activity`x' = 6  if other`x'                                 
+> // Other
+  8. }
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+
+. 
+. foreach x of local months {
+  2.     * Create mutually exclusive activity indicators
+.     gen byte one`x'   = schOnly`x'             
+  3.     gen byte two`x'   = workSch`x'               
+  4.     gen byte three`x' = !military`x' & !In_school`x' & workPT`x'
+  5.     gen byte four`x'  = !military`x' & !In_school`x' & workFT`x'
+  6.     gen byte five`x'  = military`x'              
+  7.     gen byte six`x'   = other`x'    
+  8. }
+
+. 
+. tab2 oneJan twoJan threeJan fourJan fiveJan sixJan, mi
+
+-> tabulation of oneJan by twoJan  
+
+           |        twoJan
+    oneJan |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   195,137     27,459 |   222,596 
+         1 |   109,812          0 |   109,812 
+-----------+----------------------+----------
+     Total |   304,949     27,459 |   332,408 
+
+
+-> tabulation of oneJan by threeJan  
+
+           |       threeJan
+    oneJan |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   205,330     17,266 |   222,596 
+         1 |   109,812          0 |   109,812 
+-----------+----------------------+----------
+     Total |   315,142     17,266 |   332,408 
+
+
+-> tabulation of oneJan by fourJan  
+
+           |        fourJan
+    oneJan |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   168,789     53,807 |   222,596 
+         1 |   109,812          0 |   109,812 
+-----------+----------------------+----------
+     Total |   278,601     53,807 |   332,408 
+
+
+-> tabulation of oneJan by fiveJan  
+
+           |        fiveJan
+    oneJan |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   220,263      2,333 |   222,596 
+         1 |   109,812          0 |   109,812 
+-----------+----------------------+----------
+     Total |   330,075      2,333 |   332,408 
+
+
+-> tabulation of oneJan by sixJan  
+
+           |        sixJan
+    oneJan |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   100,865    121,731 |   222,596 
+         1 |   109,812          0 |   109,812 
+-----------+----------------------+----------
+     Total |   210,677    121,731 |   332,408 
+
+
+-> tabulation of twoJan by threeJan  
+
+           |       threeJan
+    twoJan |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   287,683     17,266 |   304,949 
+         1 |    27,459          0 |    27,459 
+-----------+----------------------+----------
+     Total |   315,142     17,266 |   332,408 
+
+
+-> tabulation of twoJan by fourJan  
+
+           |        fourJan
+    twoJan |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   251,142     53,807 |   304,949 
+         1 |    27,459          0 |    27,459 
+-----------+----------------------+----------
+     Total |   278,601     53,807 |   332,408 
+
+
+-> tabulation of twoJan by fiveJan  
+
+           |        fiveJan
+    twoJan |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   302,616      2,333 |   304,949 
+         1 |    27,459          0 |    27,459 
+-----------+----------------------+----------
+     Total |   330,075      2,333 |   332,408 
+
+
+-> tabulation of twoJan by sixJan  
+
+           |        sixJan
+    twoJan |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   183,218    121,731 |   304,949 
+         1 |    27,459          0 |    27,459 
+-----------+----------------------+----------
+     Total |   210,677    121,731 |   332,408 
+
+
+-> tabulation of threeJan by fourJan  
+
+           |        fourJan
+  threeJan |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   261,335     53,807 |   315,142 
+         1 |    17,266          0 |    17,266 
+-----------+----------------------+----------
+     Total |   278,601     53,807 |   332,408 
+
+
+-> tabulation of threeJan by fiveJan  
+
+           |        fiveJan
+  threeJan |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   312,809      2,333 |   315,142 
+         1 |    17,266          0 |    17,266 
+-----------+----------------------+----------
+     Total |   330,075      2,333 |   332,408 
+
+
+-> tabulation of threeJan by sixJan  
+
+           |        sixJan
+  threeJan |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   193,411    121,731 |   315,142 
+         1 |    17,266          0 |    17,266 
+-----------+----------------------+----------
+     Total |   210,677    121,731 |   332,408 
+
+
+-> tabulation of fourJan by fiveJan  
+
+           |        fiveJan
+   fourJan |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   276,268      2,333 |   278,601 
+         1 |    53,807          0 |    53,807 
+-----------+----------------------+----------
+     Total |   330,075      2,333 |   332,408 
+
+
+-> tabulation of fourJan by sixJan  
+
+           |        sixJan
+   fourJan |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   156,870    121,731 |   278,601 
+         1 |    53,807          0 |    53,807 
+-----------+----------------------+----------
+     Total |   210,677    121,731 |   332,408 
+
+
+-> tabulation of fiveJan by sixJan  
+
+           |        sixJan
+   fiveJan |         0          1 |     Total
+-----------+----------------------+----------
+         0 |   208,344    121,731 |   330,075 
+         1 |     2,333          0 |     2,333 
+-----------+----------------------+----------
+     Total |   210,677    121,731 |   332,408 
+
+
+. 
+. foreach x of local months {
+  2.     assert workSch`x'==workK12`x'+workCollege`x'
+  3.     assert schOnly`x'+workSch`x'==In_school`x'
+  4. }
+
+. 
+. foreach x of local months {
+  2.     * assert (schOnly`x')+(workSch`x')+(!military`x' & !In_school`x' & wor
+> kPT`x')+(!military`x' & !In_school`x' & workFT`x')+(military`x')+(other`x')==
+> 1
+.     tab year if (schOnly`x')+(workSch`x')+(!military`x' & !In_school`x' & wor
+> kPT`x')+(!military`x' & !In_school`x' & workFT`x')+(military`x')+(other`x')~=
+> 1
+  3. }
+no observations
+no observations
+no observations
+no observations
+no observations
+no observations
+no observations
+no observations
+no observations
+no observations
+no observations
+no observations
+
+. 
+. * Assume people who are missing foreignBorn are actually foreign born
+. recode foreignBorn (. = 1)
+(foreignBorn: 9250 changes made)
+
+. 
+. foreach x in AR CS MK NO PC WK {
+  2.     ren m_afqt`x' m_asvab`x'
+  3. }
+
+. 
+. * keep variables
+. local demographics ID year age_now miss_interview miss_interview_cum miss_int
+> erview_length year_miss_int ever_return_after_*int ever_miss_interview ever_m
+> iss*int age_at*int missIntLastSpell last_int_day Meduc m_Meduc Feduc m_Feduc 
+> foreignBorn afqt_std asvabAR_std asvabCS_std asvabMK_std asvabNO_std asvabPC_
+> std asvabWK_std m_afqt m_asvabAR m_asvabCS m_asvabMK m_asvabNO m_asvabPC m_as
+> vabWK famInc1996 m_famInc1996 liveWithMom14 femaleHeadHH1997 HHsize1997 femal
+> e race white black hispanic mixed birth_month birth_year born_1980 born_1981 
+> born_1982 born_1983 born_1984 Sample_type weight fedMinWage cpi Interview_dat
+> e
+
+. local school Highest_Grade_Completed School_Yr_to_Grade In_school??? Months_i
+> n_K12 Months_in_college Months_in_grad_school In_K12 In_grad_school School_Yr
+> _to_Grade Enrolled_K12_??? Enrolled_college_??? Enrolled_2yr_??? Enrolled_4yr
+> _??? Enrolled_grad_school_??? gradGraduate yrGradGraduate grad4yr yrGrad4yr g
+> rad2yr yrGrad2yr gradHS yrGradHS gradGED yrGradGED gradDiploma yrGradDiploma 
+> Grad_month BA_month AA_month Diploma_month GED_month HS_month Grad_year BA_ye
+> ar AA_year Diploma_year GED_year HS_year 
+
+. local work weeks_employed weeks_worked_??? weeksSelfEmployed??? hours_worked_
+> ??? avgHrs??? weeksMilitary??? workFT??? workPT??? work??? workSch??? workK12
+> ??? workCollege??? military??? other??? activity???  workFTRecall??? workPTRe
+> call??? workRecall??? workSchRecall??? workK12Recall??? workCollegeRecall??? 
+> militaryRecall??? otherRecall??? activityRecall???  weeks_in_labor_force Avg_
+> hrs_worked Hrs_worked_tot Created_Hours_Worked Total_Hours_Worked Total_Hours
+> _Worked_Old annualHrsWrkCalcCalc annual_most_wage annual_main_wage annual_med
+> ian_wage annual_least_wage annual_mean_wage annual_most_comp annual_main_comp
+>  annual_median_comp annual_least_comp annual_mean_comp annual_ind_max annual_
+> occ_max annual_occ_main annual_ind_main annual_ind_min annual_occ_min interns
+> hip_max internship_min internship_main internship Hrs_worked_tot Created_Hour
+> s_Worked num_jobs_week* wage_week* comp_week* wagerWeek* comprWeek* wage??? c
+> omp??? wageAlt??? compAlt??? wageMedian??? compMedian??? wageAltMedian??? com
+> pAltMedian??? total_employers num_primary_job_switches
+
+. keep `demographics' `school' `work' lastValidSchoolDate long_miss_flag max_no
+> nmissing_int_year R*interview* wage_job_current wage_job_main comp_job_curren
+> t comp_job_main Highest_degree_ever self_employed_job_current self_employed_j
+> ob_main occ_job_current occ_job_main ind_job_current ind_job_main
+
+. 
+. #delimit ;
+delimiter now ;
+. capture ren ID id;
+
+.  lab var id "Person ID";
+
+. capture ren age_now age;
+
+.  lab var age "Age as of Jan 1 of current year";
+
+. capture ren Meduc hgcMoth;
+
+.  lab var hgcMoth "Mother's HGC";
+
+. capture ren m_Meduc m_hgcMoth;
+
+.  lab var m_hgcMoth "Missing Mother's HGC";
+
+. capture ren Feduc hgcFath;
+
+.  lab var hgcFath "Father's HGC";
+
+. capture ren m_Feduc m_hgcFath;
+
+.  lab var m_hgcFath "Missing Father's HGC";
+
+.  capture ren foreignBorn foreignBorn;
+
+.  lab var foreignBorn "Born outside of the US";
+
+. capture ren afqt_std    afqt   ;
+
+.  lab var afqt      "Standardized AFQT (Altonji et al.)";
+
+. capture ren asvabAR_std asvabAR;
+
+.  lab var asvabAR   "Standardized ASVAB Arithmetic Reasoning    (AR) Subtest (
+> Altonji et al.)";
+
+. capture ren asvabCS_std asvabCS;
+
+.  lab var asvabCS   "Standardized ASVAB Coding Speed            (CS) Subtest (
+> Altonji et al.)";
+
+. capture ren asvabMK_std asvabMK;
+
+.  lab var asvabMK   "Standardized ASVAB Mathematics Knowledge   (MK) Subtest (
+> Altonji et al.)";
+
+. capture ren asvabNO_std asvabNO;
+
+.  lab var asvabNO   "Standardized ASVAB Numerical Operations    (NO) Subtest (
+> Altonji et al.)";
+
+. capture ren asvabPC_std asvabPC;
+
+.  lab var asvabPC   "Standardized ASVAB Paragraph Comprehension (PC) Subtest (
+> Altonji et al.)";
+
+. capture ren asvabWK_std asvabWK;
+
+.  lab var asvabWK   "Standardized ASVAB Word Knowledge          (WK) Subtest (
+> Altonji et al.)";
+
+. capture ren m_afqt    m_afqt   ;
+
+.  lab var m_afqt    "Missing AFQT"                              ;
+
+. capture ren m_asvabAR m_asvabAR;
+
+.  lab var m_asvabAR "Missing ASVAB Arithmetic Reasoning    (AR)";
+
+. capture ren m_asvabCS m_asvabCS;
+
+.  lab var m_asvabCS "Missing ASVAB Coding Speed            (CS)";
+
+. capture ren m_asvabMK m_asvabMK;
+
+.  lab var m_asvabMK "Missing ASVAB Mathematics Knowledge   (MK)";
+
+. capture ren m_asvabNO m_asvabNO;
+
+.  lab var m_asvabNO "Missing ASVAB Numerical Operations    (NO)";
+
+. capture ren m_asvabPC m_asvabPC;
+
+.  lab var m_asvabPC "Missing ASVAB Paragraph Comprehension (PC)";
+
+. capture ren m_asvabWK m_asvabWK;
+
+.  lab var m_asvabWK "Missing ASVAB Word Knowledge          (WK)";
+
+. capture ren famInc1996 famInc1996;
+
+.  lab var famInc1996 "(Real) Family Income in 1996";
+
+. capture ren m_famInc1996 m_famInc1996;
+
+.  lab var m_famInc1996 "Missing Family Income in 1996";
+
+. * capture ren Census_region region;
+.  * lab var region "Census Region at Interview Date";
+. capture ren birth_month birthMonth;
+
+. capture ren birth_year  birthYear;
+
+. capture ren born_1980 born1980;
+
+.  lab var born1980 "Born in year 1980 dummy";
+
+. capture ren born_1981 born1981;
+
+.  lab var born1981 "Born in year 1981 dummy";
+
+. capture ren born_1982 born1982;
+
+.  lab var born1982 "Born in year 1982 dummy";
+
+. capture ren born_1983 born1983;
+
+.  lab var born1983 "Born in year 1983 dummy";
+
+. capture ren born_1984 born1984;
+
+.  lab var born1984 "Born in year 1984 dummy";
+
+.  // remember to use b1984 as the omitted dummy
+> gen oversample = 1-Sample_type;
+
+.  lab var oversample "Dummy: 1=oversample; 0=cross-sectional";
+
+. drop Sample_type;
+
+. lab var fedMinWage "Federal Minimum Wage, $1982-84";
+
+. lab var cpi "Consumer Price Index (CPI) $1982-84";
+
+. *lab var weight_cc "Cumulative Cases survey weight (BLS created)";
+. *lab var weight_panel "Panel survey weight (BLS created)";
+. *lab var weight_altonji "Altonji et al. survey weight";
+. *lab var custom_weight "Custom (BLS created) survey weight";
+. ren Highest_Grade_Completed hgcIn;
+
+.  lab var hgcIn "HGC as of survey date";
+
+. ren School_Yr_to_Grade grade_current;
+
+.  lab var grade_current "Current Grade Attending";
+
+. ren Months_in_K12 monthsK12;
+
+.  lab var monthsK12 "Months enrolled in K12 in calendar year t";
+
+. ren Months_in_college monthsCollege;
+
+.  lab var monthsCollege "Months enrolled in College in calendar year t";
+
+. ren Months_in_grad_school monthsGradSch;
+
+.  lab var monthsGradSch "Months enrolled in Graduate School in calendar year t
+> ";
+
+. * ren In_K12 enrK12;
+.  * lab var enrK12 "Ever enrolled in K12 in calendar year t";
+. * ren In_college enrCollege;
+.  * lab var enrCollege "Ever enrolled in College in calendar year t";
+. * ren In_grad_school enrGradSch;
+.  * lab var enrGradSch "Ever enrolled in Graduate school in calendar year t";
+. foreach mon in Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec {;
+  2.     ren Enrolled_K12_`mon' enrK12`mon';
+  3.  lab var enrK12`mon' "Enrolled in K12 in `mon' of calendar year t";
+  4.     ren Enrolled_college_`mon' enrCollege`mon';
+  5.  lab var enrCollege`mon' "Enrolled in College in `mon' of calendar year t"
+> ;
+  6.     ren Enrolled_2yr_`mon' enr2yr`mon';
+  7.  lab var enr2yr`mon' "Enrolled in 2yr in `mon' of calendar year t";
+  8.     ren Enrolled_4yr_`mon' enr4yr`mon';
+  9.  lab var enr4yr`mon' "Enrolled in 4yr in `mon' of calendar year t";
+ 10.     ren Enrolled_grad_school_`mon' enrGradSch`mon';
+ 11.  lab var enrGradSch`mon' "Enrolled in Graduate School in `mon' of calendar
+>  year t";
+ 12. };
+
+. * ren Weeks_in_Military weeksMilitary;
+.  * lab var weeksMilitary "Number of weeks of calendar year t spent in the mil
+> itary";
+. ren weeks_employed weeksEmployed;
+
+.  lab var weeksEmployed "Number of weeks of calendar year t spent working for 
+> an employer";
+
+. ren weeks_in_labor_force weeksLabForce;
+
+.  lab var weeksLabForce "Number of weeks of calendar year t spent in the labor
+>  force";
+
+. ren Avg_hrs_worked annualAvgHrsWrk;
+
+.  lab var annualAvgHrsWrk "Annual Hours Worked / Weeks Employed, where N/0 = 0
+> ";
+
+. ren Total_Hours_Worked annualHrsWrk;
+
+.  lab var annualHrsWrk "Hours worked in calendar year t across all jobs";
+
+. ren annual_most_wage annualWageMax;
+
+.  lab var annualWageMax "Highest wage across all jobs in calendar year t";
+
+. ren annual_median_wage annualWageMed;
+
+.  lab var annualWageMed "Median wage across all jobs in calendar year t";
+
+. ren annual_least_wage annualWageMin;
+
+.  lab var annualWageMin "Lowest wage across all jobs in calendar year t";
+
+. ren annual_mean_wage annualWageMean;
+
+.  lab var annualWageMean "Average wage weighted by job length in calendar year
+>  t";
+
+. ren annual_main_wage annualWageMain;
+
+.  lab var annualWageMain "Wage at main job in calendar year t";
+
+. ren annual_most_comp annualCompMax;
+
+.  lab var annualCompMax "Highest comp across all jobs in calendar year t";
+
+. ren annual_median_comp annualCompMed;
+
+.  lab var annualCompMed "Median comp across all jobs in calendar year t";
+
+. ren annual_least_comp annualCompMin;
+
+.  lab var annualCompMin "Lowest comp across all jobs in calendar year t";
+
+. ren annual_mean_comp annualCompMean;
+
+.  lab var annualCompMean "Average comp weighted by job length in calendar year
+>  t";
+
+. ren annual_main_comp annualCompMain;
+
+.  lab var annualCompMain "Comp at main job in calendar year t";
+
+. ren annual_ind_max annualIndMax;
+
+.  lab var annualIndMax "Industry of the highest-wage job in calendar year t";
+
+. ren annual_occ_max annualOccMax;
+
+.  lab var annualOccMax "Industry of the highest-wage job in calendar year t";
+
+. ren annual_ind_main annualIndMain;
+
+.  lab var annualIndMain "Industry of the main job in calendar year t";
+
+. ren annual_occ_main annualOccMain;
+
+.  lab var annualOccMax "Occupation of the main job in calendar year t";
+
+. ren annual_ind_min annualIndMin;
+
+.  lab var annualIndMin "Industry of the highest-wage job in calendar year t";
+
+. ren annual_occ_min annualOccMin;
+
+.  lab var annualOccMin "Industry of the highest-wage job in calendar year t";
+
+. ren internship_max internshipMax;
+
+.  lab var internshipMax "Industry of the highest-wage job in calendar year t";
+
+. ren internship_min internshipMin;
+
+.  lab var internshipMin "Industry of the highest-wage job in calendar year t";
+
+. lab var internship "Any job reported in calendar year t was an internship";
+
+. foreach mon of local months {;
+  2.     ren weeks_worked_`mon' weeksWrk`mon';
+  3.  lab var weeksWrk`mon' "Weeks Worked in `mon' of calendar year t";
+  4.     ren hours_worked_`mon' monthlyHrsWrk`mon';
+  5.  lab var monthlyHrsWrk`mon' "Total Hours Worked in `mon' of calendar year 
+> t";
+  6.     ren avgHrs`mon' avgHrsWrk`mon';
+  7.  lab var avgHrsWrk`mon' "Average weekly hours worked in `mon' of calendar 
+> year t";
+  8.     lab var weeksMilitary`mon' "Weeks in military in `mon' of calendar yea
+> r t";
+  9.     ren work`mon' atWork`mon';
+ 10.  lab var atWork`mon' "Activity >=2 & Activity<=4 in `mon' of calendar year
+>  t";
+ 11.         ren workFTRecall`mon'      RECALLworkFTRecall`mon'      ;
+ 12.     ren workPTRecall`mon'      RECALLworkPTRecall`mon'      ;
+ 13.     ren militaryRecall`mon'    RECALLmilitaryRecall`mon'    ;
+ 14.     ren workRecall`mon'        RECALLworkRecall`mon'        ;
+ 15.     ren workSchRecall`mon'     RECALLworkSchRecall`mon'     ;
+ 16.     ren workK12Recall`mon'     RECALLworkK12Recall`mon'     ;
+ 17.     ren workCollegeRecall`mon' RECALLworkCollegeRecall`mon' ;
+ 18.     ren otherRecall`mon'       RECALLotherRecall`mon'       ;
+ 19.     ren activityRecall`mon'    RECALLactivityRecall`mon'    ;
+ 20. };
+
+. #delimit cr
+delimiter now cr
+. 
+. capture ren In_school enrSchool
+
+. capture ren id id
+
+. capture ren year year
+
+. capture ren age age
+
+. capture ren birth_year birthYear
+
+. capture ren white white
+
+. capture ren black black
+
+. capture ren hispanic hispanic
+
+. capture ren race race
+
+. capture ren HH_size_78 HHsize1978
+
+. capture ren HHsize1997 HHsize1997
+
+. capture ren region region
+
+. capture ren hgcIn hgcIn
+
+. capture ren weight_panel weight
+
+. capture ren oversample oversampleRace
+
+. capture ren annualHrsWrk annualHrsWrk
+
+. capture ren grade_current gradeCurrent
+
+. capture ren miss_interview missInt
+
+. capture ren afqt afqt
+
+. capture ren female female
+
+. capture ren hgcMoth hgcMoth
+
+. capture ren m_hgcMoth m_hgcMoth
+
+. capture ren hgcFath hgcFath
+
+. capture ren m_hgcFath m_hgcFath
+
+. capture ren foreignBorn foreignBorn
+
+. capture ren m_afqt m_afqt
+
+. capture ren famInc1978 famInc1978
+
+. capture ren famInc1996 famInc1996
+
+. capture ren m_famInc1978 m_famInc1978
+
+. capture ren m_famInc1996 m_famInc1996
+
+. capture ren femaleHeadHH1997 femaleHeadHH1997
+
+. capture ren livwmom14 liveWithMom14
+
+. capture ren born1961 born1961
+
+. capture ren born1962 born1962
+
+. capture ren born1963 born1963
+
+. capture ren born1964 born1964
+
+. capture ren born1980 born1980
+
+. capture ren born1981 born1981
+
+. capture ren born1982 born1982
+
+. capture ren born1983 born1983
+
+. capture ren born1984 born1984
+
+. capture ren age_at_miss_int ageAtMissInt
+
+. capture ren year_miss_int yearMissInt
+
+. capture ren ever_miss_interview everMissInt
+
+. capture ren miss_interview_cum missIntCum
+
+. capture ren miss_interview_length missIntLength
+
+. capture ren ever_miss_3plus_int everMiss3plusInt
+
+. capture ren ever_return_after_3plus_miss_int everReturnAfter3plusMissInt
+
+. capture ren fedMinWage    fedMinWage
+
+. capture ren cpi           cpi
+
+. capture ren enrCollegeJan enrCollegeJan
+
+. capture ren enrCollegeFeb enrCollegeFeb
+
+. capture ren enrCollegeMar enrCollegeMar
+
+. capture ren enrCollegeApr enrCollegeApr
+
+. capture ren enrCollegeMay enrCollegeMay
+
+. capture ren enrCollegeJun enrCollegeJun
+
+. capture ren enrCollegeJul enrCollegeJul
+
+. capture ren enrCollegeAug enrCollegeAug
+
+. capture ren enrCollegeSep enrCollegeSep
+
+. capture ren enrCollegeOct enrCollegeOct
+
+. capture ren enrCollegeNov enrCollegeNov
+
+. capture ren enrCollegeDec enrCollegeDec
+
+. capture ren enr2yrJan enr2yrJan
+
+. capture ren enr2yrFeb enr2yrFeb
+
+. capture ren enr2yrMar enr2yrMar
+
+. capture ren enr2yrApr enr2yrApr
+
+. capture ren enr2yrMay enr2yrMay
+
+. capture ren enr2yrJun enr2yrJun
+
+. capture ren enr2yrJul enr2yrJul
+
+. capture ren enr2yrAug enr2yrAug
+
+. capture ren enr2yrSep enr2yrSep
+
+. capture ren enr2yrOct enr2yrOct
+
+. capture ren enr2yrNov enr2yrNov
+
+. capture ren enr2yrDec enr2yrDec
+
+. capture ren enr4yrJan enr4yrJan
+
+. capture ren enr4yrFeb enr4yrFeb
+
+. capture ren enr4yrMar enr4yrMar
+
+. capture ren enr4yrApr enr4yrApr
+
+. capture ren enr4yrMay enr4yrMay
+
+. capture ren enr4yrJun enr4yrJun
+
+. capture ren enr4yrJul enr4yrJul
+
+. capture ren enr4yrAug enr4yrAug
+
+. capture ren enr4yrSep enr4yrSep
+
+. capture ren enr4yrOct enr4yrOct
+
+. capture ren enr4yrNov enr4yrNov
+
+. capture ren enr4yrDec enr4yrDec
+
+. capture ren enrGradSchJan enrGradSchJan
+
+. capture ren enrGradSchFeb enrGradSchFeb
+
+. capture ren enrGradSchMar enrGradSchMar
+
+. capture ren enrGradSchApr enrGradSchApr
+
+. capture ren enrGradSchMay enrGradSchMay
+
+. capture ren enrGradSchJun enrGradSchJun
+
+. capture ren enrGradSchJul enrGradSchJul
+
+. capture ren enrGradSchAug enrGradSchAug
+
+. capture ren enrGradSchSep enrGradSchSep
+
+. capture ren enrGradSchOct enrGradSchOct
+
+. capture ren enrGradSchNov enrGradSchNov
+
+. capture ren enrGradSchDec enrGradSchDec
+
+. capture ren enrK12Jan enrK12Jan
+
+. capture ren enrK12Feb enrK12Feb
+
+. capture ren enrK12Mar enrK12Mar
+
+. capture ren enrK12Apr enrK12Apr
+
+. capture ren enrK12May enrK12May
+
+. capture ren enrK12Jun enrK12Jun
+
+. capture ren enrK12Jul enrK12Jul
+
+. capture ren enrK12Aug enrK12Aug
+
+. capture ren enrK12Sep enrK12Sep
+
+. capture ren enrK12Oct enrK12Oct
+
+. capture ren enrK12Nov enrK12Nov
+
+. capture ren enrK12Dec enrK12Dec
+
+. capture ren monthsCollege monthsCollege
+
+. capture ren monthsGradSch monthsGradSch
+
+. capture ren monthsK12 monthsK12
+
+. capture ren enrK12 enrK12
+
+. capture ren enrCollege enrCollege
+
+. capture ren enrGradSch enrGradSch
+
+. capture ren weeksEmployed weeksEmployed
+
+. capture ren weeksLabForce weeksLabForce
+
+. capture ren annualWageMean annualWageMean
+
+. capture ren annualWageMed annualWageMed
+
+. capture ren annualWageMin annualWageMin
+
+. capture ren annualWageMax annualWageMax
+
+. capture ren annualWageMain annualWageMain
+
+. capture ren annualCompMean annualCompMean
+
+. capture ren annualCompMed annualCompMed
+
+. capture ren annualCompMin annualCompMin
+
+. capture ren annualCompMax annualCompMax
+
+. capture ren annualCompMain annualCompMain
+
+. capture ren annualOccMin annualOccMin
+
+. capture ren annualOccMax annualOccMax
+
+. capture ren annualOccMain annualOccMain
+
+. capture ren annualIndMin annualIndMin
+
+. capture ren annualIndMax annualIndMax
+
+. capture ren annualIndMain annualIndMain
+
+. capture ren weeksWrkJan weeksWrkJan
+
+. capture ren weeksWrkFeb weeksWrkFeb
+
+. capture ren weeksWrkMar weeksWrkMar
+
+. capture ren weeksWrkApr weeksWrkApr
+
+. capture ren weeksWrkMay weeksWrkMay
+
+. capture ren weeksWrkJun weeksWrkJun
+
+. capture ren weeksWrkJul weeksWrkJul
+
+. capture ren weeksWrkAug weeksWrkAug
+
+. capture ren weeksWrkSep weeksWrkSep
+
+. capture ren weeksWrkOct weeksWrkOct
+
+. capture ren weeksWrkNov weeksWrkNov
+
+. capture ren weeksWrkDec weeksWrkDec
+
+. capture ren annualAvgHrsWrk annualAvgHrsWrk
+
+. capture ren weeksMilitary weeksMilitary
+
+. * capture ren   workFT workFT
+. * capture ren   workPT_A workPT_A
+. * capture ren   workPT_B workPT_B
+. * capture ren   militaryA militaryA
+. * capture ren   militaryB militaryB
+. * capture ren   militaryC militaryC
+. * capture ren   workA workA
+. * capture ren   workB workB
+. * capture ren   workSchA workSchA
+. * capture ren   workK12A workK12A
+. * capture ren   workCollegeA workCollegeA
+. * capture ren   workSchB workSchB
+. * capture ren   workK12B workK12B
+. * capture ren   workCollegeB workCollegeB
+. * capture ren   otherA otherA
+. * capture ren   otherB otherB
+. * capture ren   otherC otherC
+. * capture ren   activityA activityA
+. * capture ren   activityB activityB
+. * capture ren   activityC activityC
+. 
+. capture lab var id "Person ID"
+
+. capture lab var year "Year of Survey"
+
+. capture lab var age "Age as of Jan 1 of current year"
+
+. capture lab var birthYear "Birth year"
+
+. capture lab var white "White indicator"
+
+. capture lab var black "Black indicator"
+
+. capture lab var hispanic "Hispanic indicator"
+
+. capture lab var race "Race from Screener (Mixed dropped in 97)"
+
+. capture lab var HHsize1978 "Household Size in 1979"
+
+. capture lab var HHsize1997 "Household Size in 1997"
+
+. capture lab var region "Census Region at Interview Date"
+
+. capture lab var hgcIn "HGC as of survey date"
+
+. capture lab var weight "Panel survey weight (BLS created)"
+
+. capture lab var oversampleRace "Dummy: 1=oversample; 0=cross-sectional"
+
+. capture lab var annualHrsWrk "Hours worked in calendar year t across all jobs
+> "
+
+. capture lab var gradeCurrent "Current Grade Attending"
+
+. capture lab var missInt "Missed Interview In Current Year"
+
+. capture lab var afqt "Standardized AFQT (Altonji et al.)"
+
+. capture lab var female "Female"
+
+. capture lab var hgcMoth "Mother's HGC"
+
+. capture lab var m_hgcMoth "Missing Mother's HGC"
+
+. capture lab var hgcFath "Father's HGC"
+
+. capture lab var m_hgcFath "Missing Father's HGC"
+
+. capture lab var foreignBorn "Born outside of the US"
+
+. capture lab var m_afqt "Missing AFQT"
+
+. capture lab var famInc1978 "(Real) Family Income in 1978"
+
+. capture lab var famInc1996 "(Real) Family Income in 1996"
+
+. capture lab var m_famInc1978 "Missing Family Income in 1978"
+
+. capture lab var m_famInc1996 "Missing Family Income in 1996"
+
+. capture lab var femaleHeadHH1997 "Female headed household in 1997"
+
+. capture lab var liveWithMom14 "Live with mother at age 14"
+
+. capture lab var born1961 "Born in year 1961 dummy"
+
+. capture lab var born1962 "Born in year 1962 dummy"
+
+. capture lab var born1963 "Born in year 1963 dummy"
+
+. capture lab var born1964 "Born in year 1964 dummy"
+
+. capture lab var born1980 "Born in year 1980 dummy"
+
+. capture lab var born1981 "Born in year 1981 dummy"
+
+. capture lab var born1982 "Born in year 1982 dummy"
+
+. capture lab var born1983 "Born in year 1983 dummy"
+
+. capture lab var born1984 "Born in year 1984 dummy"
+
+. capture lab var ageAtMissInt "Age * Miss Int dummy"
+
+. capture lab var yearMissInt "Year * Miss Int dummy"
+
+. capture lab var everMissInt "Ever miss an interview"
+
+. capture lab var missIntCum "Running Tally Of Current Missed Interview Spell"
+
+. capture lab var missIntLength "Length Of Current Missed Interview Spell"
+
+. capture lab var everMiss3plusInt "Ever miss 3+ consecutive interviews"
+
+. capture lab var everReturnAfter3plusMissInt "Ever return after missing 3+ con
+> secutive interviews"
+
+. capture lab var fedMinWage "Federal Minimum Wage, $1982-84"
+
+. capture lab var cpi "Consumer Price Index (CPI) $1982-84"
+
+. capture lab var enrCollegeJan "Enrolled in College in Jan of Survey Year"
+
+. capture lab var enrCollegeFeb "Enrolled in College in Feb of Survey Year"
+
+. capture lab var enrCollegeMar "Enrolled in College in Mar of Survey Year"
+
+. capture lab var enrCollegeApr "Enrolled in College in Apr of Survey Year"
+
+. capture lab var enrCollegeMay "Enrolled in College in May of Survey Year"
+
+. capture lab var enrCollegeJun "Enrolled in College in Jun of Survey Year"
+
+. capture lab var enrCollegeJul "Enrolled in College in Jul of Survey Year"
+
+. capture lab var enrCollegeAug "Enrolled in College in Aug of Survey Year"
+
+. capture lab var enrCollegeSep "Enrolled in College in Sep of Survey Year"
+
+. capture lab var enrCollegeOct "Enrolled in College in Oct of Survey Year"
+
+. capture lab var enrCollegeNov "Enrolled in College in Nov of Survey Year"
+
+. capture lab var enrCollegeDec "Enrolled in College in Dec of Survey Year"
+
+. capture lab var enr2yrJan "Enrolled in 2yr in Jan of Survey Year"
+
+. capture lab var enr2yrFeb "Enrolled in 2yr in Feb of Survey Year"
+
+. capture lab var enr2yrMar "Enrolled in 2yr in Mar of Survey Year"
+
+. capture lab var enr2yrApr "Enrolled in 2yr in Apr of Survey Year"
+
+. capture lab var enr2yrMay "Enrolled in 2yr in May of Survey Year"
+
+. capture lab var enr2yrJun "Enrolled in 2yr in Jun of Survey Year"
+
+. capture lab var enr2yrJul "Enrolled in 2yr in Jul of Survey Year"
+
+. capture lab var enr2yrAug "Enrolled in 2yr in Aug of Survey Year"
+
+. capture lab var enr2yrSep "Enrolled in 2yr in Sep of Survey Year"
+
+. capture lab var enr2yrOct "Enrolled in 2yr in Oct of Survey Year"
+
+. capture lab var enr2yrNov "Enrolled in 2yr in Nov of Survey Year"
+
+. capture lab var enr2yrDec "Enrolled in 2yr in Dec of Survey Year"
+
+. capture lab var enr4yrJan "Enrolled in 4yr in Jan of Survey Year"
+
+. capture lab var enr4yrFeb "Enrolled in 4yr in Feb of Survey Year"
+
+. capture lab var enr4yrMar "Enrolled in 4yr in Mar of Survey Year"
+
+. capture lab var enr4yrApr "Enrolled in 4yr in Apr of Survey Year"
+
+. capture lab var enr4yrMay "Enrolled in 4yr in May of Survey Year"
+
+. capture lab var enr4yrJun "Enrolled in 4yr in Jun of Survey Year"
+
+. capture lab var enr4yrJul "Enrolled in 4yr in Jul of Survey Year"
+
+. capture lab var enr4yrAug "Enrolled in 4yr in Aug of Survey Year"
+
+. capture lab var enr4yrSep "Enrolled in 4yr in Sep of Survey Year"
+
+. capture lab var enr4yrOct "Enrolled in 4yr in Oct of Survey Year"
+
+. capture lab var enr4yrNov "Enrolled in 4yr in Nov of Survey Year"
+
+. capture lab var enr4yrDec "Enrolled in 4yr in Dec of Survey Year"
+
+. capture lab var enrGradSchJan "Enrolled in Grad School in Jan of Survey Year"
+
+. capture lab var enrGradSchFeb "Enrolled in Grad School in Feb of Survey Year"
+
+. capture lab var enrGradSchMar "Enrolled in Grad School in Mar of Survey Year"
+
+. capture lab var enrGradSchApr "Enrolled in Grad School in Apr of Survey Year"
+
+. capture lab var enrGradSchMay "Enrolled in Grad School in May of Survey Year"
+
+. capture lab var enrGradSchJun "Enrolled in Grad School in Jun of Survey Year"
+
+. capture lab var enrGradSchJul "Enrolled in Grad School in Jul of Survey Year"
+
+. capture lab var enrGradSchAug "Enrolled in Grad School in Aug of Survey Year"
+
+. capture lab var enrGradSchSep "Enrolled in Grad School in Sep of Survey Year"
+
+. capture lab var enrGradSchOct "Enrolled in Grad School in Oct of Survey Year"
+
+. capture lab var enrGradSchNov "Enrolled in Grad School in Nov of Survey Year"
+
+. capture lab var enrGradSchDec "Enrolled in Grad School in Dec of Survey Year"
+
+. capture lab var enrK12Jan "Enrolled in K12 in Jan of Survey Year"
+
+. capture lab var enrK12Feb "Enrolled in K12 in Feb of Survey Year"
+
+. capture lab var enrK12Mar "Enrolled in K12 in Mar of Survey Year"
+
+. capture lab var enrK12Apr "Enrolled in K12 in Apr of Survey Year"
+
+. capture lab var enrK12May "Enrolled in K12 in May of Survey Year"
+
+. capture lab var enrK12Jun "Enrolled in K12 in Jun of Survey Year"
+
+. capture lab var enrK12Jul "Enrolled in K12 in Jul of Survey Year"
+
+. capture lab var enrK12Aug "Enrolled in K12 in Aug of Survey Year"
+
+. capture lab var enrK12Sep "Enrolled in K12 in Sep of Survey Year"
+
+. capture lab var enrK12Oct "Enrolled in K12 in Oct of Survey Year"
+
+. capture lab var enrK12Nov "Enrolled in K12 in Nov of Survey Year"
+
+. capture lab var enrK12Dec "Enrolled in K12 in Dec of Survey Year"
+
+. capture lab var monthsCollege "Months enrolled in College in calendar year t"
+
+. capture lab var monthsGradSch "Months enrolled in Graduate School in calendar
+>  year t"
+
+. capture lab var monthsK12 "Months enrolled in K12 in calendar year t"
+
+. capture lab var enrK12 "Ever enrolled in K12 in calendar year t"
+
+. capture lab var enrCollege "Ever enrolled in College in calendar year t"
+
+. capture lab var enrGradSch "Ever enrolled in Graduate school in calendar year
+>  t"
+
+. capture lab var weeksEmployed "Number of weeks of calendar year t spent worki
+> ng for an employer"
+
+. capture lab var weeksLabForce "Number of weeks of calendar year t spent in th
+> e labor force"
+
+. capture lab var annualWageMean "Average wage weighted by weeks worked in cale
+> ndar year"
+
+. capture lab var annualWageMed "Median wage across all jobs in calendar year t
+> "
+
+. capture lab var annualWageMin "Lowest wage across all jobs in calendar year t
+> "
+
+. capture lab var annualWageMax "Highest wage across all jobs in calendar year 
+> t"
+
+. capture lab var annualWageMain "Wage at main job in calendar year t"
+
+. capture lab var annualCompMean "Average Comp weighted by weeks worked in cale
+> ndar year"
+
+. capture lab var annualCompMed "Median Comp across all jobs in calendar year t
+> "
+
+. capture lab var annualCompMin "Lowest Comp across all jobs in calendar year t
+> "
+
+. capture lab var annualCompMax "Highest Comp across all jobs in calendar year 
+> t"
+
+. capture lab var annualCompMain "Comp at main job in calendar year t"
+
+. capture lab var annualOccMin "Occupation of the lowest-wage job in calendar y
+> ear t"
+
+. capture lab var annualOccMax "Occupation of the highest-wage job in calendar 
+> year t"
+
+. capture lab var annualOccMain "Occupation of the main job in calendar year t"
+
+. capture lab var annualIndMin "Industry of the lowest-wage job in calendar yea
+> r t"
+
+. capture lab var annualIndMax "Industry of the highest-wage job in calendar ye
+> ar t"
+
+. capture lab var annualIndMain "Industry of the main job in calendar year t"
+
+. capture lab var weeksWrkJan "Weeks Worked in Jan of calendar year t"
+
+. capture lab var weeksWrkFeb "Weeks Worked in Feb of calendar year t"
+
+. capture lab var weeksWrkMar "Weeks Worked in Mar of calendar year t"
+
+. capture lab var weeksWrkApr "Weeks Worked in Apr of calendar year t"
+
+. capture lab var weeksWrkMay "Weeks Worked in May of calendar year t"
+
+. capture lab var weeksWrkJun "Weeks Worked in Jun of calendar year t"
+
+. capture lab var weeksWrkJul "Weeks Worked in Jul of calendar year t"
+
+. capture lab var weeksWrkAug "Weeks Worked in Aug of calendar year t"
+
+. capture lab var weeksWrkSep "Weeks Worked in Sep of calendar year t"
+
+. capture lab var weeksWrkOct "Weeks Worked in Oct of calendar year t"
+
+. capture lab var weeksWrkNov "Weeks Worked in Nov of calendar year t"
+
+. capture lab var weeksWrkDec "Weeks Worked in Dec of calendar year t"
+
+. capture lab var weeksSelfEmployedJan   "Weeks Self-Employed in Jan of calenda
+> r year t"
+
+. capture lab var weeksSelfEmployedFeb   "Weeks Self-Employed in Feb of calenda
+> r year t"
+
+. capture lab var weeksSelfEmployedMar   "Weeks Self-Employed in Mar of calenda
+> r year t"
+
+. capture lab var weeksSelfEmployedApr   "Weeks Self-Employed in Apr of calenda
+> r year t"
+
+. capture lab var weeksSelfEmployedMay   "Weeks Self-Employed in May of calenda
+> r year t"
+
+. capture lab var weeksSelfEmployedJun   "Weeks Self-Employed in Jun of calenda
+> r year t"
+
+. capture lab var weeksSelfEmployedJul   "Weeks Self-Employed in Jul of calenda
+> r year t"
+
+. capture lab var weeksSelfEmployedAug   "Weeks Self-Employed in Aug of calenda
+> r year t"
+
+. capture lab var weeksSelfEmployedSep   "Weeks Self-Employed in Sep of calenda
+> r year t"
+
+. capture lab var weeksSelfEmployedOct   "Weeks Self-Employed in Oct of calenda
+> r year t"
+
+. capture lab var weeksSelfEmployedNov   "Weeks Self-Employed in Nov of calenda
+> r year t"
+
+. capture lab var weeksSelfEmployedDec   "Weeks Self-Employed in Dec of calenda
+> r year t"
+
+. capture lab var annualAvgHrsWrk "Annual Hours Worked / Weeks Employed, where 
+> N/0 = 0"
+
+. capture lab var weeksMilitary "Number of weeks of calendar year t spent in th
+> e military"
+
+. * capture lab var workFT "Working Full-Time indicator"
+. * capture lab var workPT_A "Working Part-Time indicator (Def A)"
+. * capture lab var workPT_B "Working Part-Time indicator (Def B)"
+. * capture lab var militaryA "Military indicator (Def A)"
+. * capture lab var militaryB "Military indicator (Def B)"
+. * capture lab var militaryC "Military indicator (Def C)"
+. * capture lab var workA "Working indicator (Def A)"
+. * capture lab var workB "Working indicator (Def B)"
+. * capture lab var workSchA "Working and School indicator (Def A)"
+. * capture lab var workK12A "Working and K12 indicator (Def A)"
+. * capture lab var workCollegeA "Working and College indicator (Def A)"
+. * capture lab var workSchB "Working and School indicator (Def B)"
+. * capture lab var workK12B "Working and K12 indicator (Def B)"
+. * capture lab var workCollegeB "Working and College indicator (Def B)"
+. * capture lab var otherA "Other indicator (Def A)"
+. * capture lab var otherB "Other indicator (Def B)"
+. * capture lab var otherC "Other indicator (Def C)"
+. * capture lab var activityA "Primary Activity (Def A)"
+. * capture lab var activityB "Primary Activity (Def B)"
+. * capture lab var activityC "Primary Activity (Def C)"
+. capture ren Hrs_worked_tot annualHrsWrkCalc
+
+. capture lab var annualHrsWrkCalc "Annual Hours calculated as sum of 'Hours pe
+> r week across jobs' variable"
+
+. capture ren Created_Hours_Worked annualHrsWrkRaw
+
+. capture lab var annualHrsWrkRaw "Annual Hours from raw survey data"
+
+. capture ren Total_Hours_Worked_Old annualHrsWrkOld
+
+. capture lab var annualHrsWrkOld "Previous Annual Hours variable (before summi
+> ng over different types)"
+
+. capture lab var annualHrsWrkCalcCalc "Annual Hours calculated as sum of 'Hour
+> s per week at job X' multiplied by weeks worked at job X in the year"
+
+. 
+. ren wage_job_current          WageJobCurrent
+
+. ren wage_job_main             WageJobMain
+
+. ren comp_job_current          CompJobCurrent
+
+. ren comp_job_main             CompJobMain
+
+. ren self_employed_job_current selfEmployedJobCurrent
+
+. ren self_employed_job_main    selfEmployedJobMain
+
+. ren occ_job_current           occJobCurrent
+
+. ren occ_job_main              occJobMain
+
+. ren ind_job_current           indJobCurrent
+
+. ren ind_job_main              indJobMain
+
+. 
+. order id year age birthMonth birthYear white black hispanic mixed liveWithMom
+> 14 race HHsize1997 weight oversampleRace annualHrsWrk gradeCurrent missInt af
+> qt asvabAR asvabCS asvabMK asvabNO asvabPC asvabWK m_afqt m_asvabAR m_asvabCS
+>  m_asvabMK m_asvabNO m_asvabPC m_asvabWK female hgcIn hgcMoth m_hgcMoth hgcFa
+> th m_hgcFath foreignBorn famInc1996 m_famInc1996 femaleHeadHH1997 born1980 bo
+> rn1981 born1982 born1983 born1984 ageAtMissInt yearMissInt everMissInt missIn
+> tCum missIntLength everMiss3plusInt everReturnAfter3plusMissInt missIntLastSp
+> ell fedMinWage cpi enrCollegeJan enrCollegeFeb enrCollegeMar enrCollegeApr en
+> rCollegeMay enrCollegeJun enrCollegeJul enrCollegeAug enrCollegeSep enrColleg
+> eOct enrCollegeNov enrCollegeDec enr2yrJan enr2yrFeb enr2yrMar enr2yrApr enr2
+> yrMay enr2yrJun enr2yrJul enr2yrAug enr2yrSep enr2yrOct enr2yrNov enr2yrDec e
+> nr4yrJan enr4yrFeb enr4yrMar enr4yrApr enr4yrMay enr4yrJun enr4yrJul enr4yrAu
+> g enr4yrSep enr4yrOct enr4yrNov enr4yrDec enrGradSchJan enrGradSchFeb enrGrad
+> SchMar enrGradSchApr enrGradSchMay enrGradSchJun enrGradSchJul enrGradSchAug 
+> enrGradSchSep enrGradSchOct enrGradSchNov enrGradSchDec enrK12Jan enrK12Feb e
+> nrK12Mar enrK12Apr enrK12May enrK12Jun enrK12Jul enrK12Aug enrK12Sep enrK12Oc
+> t enrK12Nov enrK12Dec monthsCollege monthsGradSch monthsK12 weeksEmployed wee
+> ksLabForce annualWageMean annualWageMed annualWageMin annualWageMax annualWag
+> eMain wageJan wageFeb wageMar wageApr wageMay wageJun wageJul wageAug wageSep
+>  wageOct wageNov wageDec wageMedianJan wageMedianFeb wageMedianMar wageMedian
+> Apr wageMedianMay wageMedianJun wageMedianJul wageMedianAug wageMedianSep wag
+> eMedianOct wageMedianNov wageMedianDec wageAltJan wageAltFeb wageAltMar wageA
+> ltApr wageAltMay wageAltJun wageAltJul wageAltAug wageAltSep wageAltOct wageA
+> ltNov wageAltDec wageAltMedianJan wageAltMedianFeb wageAltMedianMar wageAltMe
+> dianApr wageAltMedianMay wageAltMedianJun wageAltMedianJul wageAltMedianAug w
+> ageAltMedianSep wageAltMedianOct wageAltMedianNov wageAltMedianDec annualComp
+> Mean annualCompMed annualCompMin annualCompMax annualCompMain compJan compFeb
+>  compMar compApr compMay compJun compJul compAug compSep compOct compNov comp
+> Dec compMedianJan compMedianFeb compMedianMar compMedianApr compMedianMay com
+> pMedianJun compMedianJul compMedianAug compMedianSep compMedianOct compMedian
+> Nov compMedianDec compAltJan compAltFeb compAltMar compAltApr compAltMay comp
+> AltJun compAltJul compAltAug compAltSep compAltOct compAltNov compAltDec comp
+> AltMedianJan compAltMedianFeb compAltMedianMar compAltMedianApr compAltMedian
+> May compAltMedianJun compAltMedianJul compAltMedianAug compAltMedianSep compA
+> ltMedianOct compAltMedianNov compAltMedianDec annualOccMin annualOccMax annua
+> lOccMain annualIndMin annualIndMax annualIndMain weeksWrkJan weeksWrkFeb week
+> sWrkMar weeksWrkApr weeksWrkMay weeksWrkJun weeksWrkJul weeksWrkAug weeksWrkS
+> ep weeksWrkOct weeksWrkNov weeksWrkDec weeksSelfEmployedJan weeksSelfEmployed
+> Feb weeksSelfEmployedMar weeksSelfEmployedApr weeksSelfEmployedMay weeksSelfE
+> mployedJun weeksSelfEmployedJul weeksSelfEmployedAug weeksSelfEmployedSep wee
+> ksSelfEmployedOct weeksSelfEmployedNov weeksSelfEmployedDec avgHrsWrkJan avgH
+> rsWrkFeb avgHrsWrkMar avgHrsWrkApr avgHrsWrkMay avgHrsWrkJun avgHrsWrkJul avg
+> HrsWrkAug avgHrsWrkSep avgHrsWrkOct avgHrsWrkNov avgHrsWrkDec annualAvgHrsWrk
+>  monthlyHrsWrkJan monthlyHrsWrkFeb monthlyHrsWrkMar monthlyHrsWrkApr monthlyH
+> rsWrkMay monthlyHrsWrkJun monthlyHrsWrkJul monthlyHrsWrkAug monthlyHrsWrkSep 
+> monthlyHrsWrkOct monthlyHrsWrkNov monthlyHrsWrkDec weeksMilitaryJan weeksMili
+> taryFeb weeksMilitaryMar weeksMilitaryApr weeksMilitaryMay weeksMilitaryJun w
+> eeksMilitaryJul weeksMilitaryAug weeksMilitarySep weeksMilitaryOct weeksMilit
+> aryNov weeksMilitaryDec workFTJan workFTFeb workFTMar workFTApr workFTMay wor
+> kFTJun workFTJul workFTAug workFTSep workFTOct workFTNov workFTDec workPTJan 
+> workPTFeb workPTMar workPTApr workPTMay workPTJun workPTJul workPTAug workPTS
+> ep workPTOct workPTNov workPTDec militaryJan militaryFeb militaryMar military
+> Apr militaryMay militaryJun militaryJul militaryAug militarySep militaryOct m
+> ilitaryNov militaryDec atWorkJan atWorkFeb atWorkMar atWorkApr atWorkMay atWo
+> rkJun atWorkJul atWorkAug atWorkSep atWorkOct atWorkNov atWorkDec workSchJan 
+> workSchFeb workSchMar workSchApr workSchMay workSchJun workSchJul workSchAug 
+> workSchSep workSchOct workSchNov workSchDec workK12Jan workK12Feb workK12Mar 
+> workK12Apr workK12May workK12Jun workK12Jul workK12Aug workK12Sep workK12Oct 
+> workK12Nov workK12Dec workCollegeJan workCollegeFeb workCollegeMar workColleg
+> eApr workCollegeMay workCollegeJun workCollegeJul workCollegeAug workCollegeS
+> ep workCollegeOct workCollegeNov workCollegeDec otherJan otherFeb otherMar ot
+> herApr otherMay otherJun otherJul otherAug otherSep otherOct otherNov otherDe
+> c activityJan activityFeb activityMar activityApr activityMay activityJun act
+> ivityJul activityAug activitySep activityOct activityNov activityDec RECALLwo
+> rkFTRecallJan RECALLworkFTRecallFeb RECALLworkFTRecallMar RECALLworkFTRecallA
+> pr RECALLworkFTRecallMay RECALLworkFTRecallJun RECALLworkFTRecallJul RECALLwo
+> rkFTRecallAug RECALLworkFTRecallSep RECALLworkFTRecallOct RECALLworkFTRecallN
+> ov RECALLworkFTRecallDec RECALLworkPTRecallJan RECALLworkPTRecallFeb RECALLwo
+> rkPTRecallMar RECALLworkPTRecallApr RECALLworkPTRecallMay RECALLworkPTRecallJ
+> un RECALLworkPTRecallJul RECALLworkPTRecallAug RECALLworkPTRecallSep RECALLwo
+> rkPTRecallOct RECALLworkPTRecallNov RECALLworkPTRecallDec RECALLmilitaryRecal
+> lJan RECALLmilitaryRecallFeb RECALLmilitaryRecallMar RECALLmilitaryRecallApr 
+> RECALLmilitaryRecallMay RECALLmilitaryRecallJun RECALLmilitaryRecallJul RECAL
+> LmilitaryRecallAug RECALLmilitaryRecallSep RECALLmilitaryRecallOct RECALLmili
+> taryRecallNov RECALLmilitaryRecallDec RECALLworkRecallJan RECALLworkRecallFeb
+>  RECALLworkRecallMar RECALLworkRecallApr RECALLworkRecallMay RECALLworkRecall
+> Jun RECALLworkRecallJul RECALLworkRecallAug RECALLworkRecallSep RECALLworkRec
+> allOct RECALLworkRecallNov RECALLworkRecallDec RECALLworkSchRecallJan RECALLw
+> orkSchRecallFeb RECALLworkSchRecallMar RECALLworkSchRecallApr RECALLworkSchRe
+> callMay RECALLworkSchRecallJun RECALLworkSchRecallJul RECALLworkSchRecallAug 
+> RECALLworkSchRecallSep RECALLworkSchRecallOct RECALLworkSchRecallNov RECALLwo
+> rkSchRecallDec RECALLworkK12RecallJan RECALLworkK12RecallFeb RECALLworkK12Rec
+> allMar RECALLworkK12RecallApr RECALLworkK12RecallMay RECALLworkK12RecallJun R
+> ECALLworkK12RecallJul RECALLworkK12RecallAug RECALLworkK12RecallSep RECALLwor
+> kK12RecallOct RECALLworkK12RecallNov RECALLworkK12RecallDec RECALLworkCollege
+> RecallJan RECALLworkCollegeRecallFeb RECALLworkCollegeRecallMar RECALLworkCol
+> legeRecallApr RECALLworkCollegeRecallMay RECALLworkCollegeRecallJun RECALLwor
+> kCollegeRecallJul RECALLworkCollegeRecallAug RECALLworkCollegeRecallSep RECAL
+> LworkCollegeRecallOct RECALLworkCollegeRecallNov RECALLworkCollegeRecallDec R
+> ECALLotherRecallJan RECALLotherRecallFeb RECALLotherRecallMar RECALLotherReca
+> llApr RECALLotherRecallMay RECALLotherRecallJun RECALLotherRecallJul RECALLot
+> herRecallAug RECALLotherRecallSep RECALLotherRecallOct RECALLotherRecallNov R
+> ECALLotherRecallDec RECALLactivityRecallJan RECALLactivityRecallFeb RECALLact
+> ivityRecallMar RECALLactivityRecallApr RECALLactivityRecallMay RECALLactivity
+> RecallJun RECALLactivityRecallJul RECALLactivityRecallAug RECALLactivityRecal
+> lSep RECALLactivityRecallOct RECALLactivityRecallNov RECALLactivityRecallDec 
+> gradGraduate yrGradGraduate grad4yr yrGrad4yr grad2yr yrGrad2yr gradHS yrGrad
+> HS gradDiploma yrGradDiploma gradGED yrGradGED annualHrsWrkCalc annualHrsWrkC
+> alcCalc annualHrsWrkRaw annualHrsWrkOld Grad_month BA_month AA_month Diploma_
+> month GED_month HS_month Grad_year BA_year AA_year Diploma_year GED_year HS_y
+> ear WageJobCurrent WageJobMain CompJobCurrent CompJobMain Interview_date last
+> _int_day R*interview* Highest_degree_ever selfEmployedJobCurrent selfEmployed
+> JobMain indJobMain indJobCurrent occJobMain occJobCurrent long_miss_flag max_
+> nonmissing_int_year lastValidSchoolDate
+
+. keep  id year age birthMonth birthYear white black hispanic mixed liveWithMom
+> 14 race HHsize1997 weight oversampleRace annualHrsWrk gradeCurrent missInt af
+> qt asvabAR asvabCS asvabMK asvabNO asvabPC asvabWK m_afqt m_asvabAR m_asvabCS
+>  m_asvabMK m_asvabNO m_asvabPC m_asvabWK female hgcIn hgcMoth m_hgcMoth hgcFa
+> th m_hgcFath foreignBorn famInc1996 m_famInc1996 femaleHeadHH1997 born1980 bo
+> rn1981 born1982 born1983 born1984 ageAtMissInt yearMissInt everMissInt missIn
+> tCum missIntLength everMiss3plusInt everReturnAfter3plusMissInt missIntLastSp
+> ell fedMinWage cpi enrCollegeJan enrCollegeFeb enrCollegeMar enrCollegeApr en
+> rCollegeMay enrCollegeJun enrCollegeJul enrCollegeAug enrCollegeSep enrColleg
+> eOct enrCollegeNov enrCollegeDec enr2yrJan enr2yrFeb enr2yrMar enr2yrApr enr2
+> yrMay enr2yrJun enr2yrJul enr2yrAug enr2yrSep enr2yrOct enr2yrNov enr2yrDec e
+> nr4yrJan enr4yrFeb enr4yrMar enr4yrApr enr4yrMay enr4yrJun enr4yrJul enr4yrAu
+> g enr4yrSep enr4yrOct enr4yrNov enr4yrDec enrGradSchJan enrGradSchFeb enrGrad
+> SchMar enrGradSchApr enrGradSchMay enrGradSchJun enrGradSchJul enrGradSchAug 
+> enrGradSchSep enrGradSchOct enrGradSchNov enrGradSchDec enrK12Jan enrK12Feb e
+> nrK12Mar enrK12Apr enrK12May enrK12Jun enrK12Jul enrK12Aug enrK12Sep enrK12Oc
+> t enrK12Nov enrK12Dec monthsCollege monthsGradSch monthsK12 weeksEmployed wee
+> ksLabForce annualWageMean annualWageMed annualWageMin annualWageMax annualWag
+> eMain wageJan wageFeb wageMar wageApr wageMay wageJun wageJul wageAug wageSep
+>  wageOct wageNov wageDec wageMedianJan wageMedianFeb wageMedianMar wageMedian
+> Apr wageMedianMay wageMedianJun wageMedianJul wageMedianAug wageMedianSep wag
+> eMedianOct wageMedianNov wageMedianDec wageAltJan wageAltFeb wageAltMar wageA
+> ltApr wageAltMay wageAltJun wageAltJul wageAltAug wageAltSep wageAltOct wageA
+> ltNov wageAltDec wageAltMedianJan wageAltMedianFeb wageAltMedianMar wageAltMe
+> dianApr wageAltMedianMay wageAltMedianJun wageAltMedianJul wageAltMedianAug w
+> ageAltMedianSep wageAltMedianOct wageAltMedianNov wageAltMedianDec annualComp
+> Mean annualCompMed annualCompMin annualCompMax annualCompMain compJan compFeb
+>  compMar compApr compMay compJun compJul compAug compSep compOct compNov comp
+> Dec compMedianJan compMedianFeb compMedianMar compMedianApr compMedianMay com
+> pMedianJun compMedianJul compMedianAug compMedianSep compMedianOct compMedian
+> Nov compMedianDec compAltJan compAltFeb compAltMar compAltApr compAltMay comp
+> AltJun compAltJul compAltAug compAltSep compAltOct compAltNov compAltDec comp
+> AltMedianJan compAltMedianFeb compAltMedianMar compAltMedianApr compAltMedian
+> May compAltMedianJun compAltMedianJul compAltMedianAug compAltMedianSep compA
+> ltMedianOct compAltMedianNov compAltMedianDec annualOccMin annualOccMax annua
+> lOccMain annualIndMin annualIndMax annualIndMain weeksWrkJan weeksWrkFeb week
+> sWrkMar weeksWrkApr weeksWrkMay weeksWrkJun weeksWrkJul weeksWrkAug weeksWrkS
+> ep weeksWrkOct weeksWrkNov weeksWrkDec weeksSelfEmployedJan weeksSelfEmployed
+> Feb weeksSelfEmployedMar weeksSelfEmployedApr weeksSelfEmployedMay weeksSelfE
+> mployedJun weeksSelfEmployedJul weeksSelfEmployedAug weeksSelfEmployedSep wee
+> ksSelfEmployedOct weeksSelfEmployedNov weeksSelfEmployedDec avgHrsWrkJan avgH
+> rsWrkFeb avgHrsWrkMar avgHrsWrkApr avgHrsWrkMay avgHrsWrkJun avgHrsWrkJul avg
+> HrsWrkAug avgHrsWrkSep avgHrsWrkOct avgHrsWrkNov avgHrsWrkDec annualAvgHrsWrk
+>  monthlyHrsWrkJan monthlyHrsWrkFeb monthlyHrsWrkMar monthlyHrsWrkApr monthlyH
+> rsWrkMay monthlyHrsWrkJun monthlyHrsWrkJul monthlyHrsWrkAug monthlyHrsWrkSep 
+> monthlyHrsWrkOct monthlyHrsWrkNov monthlyHrsWrkDec weeksMilitaryJan weeksMili
+> taryFeb weeksMilitaryMar weeksMilitaryApr weeksMilitaryMay weeksMilitaryJun w
+> eeksMilitaryJul weeksMilitaryAug weeksMilitarySep weeksMilitaryOct weeksMilit
+> aryNov weeksMilitaryDec workFTJan workFTFeb workFTMar workFTApr workFTMay wor
+> kFTJun workFTJul workFTAug workFTSep workFTOct workFTNov workFTDec workPTJan 
+> workPTFeb workPTMar workPTApr workPTMay workPTJun workPTJul workPTAug workPTS
+> ep workPTOct workPTNov workPTDec militaryJan militaryFeb militaryMar military
+> Apr militaryMay militaryJun militaryJul militaryAug militarySep militaryOct m
+> ilitaryNov militaryDec atWorkJan atWorkFeb atWorkMar atWorkApr atWorkMay atWo
+> rkJun atWorkJul atWorkAug atWorkSep atWorkOct atWorkNov atWorkDec workSchJan 
+> workSchFeb workSchMar workSchApr workSchMay workSchJun workSchJul workSchAug 
+> workSchSep workSchOct workSchNov workSchDec workK12Jan workK12Feb workK12Mar 
+> workK12Apr workK12May workK12Jun workK12Jul workK12Aug workK12Sep workK12Oct 
+> workK12Nov workK12Dec workCollegeJan workCollegeFeb workCollegeMar workColleg
+> eApr workCollegeMay workCollegeJun workCollegeJul workCollegeAug workCollegeS
+> ep workCollegeOct workCollegeNov workCollegeDec otherJan otherFeb otherMar ot
+> herApr otherMay otherJun otherJul otherAug otherSep otherOct otherNov otherDe
+> c activityJan activityFeb activityMar activityApr activityMay activityJun act
+> ivityJul activityAug activitySep activityOct activityNov activityDec RECALLwo
+> rkFTRecallJan RECALLworkFTRecallFeb RECALLworkFTRecallMar RECALLworkFTRecallA
+> pr RECALLworkFTRecallMay RECALLworkFTRecallJun RECALLworkFTRecallJul RECALLwo
+> rkFTRecallAug RECALLworkFTRecallSep RECALLworkFTRecallOct RECALLworkFTRecallN
+> ov RECALLworkFTRecallDec RECALLworkPTRecallJan RECALLworkPTRecallFeb RECALLwo
+> rkPTRecallMar RECALLworkPTRecallApr RECALLworkPTRecallMay RECALLworkPTRecallJ
+> un RECALLworkPTRecallJul RECALLworkPTRecallAug RECALLworkPTRecallSep RECALLwo
+> rkPTRecallOct RECALLworkPTRecallNov RECALLworkPTRecallDec RECALLmilitaryRecal
+> lJan RECALLmilitaryRecallFeb RECALLmilitaryRecallMar RECALLmilitaryRecallApr 
+> RECALLmilitaryRecallMay RECALLmilitaryRecallJun RECALLmilitaryRecallJul RECAL
+> LmilitaryRecallAug RECALLmilitaryRecallSep RECALLmilitaryRecallOct RECALLmili
+> taryRecallNov RECALLmilitaryRecallDec RECALLworkRecallJan RECALLworkRecallFeb
+>  RECALLworkRecallMar RECALLworkRecallApr RECALLworkRecallMay RECALLworkRecall
+> Jun RECALLworkRecallJul RECALLworkRecallAug RECALLworkRecallSep RECALLworkRec
+> allOct RECALLworkRecallNov RECALLworkRecallDec RECALLworkSchRecallJan RECALLw
+> orkSchRecallFeb RECALLworkSchRecallMar RECALLworkSchRecallApr RECALLworkSchRe
+> callMay RECALLworkSchRecallJun RECALLworkSchRecallJul RECALLworkSchRecallAug 
+> RECALLworkSchRecallSep RECALLworkSchRecallOct RECALLworkSchRecallNov RECALLwo
+> rkSchRecallDec RECALLworkK12RecallJan RECALLworkK12RecallFeb RECALLworkK12Rec
+> allMar RECALLworkK12RecallApr RECALLworkK12RecallMay RECALLworkK12RecallJun R
+> ECALLworkK12RecallJul RECALLworkK12RecallAug RECALLworkK12RecallSep RECALLwor
+> kK12RecallOct RECALLworkK12RecallNov RECALLworkK12RecallDec RECALLworkCollege
+> RecallJan RECALLworkCollegeRecallFeb RECALLworkCollegeRecallMar RECALLworkCol
+> legeRecallApr RECALLworkCollegeRecallMay RECALLworkCollegeRecallJun RECALLwor
+> kCollegeRecallJul RECALLworkCollegeRecallAug RECALLworkCollegeRecallSep RECAL
+> LworkCollegeRecallOct RECALLworkCollegeRecallNov RECALLworkCollegeRecallDec R
+> ECALLotherRecallJan RECALLotherRecallFeb RECALLotherRecallMar RECALLotherReca
+> llApr RECALLotherRecallMay RECALLotherRecallJun RECALLotherRecallJul RECALLot
+> herRecallAug RECALLotherRecallSep RECALLotherRecallOct RECALLotherRecallNov R
+> ECALLotherRecallDec RECALLactivityRecallJan RECALLactivityRecallFeb RECALLact
+> ivityRecallMar RECALLactivityRecallApr RECALLactivityRecallMay RECALLactivity
+> RecallJun RECALLactivityRecallJul RECALLactivityRecallAug RECALLactivityRecal
+> lSep RECALLactivityRecallOct RECALLactivityRecallNov RECALLactivityRecallDec 
+> gradGraduate yrGradGraduate grad4yr yrGrad4yr grad2yr yrGrad2yr gradHS yrGrad
+> HS gradDiploma yrGradDiploma gradGED yrGradGED annualHrsWrkCalc annualHrsWrkC
+> alcCalc annualHrsWrkRaw annualHrsWrkOld Grad_month BA_month AA_month Diploma_
+> month GED_month HS_month Grad_year BA_year AA_year Diploma_year GED_year HS_y
+> ear WageJobCurrent WageJobMain CompJobCurrent CompJobMain Interview_date last
+> _int_day R*interview* Highest_degree_ever selfEmployedJobMain selfEmployedJob
+> Current indJobMain indJobCurrent occJobMain occJobCurrent long_miss_flag max_
+> nonmissing_int_year lastValidSchoolDate
+
+. 
+. label values HHsize1997 .
+
+. 
+. foreach x of local months {
+  2.     assert other`x'==0             if activity`x'==1
+  3.     assert RECALLotherRecall`x'==0 if RECALLactivityRecall`x'==1
+  4. }
+
+. 
+. * reshape to monthly data
+. reshape long enrCollege enr2yr enr4yr enrGradSch enrK12 weeksWrk weeksSelfEmp
+> loyed avgHrsWrk monthlyHrsWrk wage wageAlt wageMedian wageAltMedian comp comp
+> Alt compMedian compAltMedian weeksMilitary workFT workPT atWork workSch workK
+> 12 workCollege military other activity RECALLworkFTRecall RECALLworkPTRecall 
+> RECALLworkRecall RECALLworkSchRecall RECALLworkK12Recall RECALLworkCollegeRec
+> all RECALLmilitaryRecall RECALLotherRecall RECALLactivityRecall , string i(id
+>  year) j(month)
+(note: j = Apr Aug Dec Feb Jan Jul Jun Mar May Nov Oct Sep)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                   332408   -> 4.0e+06
+Number of variables                 605   ->     210
+j variable (12 values)                    ->   month
+xij variables:
+enrCollegeApr enrCollegeAug ... enrCollegeSep->enrCollege
+      enr2yrApr enr2yrAug ... enr2yrSep   ->   enr2yr
+      enr4yrApr enr4yrAug ... enr4yrSep   ->   enr4yr
+enrGradSchApr enrGradSchAug ... enrGradSchSep->enrGradSch
+      enrK12Apr enrK12Aug ... enrK12Sep   ->   enrK12
+weeksWrkApr weeksWrkAug ... weeksWrkSep   ->   weeksWrk
+weeksSelfEmployedApr weeksSelfEmployedAug ... weeksSelfEmployedSep->weeksSelfEm
+> ployed
+avgHrsWrkApr avgHrsWrkAug ... avgHrsWrkSep->   avgHrsWrk
+monthlyHrsWrkApr monthlyHrsWrkAug ... monthlyHrsWrkSep->monthlyHrsWrk
+            wageApr wageAug ... wageSep   ->   wage
+   wageAltApr wageAltAug ... wageAltSep   ->   wageAlt
+wageMedianApr wageMedianAug ... wageMedianSep->wageMedian
+wageAltMedianApr wageAltMedianAug ... wageAltMedianSep->wageAltMedian
+            compApr compAug ... compSep   ->   comp
+   compAltApr compAltAug ... compAltSep   ->   compAlt
+compMedianApr compMedianAug ... compMedianSep->compMedian
+compAltMedianApr compAltMedianAug ... compAltMedianSep->compAltMedian
+weeksMilitaryApr weeksMilitaryAug ... weeksMilitarySep->weeksMilitary
+      workFTApr workFTAug ... workFTSep   ->   workFT
+      workPTApr workPTAug ... workPTSep   ->   workPT
+      atWorkApr atWorkAug ... atWorkSep   ->   atWork
+   workSchApr workSchAug ... workSchSep   ->   workSch
+   workK12Apr workK12Aug ... workK12Sep   ->   workK12
+workCollegeApr workCollegeAug ... workCollegeSep->workCollege
+militaryApr militaryAug ... militarySep   ->   military
+         otherApr otherAug ... otherSep   ->   other
+activityApr activityAug ... activitySep   ->   activity
+RECALLworkFTRecallApr RECALLworkFTRecallAug ... RECALLworkFTRecallSep->RECALLwo
+> rkFTRecall
+RECALLworkPTRecallApr RECALLworkPTRecallAug ... RECALLworkPTRecallSep->RECALLwo
+> rkPTRecall
+RECALLworkRecallApr RECALLworkRecallAug ... RECALLworkRecallSep->RECALLworkReca
+> ll
+RECALLworkSchRecallApr RECALLworkSchRecallAug ... RECALLworkSchRecallSep->RECAL
+> LworkSchRecall
+RECALLworkK12RecallApr RECALLworkK12RecallAug ... RECALLworkK12RecallSep->RECAL
+> LworkK12Recall
+RECALLworkCollegeRecallApr RECALLworkCollegeRecallAug ... RECALLworkCollegeReca
+> llSep->RECALLworkCollegeRecall
+RECALLmilitaryRecallApr RECALLmilitaryRecallAug ... RECALLmilitaryRecallSep->RE
+> CALLmilitaryRecall
+RECALLotherRecallApr RECALLotherRecallAug ... RECALLotherRecallSep->RECALLother
+> Recall
+RECALLactivityRecallApr RECALLactivityRecallAug ... RECALLactivityRecallSep->RE
+> CALLactivityRecall
+-----------------------------------------------------------------------------
+
+. ren hgcIn          hgc
+
+. ren atWork       work
+
+. 
+. ren RECALLworkFTRecall      workFTRecall      
+
+. ren RECALLworkPTRecall      workPTRecall      
+
+. ren RECALLmilitaryRecall    militaryRecall    
+
+. ren RECALLworkRecall        workRecall        
+
+. ren RECALLworkSchRecall     workSchRecall     
+
+. ren RECALLworkK12Recall     workK12Recall     
+
+. ren RECALLworkCollegeRecall workCollegeRecall 
+
+. ren RECALLotherRecall       otherRecall      
+
+. ren RECALLactivityRecall    activityRecall
+
+. 
+. ren weeksWrk       weeksWorked 
+
+. ren avgHrsWrk      avgHrs 
+
+. ren monthlyHrsWrk  hoursWorked 
+
+. ren WageJobCurrent wageJobCurrent
+
+. ren WageJobMain    wageJobMain
+
+. ren CompJobCurrent compJobCurrent
+
+. ren CompJobMain    compJobMain
+
+. 
+. foreach x of local months {
+  2.     assert other==0       if activity==1
+  3.     assert otherRecall==0 if activityRecall==1
+  4. }
+
+. 
+. * convert string month variable to numeric
+. generat month_num = .
+(3,988,896 missing values generated)
+
+. replace month_num = 1  if month=="Jan"
+(332,408 real changes made)
+
+. replace month_num = 2  if month=="Feb"
+(332,408 real changes made)
+
+. replace month_num = 3  if month=="Mar"
+(332,408 real changes made)
+
+. replace month_num = 4  if month=="Apr"
+(332,408 real changes made)
+
+. replace month_num = 5  if month=="May"
+(332,408 real changes made)
+
+. replace month_num = 6  if month=="Jun"
+(332,408 real changes made)
+
+. replace month_num = 7  if month=="Jul"
+(332,408 real changes made)
+
+. replace month_num = 8  if month=="Aug"
+(332,408 real changes made)
+
+. replace month_num = 9  if month=="Sep"
+(332,408 real changes made)
+
+. replace month_num = 10 if month=="Oct"
+(332,408 real changes made)
+
+. replace month_num = 11 if month=="Nov"
+(332,408 real changes made)
+
+. replace month_num = 12 if month=="Dec"
+(332,408 real changes made)
+
+. drop month
+
+. ren month_num month
+
+. sort id year month
+
+. 
+. * label months with value label
+. lab def vlMonth 1 "Jan" 2 "Feb" 3 "Mar" 4 "Apr" 5 "May" 6 "Jun" 7 "Jul" 8 "Au
+> g" 9 "Sep" 10 "Oct" 11 "Nov" 12 "Dec"
+
+. lab val month vlMonth
+
+. 
+. * rename to be CPS variables
+. ren wageJobCurrent         wageJobCPS
+
+. ren compJobCurrent         compJobCPS
+
+. ren occJobCurrent          occJobCPS
+
+. ren indJobCurrent          indJobCPS
+
+. ren selfEmployedJobCurrent selfEmployedJobCPS
+
+. 
+. * convert our annualized age variable to a monthly basis
+. *  need to assure that it stays sorted in the current order
+. sort id year month
+
+. generat sorter = _n
+
+. generat ageYr = year-birthYear
+
+. generat ageMo = month-birthMonth
+
+. replace ageYr = ageYr-1 if ageMo<0
+(1,846,855 real changes made)
+
+. drop ageMo
+
+. bys id ageYr (sorter): gen ageMo = [_n-1]
+
+. drop age sorter
+
+. ren ageYr age
+
+. 
+. * drop people outside of age ranges we want
+. keep if inrange(age,13,.)
+(1,668,151 observations deleted)
+
+. 
+. * set the panel
+. gen uniqueTime = age*100+ageMo+1
+
+. xtset id uniqueTime
+       panel variable:  id (unbalanced)
+        time variable:  uniqueTime, 1301 to 3612, but with gaps
+                delta:  1 unit
+
+. 
+. * replace absorbing graduation dummies by new monthly basis:
+. ren gradGraduate gradGraduateAnnual
+
+. ren grad4yr      grad4yrAnnual
+
+. ren grad2yr      grad2yrAnnual
+
+. ren gradDiploma  gradDiplomaAnnual
+
+. ren gradGED      gradGEDAnnual
+
+. ren gradHS       gradHSAnnual
+
+. 
+. bys id: gen gradGraduate = (month>=Grad_month    & year==Grad_year   ) | (yea
+> r>Grad_year   )
+
+. bys id: gen grad4yr      = (month>=BA_month      & year==BA_year     ) | (yea
+> r>BA_year     )
+
+. bys id: gen grad2yr      = (month>=AA_month      & year==AA_year     ) | (yea
+> r>AA_year     )
+
+. bys id: gen gradDiploma  = (month>=Diploma_month & year==Diploma_year) | (yea
+> r>Diploma_year)
+
+. bys id: gen gradGED      = (month>=GED_month     & year==GED_year    ) | (yea
+> r>GED_year    )
+
+.         gen gradHS       =  max(gradGED,gradDiploma)
+
+. 
+. * impute highest grade completed on a monthly basis
+. * do hgc_monthly_impute.do // this file was not updated with Round 15 update 
+> because we don't end up using hgc in any of the final estimations
+. 
+. * impute people as being in HS if they were 13 and not initially classified a
+> s HS, but eventually graduated HS
+. bys id: egen everHS = max(gradHS)
+
+. replace other    = 0 if other==1 & activity==6 & age==13 & everHS==1 & month~
+> =6 & month~=7 & month~=8
+(327 real changes made)
+
+. replace activity = 1 if            activity==6 & age==13 & everHS==1 & month~
+> =6 & month~=7 & month~=8
+(327 real changes made)
+
+. replace other    = 0 if other==1 & activity==6 & age==14 & everHS==1 & month~
+> =6 & month~=7 & month~=8
+(703 real changes made)
+
+. replace activity = 1 if            activity==6 & age==14 & everHS==1 & month~
+> =6 & month~=7 & month~=8
+(703 real changes made)
+
+. 
+. * impute SOME people as being in HS if they were 13 and not initially classif
+> ied as HS, but never gradHS
+. replace other    = 0 if activity==6 & other==1 & age==13 & month~=6 & month~=
+> 7 & month~=8 & (id==46 | id==343 | id==344 | id==345 | id==2142 | id==3033 | 
+> id==4225 | id==5282 | id==5447 | id==6219 | id==6345 | id==6659 | id==7000)
+(21 real changes made)
+
+. replace activity = 1 if activity==6            & age==13 & month~=6 & month~=
+> 7 & month~=8 & (id==46 | id==343 | id==344 | id==345 | id==2142 | id==3033 | 
+> id==4225 | id==5282 | id==5447 | id==6219 | id==6345 | id==6659 | id==7000)
+(21 real changes made)
+
+. 
+. * replace enrK12 if activity==1 | activity==2 but enrK12==0
+. replace enrK12     = 1 if enrK12==0 & enrCollege==0 & (activity==1 | activity
+> ==2) & age<18
+(18,129 real changes made)
+
+. replace enrK12     = 1 if enrK12==0 & enrCollege==0 & (activity==1 | activity
+> ==2) & age>17 & gradHS==0
+(0 real changes made)
+
+. replace enrCollege = 1 if enrK12==0 & enrCollege==0 & (activity==1 | activity
+> ==2) & age>17 & gradHS==1
+(0 real changes made)
+
+. * replace workK12    = 1 if activity==2 & gradHS==0
+. * replace enrK12     = 1 if workK12 & ~enrK12
+. * replace enrCollege = 1 if workCollege & ~enrCollege
+. 
+. count if activity==1 & other
+  0
+
+. 
+. compress
+  variable oversampleRace was float now byte
+  variable month was float now byte
+  variable age was float now byte
+  variable ageMo was float now byte
+  variable uniqueTime was float now int
+  variable gradGraduate was float now byte
+  variable grad4yr was float now byte
+  variable grad2yr was float now byte
+  variable gradDiploma was float now byte
+  variable gradGED was float now byte
+  variable gradHS was float now byte
+  variable everHS was float now byte
+  (81,226,075 bytes saved)
+
+. save y97_all_balanced.dta, replace
+(note: file y97_all_balanced.dta not found)
+file y97_all_balanced.dta saved
+
+. !zip -m y97_all_balanced.dta.zip y97_all_balanced.dta
+
+updating: y97_all_balanced.dta (deflated 96%)
+
+. 
+. *=================================================
+. * Frequency stats and droppings
+. *=================================================
+. xtset id uniqueTime
+       panel variable:  id (unbalanced)
+        time variable:  uniqueTime, 1301 to 3612, but with gaps
+                delta:  1 unit
+
+. xtsum id if inrange(year,1997,2016)
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+id       overall |  4504.492   2603.226          1       9022 |     N = 2146332
+         between |             2603.136          1       9022 |     n =    8984
+         within  |                    0   4504.492   4504.492 | T-bar = 238.906
+
+. xtsum id if inrange(age,16,36) & female==0 
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+id       overall |  4469.546   2608.252          2       9021 |     N = 1021897
+         between |             2606.137          2       9021 |     n =    4599
+         within  |                    0   4469.546   4469.546 | T-bar =   222.2
+
+. xtsum id if inrange(age,16,36) & female==0 & mixed==0
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+id       overall |  4481.455   2610.661          2       9021 |     N = 1012937
+         between |             2608.374          2       9021 |     n =    4559
+         within  |                    0   4481.455   4481.455 | T-bar = 222.184
+
+. 
+. * -------------------------------------------------------------------------
+. * get number of people in each birth cohort for potential survey definition
+. * -------------------------------------------------------------------------
+. 
+. * If t0=13:
+. * yob    ages_interviewed  #ints (years) by 36  # ints (years) when incorpora
+> ting retrospective info
+. * ---------------------------------------------------------------------------
+> ----------------
+. * 84        12~31                19                 19
+. * 83        13~32                20                 20
+. * 82        14~33                20                 21
+. * 81        15~34                20                 22
+. * 80        16~35                20                 23
+. 
+. * If t0=16:
+. * yob    ages_interviewed  #ints (years) by 36  # ints (years) when incorpora
+> ting retrospective info
+. * ---------------------------------------------------------------------------
+> ----------------
+. * 84        12~31                16                 16
+. * 83        13~32                17                 17
+. * 82        14~33                18                 18
+. * 81        15~34                19                 29
+. * 80        16~35                20                 21
+. 
+. bys id (uniqueTime): gen firstPer = _n==1
+
+. tab birthYear if female==0 & mixed==0 & firstPer
+
+ Birth year |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       1980 |        843       18.49       18.49
+       1981 |        941       20.64       39.13
+       1982 |        943       20.68       59.82
+       1983 |        930       20.40       80.21
+       1984 |        902       19.79      100.00
+------------+-----------------------------------
+      Total |      4,559      100.00
+
+. 
+. * * If t0=13
+. * generat numPotentialSurveys = 0
+. * replace numPotentialSurveys = 14 if birthYear==1984 & firstPer & female==0 
+> & mixed==0
+. * replace numPotentialSurveys = 15 if birthYear==1983 & firstPer & female==0 
+> & mixed==0
+. * replace numPotentialSurveys = 15 if birthYear==1982 & firstPer & female==0 
+> & mixed==0
+. * replace numPotentialSurveys = 14 if birthYear==1981 & firstPer & female==0 
+> & mixed==0
+. * replace numPotentialSurveys = 13 if birthYear==1980 & firstPer & female==0 
+> & mixed==0
+. 
+. * If t0=16
+. generat numPotentialSurveys = 0
+
+. replace numPotentialSurveys = 16 if birthYear==1984 & firstPer & female==0 & 
+> mixed==0
+(902 real changes made)
+
+. replace numPotentialSurveys = 17 if birthYear==1983 & firstPer & female==0 & 
+> mixed==0
+(930 real changes made)
+
+. replace numPotentialSurveys = 18 if birthYear==1982 & firstPer & female==0 & 
+> mixed==0
+(943 real changes made)
+
+. replace numPotentialSurveys = 19 if birthYear==1981 & firstPer & female==0 & 
+> mixed==0
+(941 real changes made)
+
+. replace numPotentialSurveys = 20 if birthYear==1980 & firstPer & female==0 & 
+> mixed==0
+(843 real changes made)
+
+. 
+. sum numPotentialSurveys if firstPer & female==0 & mixed==0
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+numPotenti~s |      4,559    17.97653    1.393309         16         20
+
+. 
+. generat totPotentialSurveysObs = sum(numPotentialSurveys)
+
+. l totPotentialSurveysObs if _n==_N
+
+         +----------+
+         | totPot~s |
+         |----------|
+2320745. |    81955 |
+         +----------+
+
+. 
+. * * If t0=13
+. * generat numPotentialSurveysPlusRetro = 0
+. * replace numPotentialSurveysPlusRetro = 14 if birthYear==1984 & firstPer & f
+> emale==0 & mixed==0
+. * replace numPotentialSurveysPlusRetro = 15 if birthYear==1983 & firstPer & f
+> emale==0 & mixed==0
+. * replace numPotentialSurveysPlusRetro = 16 if birthYear==1982 & firstPer & f
+> emale==0 & mixed==0
+. * replace numPotentialSurveysPlusRetro = 16 if birthYear==1981 & firstPer & f
+> emale==0 & mixed==0
+. * replace numPotentialSurveysPlusRetro = 16 if birthYear==1980 & firstPer & f
+> emale==0 & mixed==0
+. 
+. * If t0=16
+. generat numPotentialSurveysPlusRetro = 0
+
+. replace numPotentialSurveysPlusRetro = 16 if birthYear==1984 & firstPer & fem
+> ale==0 & mixed==0
+(902 real changes made)
+
+. replace numPotentialSurveysPlusRetro = 17 if birthYear==1983 & firstPer & fem
+> ale==0 & mixed==0
+(930 real changes made)
+
+. replace numPotentialSurveysPlusRetro = 18 if birthYear==1982 & firstPer & fem
+> ale==0 & mixed==0
+(943 real changes made)
+
+. replace numPotentialSurveysPlusRetro = 19 if birthYear==1981 & firstPer & fem
+> ale==0 & mixed==0
+(941 real changes made)
+
+. replace numPotentialSurveysPlusRetro = 21 if birthYear==1980 & firstPer & fem
+> ale==0 & mixed==0
+(843 real changes made)
+
+. 
+. sum numPotentialSurveysPlusRetro if firstPer & female==0 & mixed==0
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+numPotenti~o |      4,559    18.16144     1.68539         16         21
+
+. 
+. generat totPotentialSurveysPlusRetroObs = sum(numPotentialSurveysPlusRetro)
+
+. l totPotentialSurveysPlusRetroObs if _n==_N
+
+         +----------+
+         | tot~oObs |
+         |----------|
+2320745. |    82798 |
+         +----------+
+
+. 
+. * drop mixed race and recode race to be consistent with 79
+. drop race
+
+. gen race = .
+(2,320,745 missing values generated)
+
+. replace race = 1 if white==1
+(1,204,288 real changes made)
+
+. replace race = 2 if black==1
+(604,413 real changes made)
+
+. replace race = 3 if hispanic==1
+(490,625 real changes made)
+
+. replace race = 4 if mixed==1
+(21,419 real changes made)
+
+. label define vlrace_true 1 "White" 2 "Black" 3 "Hispanic" 4 "Mixed"
+
+. lab val race vlrace_true
+
+. drop if mixed==1
+(21,419 observations deleted)
+
+. xtsum id if female==0
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+id       overall |  4480.798   2610.303          2       9021 |     N = 1177061
+         between |             2608.374          2       9021 |     n =    4559
+         within  |                    0   4480.798   4480.798 | T-bar = 258.184
+
+. 
+. * drop months for people after R17 interview date
+. drop if R17interviewDate<=ym(year,month) & ~mi(R17interviewDate)
+(91,173 observations deleted)
+
+. * xtsum id if female==0 // if t0=13
+. xtsum id if inrange(age,16,36) & female==0 // if t0=16
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+id       overall |  4480.083   2610.979          2       9021 |     N =  968033
+         between |             2608.374          2       9021 |     n =    4559
+         within  |                    0   4480.083   4480.083 | T-bar = 212.335
+
+. 
+. * drop months for people after last valid interview date
+. gen yrmo = year*100+month
+
+. gen yrmo_last = year(last_int_day)*100+month(last_int_day)
+(595,491 missing values generated)
+
+. drop if yrmo>=yrmo_last
+(300,704 observations deleted)
+
+. * xtsum id if female==0 // if t0=13
+. xtsum id if inrange(age,16,36) & female==0 // if t0=16
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+id       overall |  4525.455    2603.42          2       9021 |     N =  805761
+         between |             2607.696          2       9021 |     n =    4444
+         within  |                    0   4525.455   4525.455 | T-bar = 181.314
+
+. 
+. * xtsum id if female==0 & ageMo==0 // if t0=13
+. xtsum id if female==0 & ageMo==0 & inrange(age,16,36)
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+id       overall |  4523.892   2603.254          2       9021 |     N =   69202
+         between |             2607.696          2       9021 |     n =    4444
+         within  |                    0   4523.892   4523.892 | T-bar =  15.572
+
+. 
+. * drop everything after the beginning of long missed interview spells
+. drop if long_miss_flag
+(1,595 observations deleted)
+
+. * xtsum id if female==0 // if t0=13
+. xtsum id if inrange(age,16,36) & female==0 // if t0=16
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+id       overall |  4525.867   2603.369          2       9021 |     N =  804923
+         between |             2607.676          2       9021 |     n =    4443
+         within  |                    0   4525.867   4525.867 | T-bar = 181.167
+
+. 
+. * drop right-censored interview spells
+. tab max_nonmissing_int_year year if year>=2011
+
+max_nonmis |
+sing_int_y |                     Year of Survey
+       ear |      2011       2012       2013       2014       2015 |     Total
+-----------+-------------------------------------------------------+----------
+      2014 |     8,592      8,592      8,592      8,592      8,592 |    51,552 
+      2015 |    56,880     56,880     56,880     56,880     47,289 |   274,809 
+      2016 |    19,956     19,956     19,956     19,956     19,956 |   102,368 
+-----------+-------------------------------------------------------+----------
+     Total |    85,428     85,428     85,428     85,428     75,837 |   428,729 
+
+
+max_nonmis |  Year of
+sing_int_y |   Survey
+       ear |      2016 |     Total
+-----------+-----------+----------
+      2014 |     8,592 |    51,552 
+      2015 |         0 |   274,809 
+      2016 |     2,588 |   102,368 
+-----------+-----------+----------
+     Total |    11,180 |   428,729 
+
+
+. keep if year<=max_nonmissing_int_year
+(17,184 observations deleted)
+
+. xtsum id if inrange(age,16,36) & female==0
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+id       overall |  4524.234   2603.834          2       9021 |     N =  794531
+         between |             2607.676          2       9021 |     n =    4443
+         within  |                    0   4524.234   4524.234 | T-bar = 178.828
+
+. xtsum id if inrange(age,16,36) & female==0 & mixed~=1 & ~long_miss_flag & yea
+> r<=max_nonmissing_int_year
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+id       overall |  4524.234   2603.834          2       9021 |     N =  794531
+         between |             2607.676          2       9021 |     n =    4443
+         within  |                    0   4524.234   4524.234 | T-bar = 178.828
+
+. 
+. * drop observations after someone "illegally" went to college (without a Dipl
+> oma)
+. drop if mdy(month,1,year)>=lastValidSchoolDate
+(5,209 observations deleted)
+
+. xtsum id if inrange(age,16,36) & female==0
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+id       overall |  4527.465   2603.071          2       9021 |     N =  792660
+         between |             2607.676          2       9021 |     n =    4443
+         within  |                    0   4527.465   4527.465 | T-bar = 178.406
+
+. xtsum id if inrange(age,16,36) & female==0 & mixed~=1 & ~long_miss_flag & yea
+> r<=max_nonmissing_int_year
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+id       overall |  4527.465   2603.071          2       9021 |     N =  792660
+         between |             2607.676          2       9021 |     n =    4443
+         within  |                    0   4527.465   4527.465 | T-bar = 178.406
+
+. 
+. preserve
+
+.     collapse (count) n=ageMo if inrange(age,16,36) & female==0 & mixed~=1 & ~
+> long_miss_flag & year<=max_nonmissing_int_year, by(id)
+
+.     sum n, d
+
+                        (count) ageMo
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            7              1
+ 5%           32              1
+10%           59              1       Obs               4,443
+25%          182              1       Sum of Wgt.       4,443
+
+50%          200                      Mean           178.4065
+                        Largest       Std. Dev.      62.28247
+75%          218            243
+90%          229            244       Variance       3879.107
+95%          234            244       Skewness      -1.515485
+99%          239            245       Kurtosis       3.995471
+
+. restore
+
+. 
+. * cohort graph to put in appendix
+. table age year birthYear if ageMo==0
+note: table too wide, birthYear moved to by()
+
+-------------------------------------------------------------------------------
+Birth |
+year  |
+and   |                             Year of Survey                             
+age   |  1993  1994  1995  1996  1997  1998  1999  2000  2001  2002  2003  2004
+------+------------------------------------------------------------------------
+1980  |
+   13 | 1,675                                                                  
+   14 |       1,675                                                            
+   15 |             1,675                                                      
+   16 |                   1,675                                                
+   17 |                         1,638                                          
+   18 |                               1,618                                    
+   19 |                                     1,568                              
+   20 |                                           1,523                        
+   21 |                                                 1,485                  
+   22 |                                                       1,449            
+   23 |                                                             1,406      
+   24 |                                                                   1,373
+   25 |                                                                        
+   26 |                                                                        
+   27 |                                                                        
+   28 |                                                                        
+   29 |                                                                        
+   30 |                                                                        
+   31 |                                                                        
+   32 |                                                                        
+   33 |                                                                        
+   34 |                                                                        
+   35 |                                                                        
+   36 |                                                                        
+------+------------------------------------------------------------------------
+1981  |
+   13 |       1,858                                                            
+   14 |             1,858                                                      
+   15 |                   1,858                                                
+   16 |                         1,826                                          
+   17 |                               1,792                                    
+   18 |                                     1,748                              
+   19 |                                           1,702                        
+   20 |                                                 1,656                  
+   21 |                                                       1,616            
+   22 |                                                             1,577      
+   23 |                                                                   1,535
+   24 |                                                                        
+   25 |                                                                        
+   26 |                                                                        
+   27 |                                                                        
+   28 |                                                                        
+   29 |                                                                        
+   30 |                                                                        
+   31 |                                                                        
+   32 |                                                                        
+   33 |                                                                        
+   34 |                                                                        
+   35 |                                                                        
+   36 |                                                                        
+------+------------------------------------------------------------------------
+1982  |
+   13 |             1,822                                                      
+   14 |                   1,822                                                
+   15 |                         1,781                                          
+   16 |                               1,761                                    
+   17 |                                     1,734                              
+   18 |                                           1,699                        
+   19 |                                                 1,669                  
+   20 |                                                       1,640            
+   21 |                                                             1,608      
+   22 |                                                                   1,577
+   23 |                                                                        
+   24 |                                                                        
+   25 |                                                                        
+   26 |                                                                        
+   27 |                                                                        
+   28 |                                                                        
+   29 |                                                                        
+   30 |                                                                        
+   31 |                                                                        
+   32 |                                                                        
+   33 |                                                                        
+   34 |                                                                        
+   35 |                                                                        
+   36 |                                                                        
+------+------------------------------------------------------------------------
+1983  |
+   13 |                   1,793                                                
+   14 |                         1,772                                          
+   15 |                               1,754                                    
+   16 |                                     1,731                              
+   17 |                                           1,714                        
+   18 |                                                 1,684                  
+   19 |                                                       1,656            
+   20 |                                                             1,628      
+   21 |                                                                   1,591
+   22 |                                                                        
+   23 |                                                                        
+   24 |                                                                        
+   25 |                                                                        
+   26 |                                                                        
+   27 |                                                                        
+   28 |                                                                        
+   29 |                                                                        
+   30 |                                                                        
+   31 |                                                                        
+   32 |                                                                        
+   33 |                                                                        
+   34 |                                                                        
+   35 |                                                                        
+   36 |                                                                        
+------+------------------------------------------------------------------------
+1984  |
+   13 |                         1,722                                          
+   14 |                               1,713                                    
+   15 |                                     1,700                              
+   16 |                                           1,684                        
+   17 |                                                 1,663                  
+   18 |                                                       1,645            
+   19 |                                                             1,599      
+   20 |                                                                   1,570
+   21 |                                                                        
+   22 |                                                                        
+   23 |                                                                        
+   24 |                                                                        
+   25 |                                                                        
+   26 |                                                                        
+   27 |                                                                        
+   28 |                                                                        
+   29 |                                                                        
+   30 |                                                                        
+   31 |                                                                        
+   32 |                                                                        
+   33 |                                                                        
+   34 |                                                                        
+   35 |                                                                        
+   36 |                                                                        
+-------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+Birth |
+year  |
+and   |                             Year of Survey                             
+age   |  2005  2006  2007  2008  2009  2010  2011  2012  2013  2014  2015  2016
+------+------------------------------------------------------------------------
+1980  |
+   13 |                                                                        
+   14 |                                                                        
+   15 |                                                                        
+   16 |                                                                        
+   17 |                                                                        
+   18 |                                                                        
+   19 |                                                                        
+   20 |                                                                        
+   21 |                                                                        
+   22 |                                                                        
+   23 |                                                                        
+   24 |                                                                        
+   25 | 1,346                                                                  
+   26 |       1,320                                                            
+   27 |             1,300                                                      
+   28 |                   1,288                                                
+   29 |                         1,270                                          
+   30 |                               1,270                                    
+   31 |                                     1,269                              
+   32 |                                           1,268                        
+   33 |                                                 1,267                  
+   34 |                                                       1,267            
+   35 |                                                               983      
+   36 |                                                                      32
+------+------------------------------------------------------------------------
+1981  |
+   13 |                                                                        
+   14 |                                                                        
+   15 |                                                                        
+   16 |                                                                        
+   17 |                                                                        
+   18 |                                                                        
+   19 |                                                                        
+   20 |                                                                        
+   21 |                                                                        
+   22 |                                                                        
+   23 |                                                                        
+   24 | 1,498                                                                  
+   25 |       1,486                                                            
+   26 |             1,461                                                      
+   27 |                   1,447                                                
+   28 |                         1,431                                          
+   29 |                               1,431                                    
+   30 |                                     1,430                              
+   31 |                                           1,429                        
+   32 |                                                 1,429                  
+   33 |                                                       1,428            
+   34 |                                                             1,137      
+   35 |                                                                      42
+   36 |                                                                        
+------+------------------------------------------------------------------------
+1982  |
+   13 |                                                                        
+   14 |                                                                        
+   15 |                                                                        
+   16 |                                                                        
+   17 |                                                                        
+   18 |                                                                        
+   19 |                                                                        
+   20 |                                                                        
+   21 |                                                                        
+   22 |                                                                        
+   23 | 1,545                                                                  
+   24 |       1,522                                                            
+   25 |             1,500                                                      
+   26 |                   1,483                                                
+   27 |                         1,468                                          
+   28 |                               1,467                                    
+   29 |                                     1,464                              
+   30 |                                           1,461                        
+   31 |                                                 1,461                  
+   32 |                                                       1,460            
+   33 |                                                             1,149      
+   34 |                                                                      43
+   35 |                                                                        
+   36 |                                                                        
+------+------------------------------------------------------------------------
+1983  |
+   13 |                                                                        
+   14 |                                                                        
+   15 |                                                                        
+   16 |                                                                        
+   17 |                                                                        
+   18 |                                                                        
+   19 |                                                                        
+   20 |                                                                        
+   21 |                                                                        
+   22 | 1,562                                                                  
+   23 |       1,541                                                            
+   24 |             1,514                                                      
+   25 |                   1,495                                                
+   26 |                         1,474                                          
+   27 |                               1,472                                    
+   28 |                                     1,471                              
+   29 |                                           1,471                        
+   30 |                                                 1,469                  
+   31 |                                                       1,469            
+   32 |                                                             1,161      
+   33 |                                                                      53
+   34 |                                                                        
+   35 |                                                                        
+   36 |                                                                        
+------+------------------------------------------------------------------------
+1984  |
+   13 |                                                                        
+   14 |                                                                        
+   15 |                                                                        
+   16 |                                                                        
+   17 |                                                                        
+   18 |                                                                        
+   19 |                                                                        
+   20 |                                                                        
+   21 | 1,535                                                                  
+   22 |       1,514                                                            
+   23 |             1,488                                                      
+   24 |                   1,465                                                
+   25 |                         1,449                                          
+   26 |                               1,446                                    
+   27 |                                     1,445                              
+   28 |                                           1,442                        
+   29 |                                                 1,442                  
+   30 |                                                       1,440            
+   31 |                                                             1,141      
+   32 |                                                                      51
+   33 |                                                                        
+   34 |                                                                        
+   35 |                                                                        
+   36 |                                                                        
+-------------------------------------------------------------------------------
+
+. 
+. *--------------------------------------------------
+. * Graph the choice shares by age and caldendar time
+. *--------------------------------------------------
+. generate caldate = ym(year,month)
+
+. preserve
+
+.     format caldate  %tm
+
+.     gen tempy = 1
+
+.     collapse (count) tempy, by(activity caldate)
+
+.     xtset activity caldate
+       panel variable:  activity (unbalanced)
+        time variable:  caldate, 1993m1 to 2016m7, but with gaps
+                delta:  1 month
+
+.     fillin activity caldate
+
+.     drop _fillin
+
+.     recode tempy (. = 0)
+(tempy: 135 changes made)
+
+.     sort caldate activity
+
+.     
+.     * collapse sum(tempy), by(activity caldate) ????
+.     
+.     *----------------------------------------------------------------
+.     * Create pct variables for total degrees and education degrees
+.     *  as well as cumulative pct and total/1000
+.     *----------------------------------------------------------------
+.     foreach X in tempy {
+  2.         bys caldate: egen `X'_denom = total(`X')
+  3.         gen `X'_pct = `X'/`X'_denom
+  4.     }
+
+.     
+.     * Adjust pct variables so that they can be in an area plot
+.     foreach X in tempy {
+  2.         * Order in area graph (top2bottom): public, non-profit, for-profit
+.         gen `X'_pct2 = .
+  3.         bys caldate (activity): replace `X'_pct2 = `X'_pct[1] + `X'_pct[2]
+>  + `X'_pct[3] + `X'_pct[4] + `X'_pct[5] + `X'_pct[6] if activity==6
+  4.         bys caldate (activity): replace `X'_pct2 = `X'_pct[1] + `X'_pct[2]
+>  + `X'_pct[3] + `X'_pct[4] + `X'_pct[5]              if activity==5
+  5.         bys caldate (activity): replace `X'_pct2 = `X'_pct[1] + `X'_pct[2]
+>  + `X'_pct[3] + `X'_pct[4]                           if activity==4
+  6.         bys caldate (activity): replace `X'_pct2 = `X'_pct[1] + `X'_pct[2]
+>  + `X'_pct[3]                                        if activity==3
+  7.         bys caldate (activity): replace `X'_pct2 = `X'_pct[1] + `X'_pct[2]
+>                                                      if activity==2
+  8.         bys caldate (activity): replace `X'_pct2 = `X'_pct[1]             
+>                                                      if activity==1
+  9.     }
+(1,698 missing values generated)
+(283 real changes made)
+(283 real changes made)
+(283 real changes made)
+(283 real changes made)
+(283 real changes made)
+(283 real changes made)
+
+.     
+.     twoway  (area tempy_pct2 caldate if activity==6, lcolor(midblue) fcolor(e
+> ltblue) lwidth(vthin) ) (area tempy_pct2 caldate if activity==5, lcolor(midgr
+> een) fcolor(eltgreen) lwidth(vthin) ) (area tempy_pct2 caldate if activity==4
+> , lcolor(cranberry) fcolor(erose) lwidth(vthin)) (area tempy_pct2 caldate if 
+> activity==3, lcolor(dknavy) fcolor(edkblue) lwidth(vthin) ) (area tempy_pct2 
+> caldate if activity==2, lcolor(sand) fcolor(sandb) lwidth(vthin) ) (area temp
+> y_pct2 caldate if activity==1, lcolor(brown) fcolor(stone) lwidth(vthin) )   
+> ,legend(order(6 "{stSerif:School Only}" 5 "{stSerif:Work in School}" 4 "{stSe
+> rif:Work PT}" 3 "{stSerif:Work FT}" 2 "{stSerif:Military}" 1 "{stSerif:Other}
+> ") rows(2) ) title( "") ytitle( "{stSerif:Probability}") xtitle( "{stSerif:Da
+> te}")  xlabel(,format(%tm)) graphregion(fcolor(white) lcolor(white)) note( "{
+> stSerif:Source: NLSY97}")
+
+.     graph export choiceSharesMonthly.eps, replace
+(file choiceSharesMonthly.eps written in EPS format)
+
+. restore
+
+. 
+. preserve
+
+.     gen monthAlt = ( month-(birthMonth-1) )*( year-age==birthYear ) + ( month
+> +(12-birthMonth+1) )*( year-age==birthYear+1  )
+
+.     gen yearmo = year*100+month
+
+.     gen agemo  =  age*100+monthAlt
+
+.     gen tempy = 1
+
+.     collapse (count) tempy, by(activity agemo)
+
+.     xtset activity agemo
+       panel variable:  activity (unbalanced)
+        time variable:  agemo, 1301 to 3606, but with gaps
+                delta:  1 unit
+
+.     fillin activity agemo
+
+.     drop _fillin
+
+.     recode tempy (. = 0)
+(tempy: 104 changes made)
+
+.     sort agemo activity
+
+.     *----------------------------------------------------------------
+.     * Create pct variables for total degrees and education degrees
+.     *  as well as cumulative pct and total/1000
+.     *----------------------------------------------------------------
+.     foreach X in tempy {
+  2.         bys agemo: egen `X'_denom = total(`X')
+  3.         gen `X'_pct = `X'/`X'_denom
+  4.     }
+
+.     
+.     * Adjust pct variables so that they can be in an area plot
+.     foreach X in tempy {
+  2.         * Order in area graph (top2bottom): public, non-profit, for-profit
+.         gen `X'_pct2 = .
+  3.         bys agemo (activity): replace `X'_pct2 = `X'_pct[1] + `X'_pct[2] +
+>  `X'_pct[3] + `X'_pct[4] + `X'_pct[5] + `X'_pct[6] if activity==6
+  4.         bys agemo (activity): replace `X'_pct2 = `X'_pct[1] + `X'_pct[2] +
+>  `X'_pct[3] + `X'_pct[4] + `X'_pct[5]              if activity==5
+  5.         bys agemo (activity): replace `X'_pct2 = `X'_pct[1] + `X'_pct[2] +
+>  `X'_pct[3] + `X'_pct[4]                           if activity==4
+  6.         bys agemo (activity): replace `X'_pct2 = `X'_pct[1] + `X'_pct[2] +
+>  `X'_pct[3]                                        if activity==3
+  7.         bys agemo (activity): replace `X'_pct2 = `X'_pct[1] + `X'_pct[2]  
+>                                                    if activity==2
+  8.         bys agemo (activity): replace `X'_pct2 = `X'_pct[1]               
+>                                                    if activity==1
+  9.     }
+(1,692 missing values generated)
+(282 real changes made)
+(282 real changes made)
+(282 real changes made)
+(282 real changes made)
+(282 real changes made)
+(282 real changes made)
+
+.     
+.     /* * Add var to add vline
+>     gen liner1 = .
+>     gen liner2 = .
+>     gen liner3 = .
+>     replace liner1 = 1600 if year==2003
+>     replace liner2 = 400 if year==2003
+>     replace liner3 = 100 if year==2003
+> 
+>     gen nclb = "NCLB" */
+.     
+.     replace agemo = agemo/100
+(1,692 real changes made)
+
+.     
+.     twoway  (area tempy_pct2 agemo if activity==6, lcolor(midblue) fcolor(elt
+> blue) lwidth(vthin) ) (area tempy_pct2 agemo if activity==5, lcolor(midgreen)
+>  fcolor(eltgreen) lwidth(vthin) ) (area tempy_pct2 agemo if activity==4, lcol
+> or(cranberry) fcolor(erose) lwidth(vthin)) (area tempy_pct2 agemo if activity
+> ==3, lcolor(dknavy) fcolor(edkblue) lwidth(vthin) ) (area tempy_pct2 agemo if
+>  activity==2, lcolor(sand) fcolor(sandb) lwidth(vthin) ) (area tempy_pct2 age
+> mo if activity==1, lcolor(brown) fcolor(stone) lwidth(vthin) )   ,legend(orde
+> r(6 "{stSerif:School Only}" 5 "{stSerif:Work in School}" 4 "{stSerif:Work PT}
+> " 3 "{stSerif:Work FT}" 2 "{stSerif:Military}" 1 "{stSerif:Other}") rows(2) )
+>  title( "") ytitle( "{stSerif:Probability}") xtitle( "{stSerif:Age}") xlabel(
+> 13(2)36) graphregion(fcolor(white) lcolor(white)) note( "{stSerif:Source: NLS
+> Y97}")
+
+.     graph export choiceSharesMonthlyAge.eps, replace
+(file choiceSharesMonthlyAge.eps written in EPS format)
+
+. restore
+
+. 
+. compress
+  variable firstPer was float now byte
+  variable numPotentialSurveys was float now byte
+  variable numPotentialSurveysPlusRetro was float now byte
+  variable race was float now byte
+  variable caldate was float now int
+  (26,368,454 bytes saved)
+
+. save y97_all.dta, replace
+(note: file y97_all.dta not found)
+file y97_all.dta saved
+
+. !zip -m y97_all.dta.zip y97_all.dta
+
+updating: y97_all.dta (deflated 95%)
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/data/ransom/WageReturnsRepo/Data/y97/y97_create_trim.log
+  log type:  text
+ closed on:  11 Feb 2019, 10:21:41
+-------------------------------------------------------------------------------

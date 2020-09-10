@@ -1,0 +1,692 @@
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  [REDACTED]y79/Geocode/y79_import_all.log
+  log type:  text
+ opened on:   8 Feb 2019, 09:55:32
+
+. 
+. **********************************************************
+. * Import and save the data (either to file or to tempfile)
+. **********************************************************
+. 
+. * Survey and Created variables (unemployment, college ids)
+. * do y79_import_dist.do
+. * sort id year
+. * tempfile holder1
+. * save `holder1', replace
+. * compress
+. * save y79_dist_raw.dta, replace
+. 
+. * Location variables (county, state, quality)
+. do y79_import_loc.do
+
+. * Import, rename, reshape, recode and label location variables (county, state, smsa)
+. 
+. infile using "../../NLSY79_Geocode_1979_2014/location.dct", clear
+
+infile dictionary {
+  R0000100 "ID# (1-12686) 79"
+  R0214700 "RACL/ETHNIC COHORT /SCRNR 79"
+  R0214800 "SEX OF R 79"
+  R0219001 "CNTY OF RESIDENCE 79"
+  R0219002 "STATE OF RESIDENCE 79"
+  R0219003 "SMSA OF RESIDENCE 79"
+  R0219004 "EDIT CODE FOR GEOGRAPHIC RES VARS 79"
+  R0219145 "STRATUM # FOR PSU 79"
+  R0219146 "PRIMARY SAMPLNG UNIT PSU SCRAMBLED 79"
+  R0408001 "CNTY OF RESIDENCE 80"
+  R0408002 "STATE OF RESIDENCE 80"
+  R0408003 "SMSA OF RESIDENCE 80"
+  R0408004 "EDIT CODE FOR GEOGRAPHIC RES VARS 80"
+  R0648001 "CNTY OF RESIDENCE 81"
+  R0648002 "STATE OF RESIDENCE 81"
+  R0648003 "SMSA OF RESIDENCE 81"
+  R0648004 "EDIT CODE FOR GEOGRAPHIC RES VARS 81"
+  R0899001 "CNTY OF RESIDENCE 82"
+  R0899002 "STATE OF RESIDENCE 82"
+  R0899003 "SMSA OF RESIDENCE 82"
+  R0899004 "EDIT CODE FOR GEOGRAPHIC RES VARS 82"
+  R1150000 "CNTY OF RESIDENCE 83"
+  R1150001 "STATE OF RESIDENCE 83"
+  R1150002 "SMSA OF RESIDENCE 83"
+  R1150003 "SMSA OF RESIDENCE 83"
+  R1150004 "CMSA OF RESIDENCE 83"
+  R1150005 "PMSA OF RESIDENCE 83"
+  R1150006 "EDIT CODE FOR GEOGRAPHIC RES VARS 83"
+  R1523000 "CNTY OF RESIDENCE 84"
+  R1523001 "STATE OF RESIDENCE 84"
+  R1523002 "SMSA OF RESIDENCE 84"
+  R1523003 "CMSA OF RESIDENCE 84"
+  R1523004 "PMSA OF RESIDENCE 84"
+  R1523005 "SMSA OF RESIDENCE 84"
+  R1523006 "EDIT CODE FOR GEOGRAPHIC RES VARS 84"
+  R1893000 "CNTY OF RESIDENCE 85"
+  R1893001 "STATE OF RESIDENCE 85"
+  R1893002 "SMSA OF RESIDENCE 85"
+  R1893003 "CMSA OF RESIDENCE 85"
+  R1893004 "PMSA OF RESIDENCE 85"
+  R1893005 "SMSA OF RESIDENCE 85"
+  R1893006 "EDIT CODE FOR GEOGRAPHIC RES VARS 85"
+  R2260000 "CNTY OF RESIDENCE 86"
+  R2260001 "STATE OF RESIDENCE 86"
+  R2260002 "SMSA OF RESIDENCE 86"
+  R2260003 "CMSA OF RESIDENCE 86"
+  R2260004 "PMSA OF RESIDENCE 86"
+  R2260005 "SMSA OF RESIDENCE 86"
+  R2260006 "EDIT CODE FOR GEOGRAPHIC RES VARS 86"
+  R2450000 "CNTY OF RESIDENCE 87"
+  R2450001 "STATE OF RESIDENCE 87"
+  R2450002 "SMSA OF RESIDENCE 87"
+  R2450003 "CMSA OF RESIDENCE 87"
+  R2450004 "PMSA OF RESIDENCE 87"
+  R2450005 "SMSA OF RESIDENCE 87"
+  R2450006 "EDIT CODE FOR GEOGRAPHIC RES VARS 87"
+  R2882500 "CNTY OF RESIDENCE 88"
+  R2882600 "STATE OF RESIDENCE 88"
+  R2882700 "SMSA OF RESIDENCE 88"
+  R2882800 "CMSA OF RESIDENCE 88"
+  R2882900 "PMSA OF RESIDENCE 88"
+  R2883000 "SMSA OF RESIDENCE 88"
+  R2883100 "SMSA/CMSA/NECMA OF RESIDENCE 88"
+  R2883200 "PMSA OF RESIDENCE 88"
+  R2883300 "SMSA/CMSA/NECMA RESIDENCE RECORD TYPE 88"
+  R2883400 "EDIT CODE FOR GEOGRAPHIC RES VARS 88"
+  R3076900 "CNTY OF RESIDENCE 89"
+  R3077000 "STATE OF RESIDENCE 89"
+  R3077100 "SMSA OF RESIDENCE 89"
+  R3077200 "CMSA OF RESIDENCE 89"
+  R3077300 "PMSA OF RESIDENCE 89"
+  R3077400 "SMSA OF RESIDENCE 89"
+  R3077500 "SMSA/CMSA/NECMA OF RESIDENCE 89"
+  R3077600 "PMSA OF RESIDENCE 89"
+  R3077700 "SMSA/CMSA/NECMA RESIDENCE RECORD TYPE 89"
+  R3077800 "QUALITY OF MATCH GEO RES VARS 89"
+  R3411300 "CNTY OF RESIDENCE 90"
+  R3411400 "STATE OF RESIDENCE 90"
+  R3411500 "SMSA OF RESIDENCE 90"
+  R3411600 "CMSA OF RESIDENCE 90"
+  R3411700 "PMSA OF RESIDENCE 90"
+  R3411800 "SMSA OF RESIDENCE 90"
+  R3411900 "SMSA/CMSA/NECMA OF RESIDENCE 90"
+  R3412000 "PMSA OF RESIDENCE 90"
+  R3412100 "SMSA/CMSA/NECMA RESIDENCE RECORD TYPE 90"
+  R3412200 "QUALITY OF MATCH GEO RES VARS 90"
+  R3659500 "CNTY OF RESIDENCE 91"
+  R3659600 "STATE OF RESIDENCE 91"
+  R3659700 "SMSA OF RESIDENCE 91"
+  R3659800 "CMSA OF RESIDENCE 91"
+  R3659900 "PMSA OF RESIDENCE 91"
+  R3660000 "SMSA OF RESIDENCE 91"
+  R3660100 "SMSA/CMSA/NECMA OF RESIDENCE 91"
+  R3660200 "PMSA OF RESIDENCE 91"
+  R3660300 "SMSA/CMSA/NECMA RESIDENCE RECORD TYPE 91"
+  R3660400 "QUALITY OF MATCH GEO RES VARS 91"
+  R4009500 "CNTY OF RESIDENCE 92"
+  R4009600 "STATE OF RESIDENCE 92"
+  R4009700 "SMSA OF RESIDENCE 92"
+  R4009800 "CMSA OF RESIDENCE 92"
+  R4009900 "PMSA OF RESIDENCE 92"
+  R4010000 "SMSA OF RESIDENCE 92"
+  R4010100 "SMSA/CMSA/NECMA OF RESIDENCE 92"
+  R4010200 "PMSA OF RESIDENCE 92"
+  R4010300 "SMSA/CMSA/NECMA RESIDENCE RECORD TYPE 92"
+  R4010400 "QUALITY OF MATCH GEO RES VARS 92"
+  R4420600 "COUNTY OF RESIDENCE (EDT) 93"
+  R4420700 "STATE OF RESIDENCE (EDT) 93"
+  R4420800 "MSA OF RESIDENCE 93"
+  R4420900 "CMSA OF RESIDENCE 93"
+  R4421000 "PMSA OF RESIDENCE 93"
+  R4421100 "SMSA OF RESIDENCE 93"
+  R4421200 "MSA/CMSA/NECMA OF RES 93"
+  R4421300 "PMSA OF RES 93"
+  R4421400 "MSA/CMSA/NECMA REC TYPE 93"
+  R4421500 "QUALITY OF MATCH 93"
+  R5090500 "COUNTY OF RESIDENCE (EDT) 94"
+  R5090600 "STATE OF RESIDENCE (EDT) 94"
+  R5090700 "MSA OF RESIDENCE 94"
+  R5090800 "CMSA OF RESIDENCE 94"
+  R5090900 "PMSA OF RESIDENCE 94"
+  R5091000 "SMSA OF RESIDENCE 94"
+  R5091100 "MSA/CMSA/NECMA OF RES 94"
+  R5091200 "PMSA OF RES 94"
+  R5091300 "MSA/CMSA/NECMA REC TYPE 94"
+  R5091400 "QUALITY OF MATCH 94"
+  R5176300 "COUNTY OF RESIDENCE (EDT) 96"
+  R5176400 "STATE OF RESIDENCE (EDT) 96"
+  R5176500 "MSA OF RESIDENCE 96"
+  R5176600 "CMSA OF RESIDENCE 96"
+  R5176700 "PMSA OF RESIDENCE 96"
+  R5176800 "SMSA OF RESIDENCE 96"
+  R5176900 "MSA/CMSA/NECMA OF RES 96"
+  R5177000 "PMSA OF RESIDENCE 96"
+  R5177100 "MSA/CMSA/NECMA REC TYPE 96"
+  R6489500 "COUNTY OF RESIDENCE (EDT) 1998"
+  R6489600 "STATE OF RESIDENCE (EDT) 1998"
+  R6489700 "MSA OF RESIDENCE 1998"
+  R6489800 "CMSA OF RESIDENCE 1998"
+  R6489900 "PMSA OF RESIDENCE 1998"
+  R6490000 "SMSA OF RESIDENCE 1998"
+  R6490100 "MSA/CMSA/NECMA OF RES 1998"
+  R6490200 "PMSA OF RESIDENCE 1998"
+  R6490300 "MSA/CMSA/NECMA REC TYPE 1998"
+  R6490400 "MSA/CMSA/NECMA OF RES 1998"
+  R6490500 "PMSA OF RESIDENCE 1998"
+  R6490600 "MSA/CMSA/NECMA REC TYPE 1998"
+  R6490700 "QUALITY OF MATCH 1998"
+  R7017300 "COUNTY OF RESIDENCE (EDT) 2000"
+  R7017400 "STATE OF RESIDENCE (EDT) 2000"
+  R7017500 "MSA OF RESIDENCE 2000"
+  R7017600 "CMSA OF RESIDENCE 2000"
+  R7017700 "PMSA OF RESIDENCE 2000"
+  R7017800 "SMSA OF RESIDENCE 2000"
+  R7017900 "MSA/CMSA/NECMA OF RES 2000"
+  R7018000 "PMSA OF RESIDENCE 2000"
+  R7018100 "MSA/CMSA/NECMA REC TYPE 2000"
+  R7018200 "PMSA OF RESIDENCE 2000"
+  R7018300 "MSA/CMSA/NECMA REC TYPE 2000"
+  R7038100 "MSA/CMSA/NECMA OF RES 2000"
+  R7038200 "QUALITY OF MATCH 2000"
+  R7714800 "COUNTY OF RESIDENCE (EDT) 2002"
+  R7714900 "STATE OF RESIDENCE (EDT) 2002"
+  R7715100 "MSA OF RESIDENCE 2002"
+  R7715200 "CMSA OF RESIDENCE 2002"
+  R7715300 "PMSA OF RESIDENCE 2002"
+  R7715400 "SMSA OF RESIDENCE 2002"
+  R7715500 "MSA/CMSA/NECMA OF RES 2002"
+  R7715600 "PMSA OF RESIDENCE 2002"
+  R7715700 "MSA/CMSA/NECMA REC TYPE 2002"
+  R7715800 "MSA/CMSA/NECMA OF RES 2002"
+  R7715900 "PMSA OF RESIDENCE 2002"
+  R7716000 "MSA/CMSA/NECMA REC TYPE 2002"
+  R7716100 "QUALITY OF MATCH 2002"
+  R8507600 "COUNTY OF RESIDENCE (EDT) 2004"
+  R8507700 "STATE OF RESIDENCE (EDT) 2004"
+  R8508000 "MSA/CMSA/NECMA OF RES 2004"
+  R8508100 "QUALITY OF MATCH 2004"
+  T0999300 "COUNTY OF RESIDENCE (EDT) 2006"
+  T0999400 "STATE OF RESIDENCE (EDT) 2006"
+  T0999700 "CBSA OF RES 2000 2006"
+  T0999800 "QUALITY OF MATCH 2006"
+  T2221100 "COUNTY OF RESIDENCE (EDT) 2008"
+  T2221200 "STATE OF RESIDENCE (EDT) 2008"
+  T2221500 "CBSA OF RES 2000 2008"
+  T2221600 "QUALITY OF MATCH 2008"
+  T3119100 "COUNTY OF RESIDENCE (EDT) 2010"
+  T3119200 "STATE OF RESIDENCE (EDT) 2010"
+  T3119800 "CBSA OF RES 2000 2010"
+  T3119900 "QUALITY OF MATCH 2010"
+  T4125000 "COUNTY OF RESIDENCE (EDT) 2012"
+  T4125100 "STATE OF RESIDENCE (EDT) 2012"
+  T4125800 "CBSA OF RES 2010 2012"
+  T4125900 "QUALITY OF MATCH 2012"
+  T5035700 "COUNTY OF RESIDENCE (EDT) 2014"
+  T5035800 "STATE OF RESIDENCE (EDT) 2014"
+  T5036500 "CBSA OF RES 2010 2014"
+  T5036600 "QUALITY OF MATCH 2014"
+}
+
+(12,686 observations read)
+
+. 
+. ****************
+. * Rename
+. ****************
+. 
+. * rename A0002400 versionR24
+. rename R0000100 id
+
+. rename R0219001 fips_co1979
+
+. rename R0219002 fips_st1979
+
+. rename R0219003 fips_smsa1979
+
+. rename R0219004 fips_editcode1979
+
+. rename R0408001 fips_co1980
+
+. rename R0408002 fips_st1980
+
+. rename R0408003 fips_smsa1980
+
+. rename R0408004 fips_editcode1980
+
+. rename R0648001 fips_co1981
+
+. rename R0648002 fips_st1981
+
+. rename R0648003 fips_smsa1981
+
+. rename R0648004 fips_editcode1981
+
+. rename R0899001 fips_co1982
+
+. rename R0899002 fips_st1982
+
+. rename R0899003 fips_smsa1982
+
+. rename R0899004 fips_editcode1982
+
+. rename R1150000 fips_co1983
+
+. rename R1150001 fips_st1983
+
+. rename R1150002 fips_smsa1983
+
+. * rename R1150003 fips_smsa1983
+. rename R1150006 fips_editcode1983
+
+. rename R1523000 fips_co1984
+
+. rename R1523001 fips_st1984
+
+. rename R1523002 fips_smsa1984
+
+. * rename R1523005 fips_smsa1984
+. rename R1523006 fips_editcode1984
+
+. rename R1893000 fips_co1985
+
+. rename R1893001 fips_st1985
+
+. rename R1893002 fips_smsa1985
+
+. * rename R1893005 fips_smsa1985
+. rename R1893006 fips_editcode1985
+
+. rename R2260000 fips_co1986
+
+. rename R2260001 fips_st1986
+
+. rename R2260002 fips_smsa1986
+
+. * rename R2260005 fips_smsa1986
+. rename R2260006 fips_editcode1986
+
+. rename R2450000 fips_co1987
+
+. rename R2450001 fips_st1987
+
+. rename R2450002 fips_smsa1987
+
+. * rename R2450005 fips_smsa1987
+. rename R2450006 fips_editcode1987
+
+. rename R2882500 fips_co1988
+
+. rename R2882600 fips_st1988
+
+. rename R2882700 fips_smsa1988
+
+. * rename R2883000 fips_smsa1988
+. rename R2883400 fips_editcode1988
+
+. rename R3076900 fips_co1989
+
+. rename R3077000 fips_st1989
+
+. rename R3077100 fips_smsa1989
+
+. * rename R3077400 fips_smsa1989
+. rename R3077800 fips_quality1989
+
+. rename R3411300 fips_co1990
+
+. rename R3411400 fips_st1990
+
+. rename R3411500 fips_smsa1990
+
+. * rename R3411800 fips_smsa1990
+. rename R3412200 fips_quality1990
+
+. rename R3659500 fips_co1991
+
+. rename R3659600 fips_st1991
+
+. rename R3659700 fips_smsa1991
+
+. * rename R3660000 fips_smsa1991
+. rename R3660400 fips_quality1991
+
+. rename R4009500 fips_co1992
+
+. rename R4009600 fips_st1992
+
+. rename R4009700 fips_smsa1992
+
+. * rename R4010000 fips_smsa1992
+. rename R4010400 fips_quality1992
+
+. rename R4420600 fips_co1993
+
+. rename R4420700 fips_st1993
+
+. rename R4421100 fips_smsa1993
+
+. rename R4421500 fips_quality1993
+
+. rename R5090500 fips_co1994
+
+. rename R5090600 fips_st1994
+
+. rename R5091000 fips_smsa1994
+
+. rename R5091400 fips_quality1994
+
+. rename R5176300 fips_co1996
+
+. rename R5176400 fips_st1996
+
+. rename R5176800 fips_smsa1996
+
+. rename R6489500 fips_co1998
+
+. rename R6489600 fips_st1998
+
+. rename R6490000 fips_smsa1998
+
+. rename R6490700 fips_quality1998
+
+. rename R7017300 fips_co2000
+
+. rename R7017400 fips_st2000
+
+. rename R7017800 fips_smsa2000
+
+. rename R7038200 fips_quality2000
+
+. rename R7714800 fips_co2002
+
+. rename R7714900 fips_st2002
+
+. rename R7715400 fips_smsa2002
+
+. rename R7716100 fips_quality2002
+
+. rename R8507600 fips_co2004
+
+. rename R8507700 fips_st2004
+
+. rename R8508100 fips_quality2004
+
+. rename T0999300 fips_co2006
+
+. rename T0999400 fips_st2006
+
+. rename T0999800 fips_quality2006
+
+. rename T2221100 fips_co2008
+
+. rename T2221200 fips_st2008
+
+. rename T2221600 fips_quality2008
+
+. rename T3119100 fips_co2010
+
+. rename T3119200 fips_st2010
+
+. rename T3119900 fips_quality2010
+
+. rename T4125000 fips_co2012 
+
+. rename T4125100 fips_st2012 
+
+. rename T4125900 fips_quality2012 
+
+. rename T5035700 fips_co2014
+
+. rename T5035800 fips_st2014
+
+. rename T5036600 fips_quality2014
+
+. 
+. * keep id versionR24 fips*
+. keep id fips*
+
+. 
+. forvalues yr=1970/1996 {
+  2.         gen temp`yr'=0
+  3. }
+
+. 
+. reshape long temp fips_st fips_co fips_smsa fips_editcode fips_quality, i(id) j(year)
+(note: j = 1970 1971 1972 1973 1974 1975 1976 1977 1978 1979 1980 1981 1982 1983 1984 1985 1986 1987 1988 1989 1990 1991 1992 1993 1994 1995 1996 1998 2000 2002 2004 2006 2008 2010 2012 2014)
+(note: fips_st1970 not found)
+(note: fips_co1970 not found)
+(note: fips_smsa1970 not found)
+(note: fips_editcode1970 not found)
+(note: fips_quality1970 not found)
+(note: fips_st1971 not found)
+(note: fips_co1971 not found)
+(note: fips_smsa1971 not found)
+(note: fips_editcode1971 not found)
+(note: fips_quality1971 not found)
+(note: fips_st1972 not found)
+(note: fips_co1972 not found)
+(note: fips_smsa1972 not found)
+(note: fips_editcode1972 not found)
+(note: fips_quality1972 not found)
+(note: fips_st1973 not found)
+(note: fips_co1973 not found)
+(note: fips_smsa1973 not found)
+(note: fips_editcode1973 not found)
+(note: fips_quality1973 not found)
+(note: fips_st1974 not found)
+(note: fips_co1974 not found)
+(note: fips_smsa1974 not found)
+(note: fips_editcode1974 not found)
+(note: fips_quality1974 not found)
+(note: fips_st1975 not found)
+(note: fips_co1975 not found)
+(note: fips_smsa1975 not found)
+(note: fips_editcode1975 not found)
+(note: fips_quality1975 not found)
+(note: fips_st1976 not found)
+(note: fips_co1976 not found)
+(note: fips_smsa1976 not found)
+(note: fips_editcode1976 not found)
+(note: fips_quality1976 not found)
+(note: fips_st1977 not found)
+(note: fips_co1977 not found)
+(note: fips_smsa1977 not found)
+(note: fips_editcode1977 not found)
+(note: fips_quality1977 not found)
+(note: fips_st1978 not found)
+(note: fips_co1978 not found)
+(note: fips_smsa1978 not found)
+(note: fips_editcode1978 not found)
+(note: fips_quality1978 not found)
+(note: fips_quality1979 not found)
+(note: fips_quality1980 not found)
+(note: fips_quality1981 not found)
+(note: fips_quality1982 not found)
+(note: fips_quality1983 not found)
+(note: fips_quality1984 not found)
+(note: fips_quality1985 not found)
+(note: fips_quality1986 not found)
+(note: fips_quality1987 not found)
+(note: fips_quality1988 not found)
+(note: fips_editcode1989 not found)
+(note: fips_editcode1990 not found)
+(note: fips_editcode1991 not found)
+(note: fips_editcode1992 not found)
+(note: fips_editcode1993 not found)
+(note: fips_editcode1994 not found)
+(note: fips_st1995 not found)
+(note: fips_co1995 not found)
+(note: fips_smsa1995 not found)
+(note: fips_editcode1995 not found)
+(note: fips_quality1995 not found)
+(note: fips_editcode1996 not found)
+(note: fips_quality1996 not found)
+(note: temp1998 not found)
+(note: fips_editcode1998 not found)
+(note: temp2000 not found)
+(note: fips_editcode2000 not found)
+(note: temp2002 not found)
+(note: fips_editcode2002 not found)
+(note: temp2004 not found)
+(note: fips_smsa2004 not found)
+(note: fips_editcode2004 not found)
+(note: temp2006 not found)
+(note: fips_smsa2006 not found)
+(note: fips_editcode2006 not found)
+(note: temp2008 not found)
+(note: fips_smsa2008 not found)
+(note: fips_editcode2008 not found)
+(note: temp2010 not found)
+(note: fips_smsa2010 not found)
+(note: fips_editcode2010 not found)
+(note: temp2012 not found)
+(note: fips_smsa2012 not found)
+(note: fips_editcode2012 not found)
+(note: temp2014 not found)
+(note: fips_smsa2014 not found)
+(note: fips_editcode2014 not found)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                    12686   ->  456696
+Number of variables                 125   ->       8
+j variable (36 values)                    ->   year
+xij variables:
+         temp1970 temp1971 ... temp2014   ->   temp
+fips_st1970 fips_st1971 ... fips_st2014   ->   fips_st
+fips_co1970 fips_co1971 ... fips_co2014   ->   fips_co
+fips_smsa1970 fips_smsa1971 ... fips_smsa2014->fips_smsa
+fips_editcode1970 fips_editcode1971 ... fips_editcode2014->fips_editcode
+fips_quality1970 fips_quality1971 ... fips_quality2014->fips_quality
+-----------------------------------------------------------------------------
+
+. drop temp
+
+. 
+. recode _all (-1 = .r) (-2 = .d) (-3 = .i) (-4 = .v) (-5 = .n)
+(id: 0 changes made)
+(year: 0 changes made)
+(fips_co: 88877 changes made)
+(fips_st: 88911 changes made)
+(fips_quality: 66552 changes made)
+(fips_smsa: 60889 changes made)
+(fips_editcode: 18394 changes made)
+
+. 
+. gen fips_editcode1 = fips_editcode if inlist(year,1979,1982)
+(434,033 missing values generated)
+
+. gen fips_editcode2 = fips_editcode if inlist(year,1983,1988)
+(435,217 missing values generated)
+
+. * drop fips_editcode
+. 
+. ***************************************************
+. * Label variables and values
+. ***************************************************
+. 
+. label var id              "ID# (1-12686) 79"
+
+. * label var versionR24      "VERSION_R24 2010"
+. label var fips_st         "STATE FIPS CODE"
+
+. label var fips_co         "COUNTY FIPS CODE"
+
+. label var fips_smsa       "SMSA FIPS CODE"
+
+. label var fips_editcode1  "CODE FOR HAND EDITS (1979-1982)"
+
+. label var fips_editcode2  "CODE FOR HAND EDITS (1983-1989)"
+
+. label var fips_quality    "CODE FOR QUALITY (1990-2014)"
+
+. 
+. label define vleditcode1 0 "NO EDIT NECESSARY"  1 "ZIP CODE CHANGED-KEYPUNCH ERROR"  2 "COUNTY CODE CHANGED-KEYPUNCH ERROR" 3 "STATE CODE CHANGED-KEYPUNCH ERROR"  4 "ZIP CODE CHANGED-ASSIGNMENT"  5 "COUNTY CODE CHANGED-ASSIGNMENT"  6 "STATE CODE CHAN
+> GED-ASSIGNMENT"  7 "MULTIPLE CHANGES-AT LEAST ONE KEYPUNCH ERROR"  8 "MULTIPLE CHANGES-ASSIGNMENTS"
+
+. label define vleditcode2 0 "NO HAND EDIT"       1 "ZIP CODE ADDED-STREET ADDRESS, CITY, COUNTY & STATE AVAILABLE"  2 "ZIP CODE ADDED-STREET ADDRESS, COUNTY, & STATE AVAILABLE"  3 "ZIP CODE ADDED-CITY, COUNTY, & STATE AVAILABLE"  4 "ZIP CODE ADDED-COU
+> NTY & STATE AVAILABLE, MAIN PO ZIP USED"  5 "COUNTY & STATE ADDED-ZIP CODE AVAILABLE"  6 "ZIP, COUNTY & STATE CODES FROM PRIOR INT-NO RESIDENCE CHANGE"  7 "MATCH ON COUNTY & STATE CODES ON CCDB 83-NO MATCH ON 83 CRF"  8 "COUNTY CODE ADDED-ZIP CODE & 
+> STATE CODE AVAILABLE"  9 "MISCELLANEOUS HAND EDITS-ZIP, COUNTY, &/OR STATE CODES ADDED"  10 "COUNTY ADDED FROM CRF-STATE & ZIP CODE MATCH W/CRF"  11 "COUNTY & STATE ADDED FROM CRF-ZIP CODE MATCH W/CRF"
+
+. 
+. label values fips_editcode1 vleditcode1
+
+. label values fips_editcode2 vleditcode2
+
+. 
+. * Quality definition changed over time:
+. * 1988 (init): 0 "R IN MILITARY OR RESIDING ABROAD"  1 "RESIDENCE INFORMATION INDETERMINANT"  3 "ZIP NOT FOUND, MATCH ON STATE AND COUNTY"  4 "ZIPCODE STATE AND AREA-CODE-ONLY STATE MATCH"  6 "ADDRESS STATE AND PHONE STATE MATCH"  7 "ZIPCODE STATE AN
+> D PHONE STATE MATCH"  8 "ADDRESS STATE AND ZIPCODE STATE MATCH"  9 "ADDRESS STATE, ZIPCODE STATE AND PHONE STATE MATCH"  10 "COUNTY AND/OR STATE WERE HAND EDITED"
+. * 1998--2004: 1 Actual Match Based on Address 0 Match Based on Zip Centroid
+. * 2006--2014: 1: Actual Match Based on Address 2: Manual Edit: Match Based on Short Street 3: Manual Edit: Match Based on Long Street 4: Match Based on Zip Centroid
+. recode fips_quality (1 = 11) (0 = 14) if inlist(year,1998,2000,2002,2004)
+(fips_quality: 30073 changes made)
+
+. recode fips_quality (1 = 11) (2 = 12) (3 = 13) (4 = 14) if inlist(year,2006,2008,2010,2012,2014)
+(fips_quality: 36980 changes made)
+
+. 
+. label define vlquality    0 "R IN MILITARY OR RESIDING ABROAD"  1 "RESIDENCE INFORMATION INDETERMINANT"  3 "ZIP NOT FOUND, MATCH ON STATE AND COUNTY"  4 "ZIPCODE STATE AND AREA-CODE-ONLY STATE MATCH"  6 "ADDRESS STATE AND PHONE STATE MATCH"  7 "ZIPCO
+> DE STATE AND PHONE STATE MATCH"  8 "ADDRESS STATE AND ZIPCODE STATE MATCH"  9 "ADDRESS STATE, ZIPCODE STATE AND PHONE STATE MATCH"  10 "COUNTY AND/OR STATE WERE HAND EDITED" 11 "ACTUAL MATCH ABSED ON ADDRESS" 12 "MANUAL EDIT: MATCH BASED ON SHORT STR
+> EET" 13 "MANUAL EDIT: MATCH BASED ON LONG STREET" 14 "MATCHED BASED ON ZIP CENTROID"
+
+. label values fips_quality vlquality
+
+. 
+. * order id year version* fips_st fips_co fips_smsa fips_editcode1 fips_editcode2 fips_quality
+. order id year fips_st fips_co fips_smsa fips_editcode1 fips_editcode2 fips_quality
+
+. 
+end of do-file
+
+. sort id year
+
+. tempfile holder2
+
+. save `holder2', replace
+(note: file /tmp/St32680.000001 not found)
+file /tmp/St32680.000001 saved
+
+. compress
+  variable id was float now int
+  variable fips_st was float now byte
+  variable fips_co was float now int
+  variable fips_smsa was float now int
+  variable fips_editcode1 was float now byte
+  variable fips_editcode2 was float now byte
+  variable fips_quality was float now byte
+  variable fips_editcode was float now byte
+  (9,590,616 bytes saved)
+
+. save y79_loc_raw.dta, replace
+file y79_loc_raw.dta saved
+
+. 
+. ***********************************
+. * Merge the data and save the data
+. ***********************************
+. 
+. * use y79_raw.dta, clear
+. * merge 1:1 id year using `holder1'
+. * assert _merge==3
+. * drop _merge
+. 
+. * use `holder1', clear
+. * merge 1:1 id year using `holder2'
+. * assert _merge==3
+. * drop _merge
+. 
+. compress
+  (0 bytes saved)
+
+. save y79_geocode_raw.dta, replace
+file y79_geocode_raw.dta saved
+
+. 
+. !chmod 774 *.dta
+
+
+. log close
+      name:  <unnamed>
+       log:  [REDACTED]y79/Geocode/y79_import_all.log
+  log type:  text
+ closed on:   8 Feb 2019, 09:55:37
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

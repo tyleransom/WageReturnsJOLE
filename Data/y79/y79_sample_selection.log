@@ -1,0 +1,227 @@
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/data/ransom/WageReturnsRepo/Data/y79/y79_sample_selection.log
+  log type:  text
+ opened on:   2 Mar 2020, 17:04:44
+
+. 
+. **************************************************
+. * Same drops happen here as in y79_create_trim (wherein
+. *  we create our final dataset)
+. * but here they are done correctly for one unified 79 cohort
+. **************************************************
+. 
+. 
+. !unzip -u y79_all_balanced.dta.zip
+
+
+. use y79_all_balanced.dta, clear
+
+. !rm y79_all_balanced.dta
+
+
+. 
+. *=================================================
+. * Frequency stats and droppings
+. *=================================================
+. *** "Drop" females and over-samples
+. * One cohort
+. qui count if uniqueTime==1301
+
+. scalar r0 = r(N)
+
+. qui count if uniqueTime==1301  &  female
+
+. scalar r1 = r(N)             
+
+. qui count if uniqueTime==1301  & !female &  birthYear< 1959
+
+. scalar r1a = r(N)           
+
+. qui count if uniqueTime==1301  & !female &  birthYear>=1959 & (oversamplePoor | oversampleMilitary)
+
+. scalar r2 = r(N)              
+
+. qui count if uniqueTime==1301  & !female &  birthYear>=1959 & !oversamplePoor & !oversampleMilitary
+
+. scalar r3 = r(N)                                
+
+. 
+. disp "Starting persons  (one cohort) "  r0
+Starting persons  (one cohort) 12686
+
+. disp "Drop females      (one cohort) "  r1
+Drop females      (one cohort) 6283
+
+. disp "Drop older cohorts(one cohort) "  r1a
+Drop older cohorts(one cohort) 1698
+
+. disp "Drop oversample   (one cohort) "  r2
+Drop oversample   (one cohort) 843
+
+. disp "Resulting persons (one cohort) "  r3
+Resulting persons (one cohort) 3862
+
+. 
+. 
+. * qui count if uniqueTime==1301 & !female & birthYear==1957 & !oversamplePoor & !oversampleMilitary
+. * scalar r57 = r(N)
+. * qui count if uniqueTime==1301 & !female & birthYear==1958 & !oversamplePoor & !oversampleMilitary
+. * scalar r58 = r(N)
+. qui count if uniqueTime==1301 & !female & birthYear==1959 & !oversamplePoor & !oversampleMilitary
+
+. scalar r59 = r(N)
+
+. qui count if uniqueTime==1301 & !female & birthYear==1960 & !oversamplePoor & !oversampleMilitary
+
+. scalar r60 = r(N)
+
+. qui count if uniqueTime==1301 & !female & birthYear==1961 & !oversamplePoor & !oversampleMilitary
+
+. scalar r61 = r(N)
+
+. qui count if uniqueTime==1301 & !female & birthYear==1962 & !oversamplePoor & !oversampleMilitary
+
+. scalar r62 = r(N)
+
+. qui count if uniqueTime==1301 & !female & birthYear==1963 & !oversamplePoor & !oversampleMilitary
+
+. scalar r63 = r(N)
+
+. qui count if uniqueTime==1301 & !female & birthYear==1964 & !oversamplePoor & !oversampleMilitary
+
+. scalar r64 = r(N)
+
+. 
+. * For 79:
+. *  dob   age_int  svy_rounds  final_rounds (with imputed data)
+. *  1964  14-35    20          20
+. *  1963  15-35    20          20
+. *  1962  16-35    20          20
+. *  1961  17-35    19          20
+. *  1960  18-35    18          20
+. *  1959  19-35    17          20
+. *  1958  20-35    16          20
+. *  1957  21-35    15          20
+. 
+. * rounds ~= waves: rounds is a proxy for how many years were you surveyed, whereas waves referes to 
+. *                  how often the survey was done, which moved to every other year
+. disp "Survey waves                         " 18
+Survey waves                         18
+
+. disp "Survey Person-years     (one cohort) " r64*20 + r63*20 + r62*20 + r61*19 + r60*18 + r59*17
+Survey Person-years     (one cohort) 73645
+
+. disp "Add Retro data          (one cohort) " r64*0  + r63*0  + r62*0  + r61*1  + r60*2  + r59*3 
+Add Retro data          (one cohort) 3595
+
+. disp "Potential person-years  (one cohort) " r3*20
+Potential person-years  (one cohort) 77240
+
+. disp "Potential person-months (one cohort) " r3*20*12
+Potential person-months (one cohort) 926880
+
+. 
+. 
+. drop if oversamplePoor | oversampleMilitary
+(841,824 observations deleted)
+
+. 
+. *** Drop observations after last (valid) interview and more counts
+. * Youngins
+. count    if birthYear>=1959 & !female & ( mdy(month,1,year)> lastValidIntDate | mdy(month,1,year)> lastValidSchoolDate ) & uniqueTime>=1601 & uniqueTime<=3512
+  72,701
+
+. scalar s0 = r(N)
+
+. xtsum id if birthYear>=1959 & !female &   mdy(month,1,year)<=lastValidIntDate & mdy(month,1,year)<=lastValidSchoolDate   & uniqueTime>=1601 & uniqueTime<=3512
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+id       overall |  5265.728   3271.122          5      12686 |     N =  854179
+         between |             3273.974          5      12686 |     n =    3852
+         within  |                    0   5265.728   5265.728 |     T = 221.749
+
+. scalar s1 = r(N)
+
+. scalar s2 = r(Tbar)
+
+. xtsum id if birthYear>=1959 & !female &   mdy(month,1,year)<=lastValidIntDate & mdy(month,1,year)<=lastValidSchoolDate   & ageMo==0 & uniqueTime>=1601 & uniqueTime<=3512
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+id       overall |   5265.65   3271.392          5      12686 |     N =   71463
+         between |             3273.974          5      12686 |     n =    3852
+         within  |                    0    5265.65    5265.65 |     T = 18.5522
+
+. scalar s3 = r(N)
+
+. scalar s4 = r(n)
+
+. 
+. disp "Drop missing int months " s0
+Drop missing int months 72701
+
+. disp "Final months "            s1
+Final months 854179
+
+. disp "Final Tbar "              s2
+Final Tbar 221.74948
+
+. 
+. disp "Final years "             s3
+Final years 71463
+
+. disp "Final persons "           s4
+Final persons 3852
+
+. disp "Drop missing int years "  s4*20-s3
+Drop missing int years 5577
+
+. 
+. xtsum id if birthYear>=1959 & !female &   mdy(month,1,year)<=lastValidIntDate & mdy(month,1,year)<=lastValidSchoolDate   & ageMo==0 & uniqueTime>=1601 & uniqueTime<=1612
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+id       overall |   5268.68   3273.974          5      12686 |     N =    3852
+         between |             3273.974          5      12686 |     n =    3852
+         within  |                    0    5268.68    5268.68 |     T =       1
+
+. xtsum id if birthYear>=1959 & !female &   mdy(month,1,year)<=lastValidIntDate & mdy(month,1,year)<=lastValidSchoolDate   & ageMo==0 & uniqueTime>=2801 & uniqueTime<=2812
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+id       overall |  5267.432   3271.231          5      12686 |     N =    3485
+         between |             3271.231          5      12686 |     n =    3485
+         within  |                    0   5267.432   5267.432 |     T =       1
+
+. xtsum id if birthYear>=1959 & !female &   mdy(month,1,year)<=lastValidIntDate & mdy(month,1,year)<=lastValidSchoolDate   & ageMo==0 & uniqueTime>=3101 & uniqueTime<=3112
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+id       overall |  5271.659   3267.447          6      12686 |     N =    3361
+         between |             3267.447          6      12686 |     n =    3361
+         within  |                    0   5271.659   5271.659 |     T =       1
+
+. xtsum id if birthYear>=1959 & !female &   mdy(month,1,year)<=lastValidIntDate & mdy(month,1,year)<=lastValidSchoolDate   & ageMo==0 & uniqueTime>=3501 & uniqueTime<=3512
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+id       overall |  5258.034   3267.512          6      12517 |     N =    3265
+         between |             3267.512          6      12517 |     n =    3265
+         within  |                    0   5258.034   5258.034 |     T =       1
+
+. 
+. drop     if mdy(month,1,year)>lastValidIntDate
+(184,061 observations deleted)
+
+. drop     if mdy(month,1,year)>lastValidSchoolDate
+(1,333 observations deleted)
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/data/ransom/WageReturnsRepo/Data/y79/y79_sample_selection.log
+  log type:  text
+ closed on:   2 Mar 2020, 17:05:04
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

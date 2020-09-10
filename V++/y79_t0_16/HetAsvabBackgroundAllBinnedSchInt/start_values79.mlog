@@ -1,0 +1,43 @@
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2012 The MathWorks, Inc.
+                    R2012b (8.0.0.783) 64-bit (glnxa64)
+                              August 22, 2012
+
+ 
+To get started, type one of these: helpwin, helpdesk, or demo.
+For product information, visit www.mathworks.com.
+ 
+>> >> [Warning: File 'start_values79.diary' not found.] 
+>> >> >> 
+A = 
+
+          data: [816x1 double]
+      textdata: {'logit_coef1'}
+    colheaders: {'logit_coef1'}
+
+>> 
+B = 
+
+          data: [41x1 double]
+      textdata: {'wage_all1'}
+    colheaders: {'wage_all1'}
+
+>> 
+C = 
+
+          data: [114x1 double]
+      textdata: {'coefSigmaAll1'}
+    colheaders: {'coefSigmaAll1'}
+
+>> >> >> >> >> >> >> >> >> >> >> >> >> 
+ans =
+
+   962     1
+
+>> 
+ans =
+
+     9     1
+
+>> >> >> >> >> 

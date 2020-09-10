@@ -1,0 +1,383 @@
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  [REDACTED]y79/Geocode/y79_create_geocode.log
+  log type:  text
+ opened on:   8 Feb 2019, 09:55:40
+
+. 
+. *****************************************************************************
+. * Merge geocode into the monthly data with interview month
+. *  and impute location for time between interviews
+. *****************************************************************************
+. *============================================================================
+. * Impute location according to the following rules:
+. *  (1) If someone switches location between consecutive interviews,
+. *        - assume i is in the new location the month after interview_{t}
+. *          (as opposed to the month before interview_{t+1}
+. *  (2) If someone switches location sometime in a missing interview spell,
+. *        - assume i is in the new location the month after interview_{t}
+. *          (as opposed to the month before interview_{t+1}
+. *============================================================================
+. *----------------------------------------------------------------------------
+. * Before the merge, backfill gaps in missed interviews. Doing this before
+. *  the merge is needed because the way observations are dropped.
+. * Also for skipped years, thus the fillin
+. *----------------------------------------------------------------------------
+. use y79_geocode_raw.dta, clear
+
+. * Need 9 more years to fillin
+. set obs `=_N+9'
+number of observations (_N) was 456,696, now 456,705
+
+. replace id = 0 if mi(id)
+(9 real changes made)
+
+. replace year = 1997 if _n==_N
+(1 real change made)
+
+. replace year = 1999 if _n==_N-1
+(1 real change made)
+
+. replace year = 2001 if _n==_N-2
+(1 real change made)
+
+. replace year = 2003 if _n==_N-3
+(1 real change made)
+
+. replace year = 2005 if _n==_N-4
+(1 real change made)
+
+. replace year = 2007 if _n==_N-5
+(1 real change made)
+
+. replace year = 2009 if _n==_N-6
+(1 real change made)
+
+. replace year = 2011 if _n==_N-7
+(1 real change made)
+
+. replace year = 2013 if _n==_N-8
+(1 real change made)
+
+. fillin id year
+
+. drop if id==0
+(45 observations deleted)
+
+. drop _fillin
+
+. 
+. gen fips_co_old = fips_co
+(329,911 missing values generated)
+
+. gen fips_st_old = fips_st
+(329,945 missing values generated)
+
+. 
+. * If fips_st==0, replace fips_st and fips_co with 0.
+. *  Note: we can use state mean for fips_co==0 with valid fips_st
+. replace fips_co = .o if fips_st==0
+(191 real changes made, 191 to missing)
+
+. replace fips_st = .o if fips_st==0
+(191 real changes made, 191 to missing)
+
+. 
+. * Sort descending and backfill non-missing values
+. gsort id -year
+
+. by id: replace fips_co = fips_co[_n-1] if mi(fips_co) & !mi(fips_co[_n-1]) & _n>1
+(214,750 real changes made)
+
+. by id: replace fips_st = fips_st[_n-1] if mi(fips_st) & !mi(fips_st[_n-1]) & _n>1
+(214,307 real changes made)
+
+. 
+. * Sort ascending and fill missing values with last observed county
+. sort id year
+
+. by id: replace fips_co = fips_co[_n-1] if mi(fips_co) & !mi(fips_co[_n-1]) & _n>1
+(102,347 real changes made)
+
+. by id: replace fips_st = fips_st[_n-1] if mi(fips_st) & !mi(fips_st[_n-1]) & _n>1
+(102,824 real changes made)
+
+. 
+. * Note: The above gives every id-year obs a fips_co/st if they ever provided one,
+. *  ie, the only missings going forward are for those that never gave a fips
+. 
+. keep id year fips_st fips_co
+
+. compress
+  (0 bytes saved)
+
+. tempfile holder1
+
+. save `holder1'
+file /tmp/St32680.000001 saved
+
+. 
+. !unzip -u ../y79_all.dta.zip
+
+
+. use id year month interview_date missInt birthMonth birthYear using y79_all.dta, clear
+
+. !rm y79_all.dta
+
+
+. 
+. sort id year
+
+. 
+. isid id year month
+
+. merge m:1 id year using `holder1', assert(using match) keep(match) nogen
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                         2,626,350  
+    -----------------------------------------
+
+. * Note: since y79_all only goes through age 3612, it stops at year 2001
+. * Thus the obs between 2001-2014 in 'using' will be dropped here
+. 
+. *============================================================================
+. * Impute monthly counties, so that moves can occur once observed vs year end
+. *============================================================================
+. gen intThisMonth = month(interview_date)==month
+
+. 
+. gsort id -year -month
+
+.         by id: gen     fips_co2 = fips_co        if intThisMonth  | _n==1
+(2,464,950 missing values generated)
+
+.         by id: replace fips_co2 = fips_co2[_n-1] if !intThisMonth & _n> 1
+(2,464,941 real changes made, 204 to missing)
+
+.         by id: replace fips_co2 = fips_co2[_n-1] if mi(fips_co2)  & _n> 1
+(0 real changes made)
+
+.         
+.         by id: gen     fips_st2 = fips_st        if intThisMonth  | _n==1
+(2,464,950 missing values generated)
+
+.         by id: replace fips_st2 = fips_st2[_n-1] if !intThisMonth & _n> 1
+(2,464,941 real changes made, 204 to missing)
+
+.         by id: replace fips_st2 = fips_st2[_n-1] if mi(fips_st2)  & _n> 1
+(0 real changes made)
+
+. sort id year month
+
+. 
+. * recode fips* (-4 = .v)
+. 
+. order id year month missInt interview_date intThisMonth fips_st fips_co fips_st2 fips_co2 birthMonth birthYear 
+
+. save y79_geocode2, replace
+(note: file y79_geocode2.dta not found)
+file y79_geocode2.dta saved
+
+. !zip -m y79_geocode2.dta.zip y79_geocode2.dta
+
+
+. 
+. *============================================================================
+. * Merge in county characteristics (empPct and incPerCapita; final versions)
+. *============================================================================
+. drop fips_st fips_co
+
+. rename fips_st2    fips_st
+
+. rename fips_co2    fips_co
+
+. 
+. * Hand edits
+. *  For example when Dade County, Florida (FIPS code 12025) became Miami-Dade County in 1997, it received the new FIPS code of 12086, http://coweeta.uga.edu/trends/datadictionary/fipscode.html
+. replace fips_co=86 if fips_st==12 & fips_co==25 & year>=1990
+(6,904 real changes made)
+
+. 
+. * merge m:1 fips_st fips_co year using ../../county_data, keepusing(year fips_st fips_co AreaName cbsa incPerCapitaFinal empPctFinal incPerCapita empPct empTot empTotMSA)
+. * EDIT: JA 1/2019: Got rid of AreaName since it doubles the file size(string) w/o any clear benefit
+. merge m:1 fips_st fips_co year using ../../county_data, keep(master match) nogen keepusing(year fips_st fips_co cbsa incPerCapitaFinal empPctFinal incPerCapita empPct empTot empTotMSA)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                         6,718
+        from master                     6,718  
+        from using                          0  
+
+    matched                         2,619,632  
+    -----------------------------------------
+
+. 
+. *----------------------------------------------------------------------------
+. * There are some NLSY obs that have county data but don't match:
+. * st   co     freq 
+. *  2   40      17   (AK - bad fips_co to start with); id==5682, always in AK, in co 40 til 1981, then in co 90; 40 is matched before 1980
+. *  2  210      13   (AK - bad fips_co to start with); id==5686, always in AK, all obs are GOOD, except last 12 obs in co 210
+. *  6  500 ??   71   (CA - max fips_co is 115)
+. * 12  500 ??   59   (FL - max fips_co is 133)
+. * 36  500 ??  482   (NY - max fips_co is 123)
+. * 36  550 ??   25   (NY - max fips_co is 123)
+. * Fips code 500 and 550 are most likely error codes of some sort. All obs
+. *  take place in years 1983-1986
+. *
+. * Edits:
+. *  fips_st in 60, 66, 72, 78 (American Somoa,Guam,Puerto Rico,Virgin Islands)
+. *  ->  use national average (Mainly just 66 and 78)
+. *  fips_st in 1-56 but no/invalid fips_co
+. *  ->  use state average (see above: 2,6,12,36)
+. *  fips_st = 0 --> treat these as missing (fix above)
+. *  -> national average? one fips_co for each indiv with fips_st==0
+. *----------------------------------------------------------------------------
+. gen m_empPct       = mi(empPctFinal)
+
+. gen m_incPerCapita = mi(incPerCapitaFinal)
+
+. 
+. replace fips_co = -99 if m_empPct | m_incPerCapita
+(24,612 real changes made)
+
+. replace fips_st = -99 if (m_empPct | m_incPerCapita) & (fips_st==0 | fips_st>56)
+(2,300 real changes made)
+
+. 
+. drop cbsa-empTotMSA
+
+. 
+. * merge m:1 fips_st fips_co year using ../../county_data, keepusing(year fips_st fips_co AreaName cbsa incPerCapitaFinal empPctFinal incPerCapita empPct empTot empTotMSA)
+. merge m:1 fips_st fips_co year using ../../county_data, assert(using match) keep(match) nogen keepusing(year fips_st fips_co cbsa incPerCapitaFinal empPctFinal incPerCapita empPct empTot empTotMSA)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                         2,626,350  
+    -----------------------------------------
+
+. 
+. *============================================================================
+. * Merge in monthly unemployment rate from BLS (not NLSY-provided rate)
+. *============================================================================
+. tempfile county_unemp
+
+. preserve
+
+.     use ../../county_unemp_monthly, clear
+
+.     ren state fips_st
+
+.     ren county fips_co
+
+.     save `county_unemp', replace
+(note: file /tmp/St32680.000002 not found)
+file /tmp/St32680.000002 saved
+
+. restore
+
+. 
+. merge m:1 fips_st fips_co year month using `county_unemp', keep(master match) nogen keepusing(urate)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                     1,798,349
+        from master                 1,798,349  
+        from using                          0  
+
+    matched                           828,001  
+    -----------------------------------------
+
+. 
+. tempfile holder16
+
+. save `holder16', replace
+(note: file /tmp/St32680.000004 not found)
+file /tmp/St32680.000004 saved
+
+. 
+. * rename empPctFinal       empPct
+. * rename incPerCapitaFinal incPerCapita
+. 
+. *============================================================================
+. * Merge in IPEDS data -- Specifically, we want to merge in one data point:
+. *   For y79, that will be data from 1990
+. *   For y97, that will be data from 2005
+. * And we want to merge based on the county they lived in at 16 (say Sep)
+. *============================================================================
+. use ../../ipeds_final, clear
+(IPEDS Interim Data - UNITID Year)
+
+. keep if year==1990
+(46,983 observations deleted)
+
+. drop year
+
+. drop if mi(fips5)
+(1 observation deleted)
+
+. 
+. tempfile holderIP
+
+. save `holderIP', replace
+(note: file /tmp/St32680.000005 not found)
+file /tmp/St32680.000005 saved
+
+. 
+. use `holder16', clear
+
+. gen year16 = birthYear+16
+
+. bys id: gen fips5a = fips_st*1000+fips_co if year==year16 & month==9
+(2,616,613 missing values generated)
+
+. bys id: egen fips5 = max(fips5a)
+(730 missing values generated)
+
+. drop fips5a
+
+. 
+. merge m:1 fips5 using `holderIP', keep(master match)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                       370,966
+        from master                   370,966  (_merge==1)
+        from using                          0  (_merge==2)
+
+    matched                         2,255,384  (_merge==3)
+    -----------------------------------------
+
+. 
+. * For those missing county data, should we impute state-level data?
+. 
+. compress
+  variable intThisMonth was float now byte
+  variable fips_st was float now byte
+  variable fips_co was float now int
+  variable m_empPct was float now byte
+  variable m_incPerCapita was float now byte
+  variable year16 was float now int
+  variable numBA was double now int
+  variable numAA was double now byte
+  (76,164,150 bytes saved)
+
+. save y79_geocode3.dta, replace
+(note: file y79_geocode3.dta not found)
+file y79_geocode3.dta saved
+
+. !chmod 774 *.dta
+
+
+. !zip -m y79_geocode3.dta.zip y79_geocode3.dta
+
+
+. 
+. log close
+      name:  <unnamed>
+       log:  [REDACTED]y79/Geocode/y79_create_geocode.log
+  log type:  text
+ closed on:   8 Feb 2019, 09:56:18
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

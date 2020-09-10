@@ -1,0 +1,87 @@
+	(1)	(2)	(3)	(4)
+VARIABLES	WagesDiffVar	WagesDiffVar	WagesDiffVar	WagesDiffVar
+				
+black	-0.0905***			
+	(0.0107)			
+hispanic	-0.0085			
+	(0.0132)			
+born1959	0.1434***			
+	(0.0168)			
+born1960	0.1081***			
+	(0.0155)			
+born1961	0.0715***			
+	(0.0145)			
+born1962	0.0679***			
+	(0.0145)			
+born1963	0.0325**			
+	(0.0142)			
+foreignBorn	-0.0211			
+	(0.0190)			
+empPct	-0.1682***			
+	(0.0183)			
+incPerCapita	0.0318***			
+	(0.0015)			
+anySchoolt	-0.0149			
+	(0.0156)			
+anySchoolSq	0.0370			
+	(0.0414)			
+anySchoolCu	-0.0109			
+	(0.0311)			
+workK12t	0.0879**			
+	(0.0342)			
+workK12Sq	-0.3320			
+	(0.3017)			
+workK12anySchool	-0.0404			
+	(0.0395)			
+workK12Cu	0.0937			
+	(0.7354)			
+workColleget	0.1128***			
+	(0.0245)			
+workCollegeSq	-0.1646*			
+	(0.0926)			
+workCollegeanySchool	-0.0663			
+	(0.0726)			
+workCollegeCu	0.1698**			
+	(0.0660)			
+workPTonlyt	-0.0572***			
+	(0.0173)			
+workPTSq	0.1401***			
+	(0.0534)			
+workPTanySchool	-0.0793***			
+	(0.0270)			
+workPTCu	-0.0790*			
+	(0.0432)			
+workFTonlyt	0.1025***			
+	(0.0046)			
+workFTSq	-0.1015***			
+	(0.0071)			
+workFTanySchool	0.0300***			
+	(0.0050)			
+workFTCu	0.0334***			
+	(0.0033)			
+militaryt	0.0039			
+	(0.0182)			
+militarySq	0.0310			
+	(0.0553)			
+militaryCu	-0.0306			
+	(0.0373)			
+othert	-0.0661***			
+	(0.0119)			
+otherSq	0.0513*			
+	(0.0288)			
+otherCu	-0.0098			
+	(0.0178)			
+gradHS	0.0725***			
+	(0.0121)			
+grad4yr	0.2040***			
+	(0.0206)			
+inSchWork	-0.1005***			
+	(0.0078)			
+PTwork	-0.0431***			
+	(0.0069)			
+Constant	1.2408***	0.3489***	0.4448***	0.3667***
+	(0.0235)	(0.0052)	(0.0076)	(0.0031)
+				
+Observations	464,461	464,461	464,461	464,461
+Robust standard errors in parentheses				
+*** p<0.01, ** p<0.05, * p<0.1				

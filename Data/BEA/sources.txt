@@ -1,0 +1,4 @@
+BEA's API for downloading data: https://apps.bea.gov/regional/downloadzip.cfm
+
+Download series 
+CA4, CA5, CA5N, CA25, and CA25N

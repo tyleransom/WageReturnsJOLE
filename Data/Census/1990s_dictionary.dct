@@ -1,0 +1,17 @@
+infile dictionary {
+	_firstlineoffile(16)
+	
+	float fips_stco
+	float age
+	float sex
+	float value1990
+	float value1991
+	float value1992
+	float value1993
+	float value1994
+	float value1995
+	float value1996
+	float value1997
+	float value1998
+	float value1999
+}

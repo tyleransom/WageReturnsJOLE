@@ -1,0 +1,405 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Get MFX. Broken out into 2 sections: 
+%   1 - Overall - MFX for all individuals of a given age.
+%   2 - Oaxaca  - Get MFX using betas from 79 and X's from 97
+% Both of these sections get specific mfx for 1 year of any school and 
+%  mfx if all time in workCollege had been spent in schoolOnly
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+vladppadd
+
+user =
+
+    'ransom'
+
+load results
+covMatr = covMatr1;
+load modeldescr name holder namevar typeEst varval*
+% load modeldescr 
+load ../data_import79 black hispanic gradHS grad4yr activity yearmo
+if typeEst==1
+	save cov1b gamma_final covMatr
+else
+	save cov1a gamma_final covMatr
+end
+global numDrawsM unobMean
+
+rand('seed',12345);
+randn('seed',12345);
+
+% Initialize csv and mat
+dlmwrite('mfxExper29.csv',['MFX']);
+hoy = date;
+save mfxExperObjects29 hoy
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Age 29 (agemo==2812 | period==156)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DV's to loop over
+my.marginals = [156*holder+name.Wage1];
+[M one] = size(my.marginals);
+
+% Variables in DV
+my.vars = [156*holder+name.black             ;
+           156*holder+name.hispanic          ;
+           % 156*holder+name.born1022          ;
+           156*holder+name.born1959          ; 
+           156*holder+name.born1960          ; 
+           156*holder+name.born1961          ; 
+           156*holder+name.born1962          ; 
+           156*holder+name.born1963          ; 
+           156*holder+name.foreignBorn       ;
+           156*holder+name.empPct            ;
+           156*holder+name.incPerCapita      ;
+           156*holder+name.anySchool         ;
+           % 156*holder+name.potExp            ;
+		   156*holder+name.workK12           ;
+           156*holder+name.workCollege       ;
+           156*holder+name.workPT            ;
+           156*holder+name.workFT            ;
+           156*holder+name.military          ;
+           156*holder+name.other             ;
+           156*holder+name.gradHS            ;
+           156*holder+name.grad4yr           ;
+           156*holder+name.inSchWork         ;
+           156*holder+name.PTwork            ;
+           156*holder+name.constant          ];
+[my.M my.N] = size(my.vars);
+
+%%% Indices for higher-order interactions - variables that have mfx that we 
+%%% do not want to report and that should enter in other mfx.
+
+% This is an index of how they appear in the list of mfx 
+my.notvars = [12 14 16 18 20 22 24];
+
+% This is an index of how they appear in the list of estimated coefficients
+% oneMA  = []; value(bothMA) = value(oneMA)*value(twoMA)*multMA;
+% twoMA  = []; indices come from order of vars in wage equation
+% bothMA = []; subtract one from the index to account for C++ starting at 0
+% multMA = [];
+
+oneMA  = [ 10  13  17  21  25  29  32]; %y79
+twoMA  = [ 11  14  18  22  26  30  33]; %y79
+bothMA = [ 12  16  20  24  28  31  34]; %y79
+multMA = [0.1 0.1 0.1 0.1 0.1 0.1 0.1]; %both
+
+% Flagging variables
+worker    = (activity(:,1,156)>=2 & activity(:,1,156)<=4) | (activity(:,1,156)>=12 & activity(:,1,156)<=14) | (activity(:,1,156)>=22 & activity(:,1,156)<=24);
+monthsCol = (sum(activity(:,1,:)==11 |  activity(:,1,:)==12 , 3));
+everCol   = (monthsCol>0);
+finish4   = (monthsCol>=40 & monthsCol<=50);
+year      = floor(squeeze(yearmo)./100);
+acter     = squeeze(activity);
+calyearsInCol = zeros(size(activity,1),1);
+for i=1:size(activity,1)
+	calyearsInCol(i) = max(grad4yr(i,1,:)==1).*numel(unique(year(i,acter(i,:)==11 | acter(i,:)==12)));
+end
+finish4a  = calyearsInCol==5;
+finish5   = (monthsCol>=51 & monthsCol<=60);
+finish5a  = calyearsInCol==6;
+
+% Population means (may change)
+for i=1:my.M
+	my.fullMeans(i,1)    = mean(eval(['varval' num2str(my.vars(i)) '(                                                         worker==1 & ~isnan(varval' num2str(my.vars(i)) '))']));
+	my.hsDropMeans(i,1)  = mean(eval(['varval' num2str(my.vars(i)) '(gradHS(:,1,156)==0 & grad4yr(:,1,156)==0 &               worker==1 & ~isnan(varval' num2str(my.vars(i)) '))']));
+	my.hsGradMeans(i,1)  = mean(eval(['varval' num2str(my.vars(i)) '(gradHS(:,1,156)==1 & grad4yr(:,1,156)==0 & everCol==0 &  worker==1 & ~isnan(varval' num2str(my.vars(i)) '))']));
+	my.baDropMeans(i,1)  = mean(eval(['varval' num2str(my.vars(i)) '(gradHS(:,1,156)==1 & grad4yr(:,1,156)==0 & everCol==1 &  worker==1 & ~isnan(varval' num2str(my.vars(i)) '))']));
+	my.baGradMeans(i,1)  = mean(eval(['varval' num2str(my.vars(i)) '(gradHS(:,1,156)==1 & grad4yr(:,1,156)==1 &               worker==1 & ~isnan(varval' num2str(my.vars(i)) '))']));
+	my.baGrad4Means(i,1) = mean(eval(['varval' num2str(my.vars(i)) '(gradHS(:,1,156)==1 & grad4yr(:,1,156)==1 & finish4a==1 & worker==1 & ~isnan(varval' num2str(my.vars(i)) '))']));
+	my.baGrad5Means(i,1) = mean(eval(['varval' num2str(my.vars(i)) '(gradHS(:,1,156)==1 & grad4yr(:,1,156)==1 & finish5a==1 & worker==1 & ~isnan(varval' num2str(my.vars(i)) '))']));
+end
+
+clear varval* 
+
+%============================================================================
+% Overall MFX
+%============================================================================
+simplerMfx4 % this now returns 7 mfx
+Gauss-Hermite
+Number of runs is: 29
+
+    DV --  940
+ --------------------------------------------------------------
+  alternative     varnumber           mfx        se mfx 
+ --------------------------------------------------------------
+            1         23869    -0.0284838    0.00191035 
+            1         23870     0.0169977    0.00210878 
+            1         23873      0.178735      0.002752 
+            1         23874      0.148601    0.00258693 
+            1         23875       0.11482     0.0031421 
+            1         23876     0.0734711    0.00269185 
+            1         23877     0.0388366    0.00296006 
+            1         23882     0.0486669    0.00257097 
+            1         23897    -0.0852097      0.002576 
+            1         23898     0.0197037   0.000208077 
+            1         23903     0.0106165   0.000986591 
+            1         23906            -0             0 
+            1         23907    0.00346862    0.00162838 
+            1         23910            -0             0 
+            1         23911     0.0662045    0.00148873 
+            1         23914            -0             0 
+            1         23915    -0.0244634   0.000958464 
+            1         23918            -0             0 
+            1         23919     0.0230449   0.000232238 
+            1         23922            -0             0 
+            1         23923     0.0765561    0.00167177 
+            1         23926            -0             0 
+            1         23927    -0.0605008   0.000793401 
+            1         23930            -0             0 
+            1         23934     0.0332816    0.00214882 
+            1         23935      0.211616    0.00304658 
+            1         23936    -0.0892941    0.00188882 
+            1         23937    -0.0224031    0.00185683 
+            1         24018       1.30288    0.00397986 
+ --------------------------------------------------------------
+Gauss-Hermite
+Number of runs is: 29
+
+    DV --  940
+ --------------------------------------------------------------
+  alternative     varnumber           mfx        se mfx 
+ --------------------------------------------------------------
+            1         23869    -0.0284838    0.00191035 
+            1         23870     0.0169977    0.00210878 
+            1         23873      0.178735      0.002752 
+            1         23874      0.148601    0.00258693 
+            1         23875       0.11482     0.0031421 
+            1         23876     0.0734711    0.00269185 
+            1         23877     0.0388366    0.00296006 
+            1         23882     0.0486669    0.00257097 
+            1         23897    -0.0852097      0.002576 
+            1         23898     0.0197037   0.000208077 
+            1         23903    0.00382592    0.00151706 
+            1         23906            -0             0 
+            1         23907    0.00173367    0.00231959 
+            1         23910            -0             0 
+            1         23911     0.0989231    0.00255342 
+            1         23914            -0             0 
+            1         23915    -0.0183177   0.000888719 
+            1         23918            -0             0 
+            1         23919     0.0132312   0.000273796 
+            1         23922            -0             0 
+            1         23923      0.085873    0.00206974 
+            1         23926            -0             0 
+            1         23927    -0.0464047   0.000630361 
+            1         23930            -0             0 
+            1         23934     0.0332816    0.00214882 
+            1         23935      0.211616    0.00304658 
+            1         23936    -0.0892941    0.00188882 
+            1         23937    -0.0224031    0.00185683 
+            1         24018       1.30288    0.00397986 
+ --------------------------------------------------------------
+Gauss-Hermite
+Number of runs is: 29
+
+    DV --  940
+ --------------------------------------------------------------
+  alternative     varnumber           mfx        se mfx 
+ --------------------------------------------------------------
+            1         23869    -0.0284838    0.00191035 
+            1         23870     0.0169977    0.00210878 
+            1         23873      0.178735      0.002752 
+            1         23874      0.148601    0.00258693 
+            1         23875       0.11482     0.0031421 
+            1         23876     0.0734711    0.00269185 
+            1         23877     0.0388366    0.00296006 
+            1         23882     0.0486669    0.00257097 
+            1         23897    -0.0852097      0.002576 
+            1         23898     0.0197037   0.000208077 
+            1         23903     0.0123865    0.00108804 
+            1         23906            -0             0 
+            1         23907    0.00069715    0.00180865 
+            1         23910            -0             0 
+            1         23911     0.0901559    0.00246488 
+            1         23914            -0             0 
+            1         23915     -0.022009   0.000919687 
+            1         23918            -0             0 
+            1         23919     0.0132256   0.000252984 
+            1         23922            -0             0 
+            1         23923       0.07333    0.00153962 
+            1         23926            -0             0 
+            1         23927      -0.05887   0.000740664 
+            1         23930            -0             0 
+            1         23934     0.0332816    0.00214882 
+            1         23935      0.211616    0.00304658 
+            1         23936    -0.0892941    0.00188882 
+            1         23937    -0.0224031    0.00185683 
+            1         24018       1.30288    0.00397986 
+ --------------------------------------------------------------
+Gauss-Hermite
+Number of runs is: 29
+
+    DV --  940
+ --------------------------------------------------------------
+  alternative     varnumber           mfx        se mfx 
+ --------------------------------------------------------------
+            1         23869    -0.0284838    0.00191035 
+            1         23870     0.0169977    0.00210878 
+            1         23873      0.178735      0.002752 
+            1         23874      0.148601    0.00258693 
+            1         23875       0.11482     0.0031421 
+            1         23876     0.0734711    0.00269185 
+            1         23877     0.0388366    0.00296006 
+            1         23882     0.0486669    0.00257097 
+            1         23897    -0.0852097      0.002576 
+            1         23898     0.0197037   0.000208077 
+            1         23903    0.00968824    0.00102939 
+            1         23906            -0             0 
+            1         23907     0.0035899    0.00162495 
+            1         23910            -0             0 
+            1         23911     0.0635441    0.00141666 
+            1         23914            -0             0 
+            1         23915    -0.0245901   0.000965802 
+            1         23918            -0             0 
+            1         23919     0.0247241   0.000229735 
+            1         23922            -0             0 
+            1         23923     0.0723636    0.00150071 
+            1         23926            -0             0 
+            1         23927    -0.0623224   0.000860516 
+            1         23930            -0             0 
+            1         23934     0.0332816    0.00214882 
+            1         23935      0.211616    0.00304658 
+            1         23936    -0.0892941    0.00188882 
+            1         23937    -0.0224031    0.00185683 
+            1         24018       1.30288    0.00397986 
+ --------------------------------------------------------------
+Gauss-Hermite
+Number of runs is: 29
+
+    DV --  940
+ --------------------------------------------------------------
+  alternative     varnumber           mfx        se mfx 
+ --------------------------------------------------------------
+            1         23869    -0.0284838    0.00191035 
+            1         23870     0.0169977    0.00210878 
+            1         23873      0.178735      0.002752 
+            1         23874      0.148601    0.00258693 
+            1         23875       0.11482     0.0031421 
+            1         23876     0.0734711    0.00269185 
+            1         23877     0.0388366    0.00296006 
+            1         23882     0.0486669    0.00257097 
+            1         23897    -0.0852097      0.002576 
+            1         23898     0.0197037   0.000208077 
+            1         23903    0.00683837    0.00116317 
+            1         23906            -0             0 
+            1         23907    0.00807892    0.00201886 
+            1         23910            -0             0 
+            1         23911     0.0268841      0.001166 
+            1         23914            -0             0 
+            1         23915     -0.032314    0.00173645 
+            1         23918            -0             0 
+            1         23919     0.0456906   0.000301473 
+            1         23922            -0             0 
+            1         23923     0.0846587    0.00201667 
+            1         23926            -0             0 
+            1         23927    -0.0701532    0.00122286 
+            1         23930            -0             0 
+            1         23934     0.0332816    0.00214882 
+            1         23935      0.211616    0.00304658 
+            1         23936    -0.0892941    0.00188882 
+            1         23937    -0.0224031    0.00185683 
+            1         24018       1.30288    0.00397986 
+ --------------------------------------------------------------
+Gauss-Hermite
+Number of runs is: 29
+
+    DV --  940
+ --------------------------------------------------------------
+  alternative     varnumber           mfx        se mfx 
+ --------------------------------------------------------------
+            1         23869    -0.0284838    0.00191035 
+            1         23870     0.0169977    0.00210878 
+            1         23873      0.178735      0.002752 
+            1         23874      0.148601    0.00258693 
+            1         23875       0.11482     0.0031421 
+            1         23876     0.0734711    0.00269185 
+            1         23877     0.0388366    0.00296006 
+            1         23882     0.0486669    0.00257097 
+            1         23897    -0.0852097      0.002576 
+            1         23898     0.0197037   0.000208077 
+            1         23903    0.00995747    0.00116966 
+            1         23906            -0             0 
+            1         23907    0.00770981     0.0018931 
+            1         23910            -0             0 
+            1         23911     0.0318707    0.00110636 
+            1         23914            -0             0 
+            1         23915      -0.03213    0.00166019 
+            1         23918            -0             0 
+            1         23919      0.038151   0.000283539 
+            1         23922            -0             0 
+            1         23923     0.0848125    0.00202338 
+            1         23926            -0             0 
+            1         23927     -0.070768    0.00125517 
+            1         23930            -0             0 
+            1         23934     0.0332816    0.00214882 
+            1         23935      0.211616    0.00304658 
+            1         23936    -0.0892941    0.00188882 
+            1         23937    -0.0224031    0.00185683 
+            1         24018       1.30288    0.00397986 
+ --------------------------------------------------------------
+Gauss-Hermite
+Number of runs is: 29
+
+    DV --  940
+ --------------------------------------------------------------
+  alternative     varnumber           mfx        se mfx 
+ --------------------------------------------------------------
+            1         23869    -0.0284838    0.00191035 
+            1         23870     0.0169977    0.00210878 
+            1         23873      0.178735      0.002752 
+            1         23874      0.148601    0.00258693 
+            1         23875       0.11482     0.0031421 
+            1         23876     0.0734711    0.00269185 
+            1         23877     0.0388366    0.00296006 
+            1         23882     0.0486669    0.00257097 
+            1         23897    -0.0852097      0.002576 
+            1         23898     0.0197037   0.000208077 
+            1         23903    0.00793142     0.0011087 
+            1         23906            -0             0 
+            1         23907    0.00805896     0.0021564 
+            1         23910            -0             0 
+            1         23911     0.0217973    0.00114706 
+            1         23914            -0             0 
+            1         23915    -0.0332327    0.00185863 
+            1         23918            -0             0 
+            1         23919     0.0504689   0.000325382 
+            1         23922            -0             0 
+            1         23923     0.0855112     0.0020539 
+            1         23926            -0             0 
+            1         23927    -0.0704308    0.00123739 
+            1         23930            -0             0 
+            1         23934     0.0332816    0.00214882 
+            1         23935      0.211616    0.00304658 
+            1         23936    -0.0892941    0.00188882 
+            1         23937    -0.0224031    0.00185683 
+            1         24018       1.30288    0.00397986 
+ --------------------------------------------------------------
+
+overall.full       = fullMfx;
+overall.hsDrop     = hsDropMfx;
+overall.hsGrad     = hsGradMfx;
+overall.baDrop     = baDropMfx;
+overall.baGrad     = baGradMfx;
+overall.baGrad4    = baGrad4Mfx;
+overall.baGrad5    = baGrad5Mfx;
+overall.gammavarM = gammavarM;
+
+save mfxExperObjects29 overall -append
+
+% First time simplerMfx4 is run, spit out output
+dlmwrite('mfxExper29.csv',['Overall MFX'], '-append');
+dlmwrite('mfxExper29.csv',['full'], '-append');
+dlmwrite('mfxExper29.csv',[[ctranspose(overall.full.eff); ctranspose(overall.full.se)];], '-append');
+dlmwrite('mfxExper29.csv',['hsDrop'], '-append');
+dlmwrite('mfxExper29.csv',[[ctranspose(overall.hsDrop.eff); ctranspose(overall.hsDrop.se)];], '-append');
+dlmwrite('mfxExper29.csv',['hsGrad'], '-append');
+dlmwrite('mfxExper29.csv',[[ctranspose(overall.hsGrad.eff); ctranspose(overall.hsGrad.se)];], '-append');
+dlmwrite('mfxExper29.csv',['baDrop'], '-append');
+dlmwrite('mfxExper29.csv',[[ctranspose(overall.baDrop.eff); ctranspose(overall.baDrop.se)];], '-append');
+dlmwrite('mfxExper29.csv',['baGrad'], '-append');
+dlmwrite('mfxExper29.csv',[[ctranspose(overall.baGrad.eff); ctranspose(overall.baGrad.se)];], '-append');
+dlmwrite('mfxExper29.csv',['baGrad4'], '-append');
+dlmwrite('mfxExper29.csv',[[ctranspose(overall.baGrad4.eff); ctranspose(overall.baGrad4.se)];], '-append');
+dlmwrite('mfxExper29.csv',['baGrad5'], '-append');
+dlmwrite('mfxExper29.csv',[[ctranspose(overall.baGrad5.eff); ctranspose(overall.baGrad5.se)];], '-append');
+

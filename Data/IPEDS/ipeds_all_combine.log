@@ -1,0 +1,1145 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/jared/WageReturnsRepo/Data/IPEDS/ipeds_all_combine.log
+  log type:  text
+ opened on:   6 Mar 2019, 11:30:17
+
+. 
+. clear all
+
+. 
+. *============================================================================
+. * ...
+. *============================================================================
+. 
+. * County data is inconsistent at best. Strat:
+. *  Clean up countynm (get rid of county; capitalize it all)
+. *  Find the mode countynm by unitid-zip (some unitids change zip)
+. *  Compare that countynm with the counties that are in that zip from zipctyAB
+. *  and keep the matches; for those without, random
+. 
+. * UPDATE: Find the mode zip code for each program
+. *  ID the county that most of the zip code is in and use that
+. 
+. * 1) Find mode county by unitid zip; match with zipctyAB and keep if match
+. * 2) If no match, find modezip for unitid, match with "first" county in zip
+. 
+. *----------------------------------------------------------------
+. * Find 51 flagship instnms and unitids
+. *----------------------------------------------------------------
+. insheet using statefipsflagship.csv, clear
+(4 vars, 51 obs)
+
+. rename flagship instnm
+
+. 
+. replace instnm = upper(instnm)
+(51 real changes made)
+
+. gen city = instnm if _n==1
+(50 missing values generated)
+
+. do college_clean
+
+. *****************************************************************************
+. * Cleans instnm and city for match
+. * UPDATE 9/15/2016: subinword works much better/easier than regexr when wanti
+> ng 
+. *                   to replace entire words, regardess of location within in
+. *                   text, and will replace all instances
+. * UPDATE 1/19/2017: city technically not needed, but will keep
+. *****************************************************************************
+. * charlist instnm
+. * di "`r(ascii)'"
+. 
+. foreach X in instnm city {
+  2.         * Get rid of all punctuation 
+.         foreach Y in # - , & / ( ) : ; . {
+  3.                 replace `X' = subinstr( `X',"`Y'"," ",.)
+  4.         }
+  5.         
+.         foreach Y in ' ` `=char(146)' `=char(150)'   {
+  6.                 replace `X' = subinstr( `X',"`Y'","",.)
+  7.         }
+  8.         
+.         * Ñ,ì,ò
+.         replace `X' = subinstr( `X', "`=char(209)'","N",.)
+  9.         replace `X' = subinstr( `X', "`=char(237)'","I",.)
+ 10.         replace `X' = subinstr( `X', "`=char(243)'","O",.)
+ 11.         
+.         * Get rid of  extra/trailing/leading spaces
+.         qui replace `X' =  trim(itrim(`X'))
+ 12.         
+.         * replace "U" and "UN" and "UNIV" and "UNIVER" with "UNIVERSITY"
+.         qui replace `X' = subinword( `X', "U"     , "UNIVERSITY",.)
+ 13.         qui replace `X' = subinword( `X', "UN"    , "UNIVERSITY",.)
+ 14.         qui replace `X' = subinword( `X', "UNI"   , "UNIVERSITY",.)
+ 15.         qui replace `X' = subinword( `X', "UNIV"  , "UNIVERSITY",.)
+ 16.         qui replace `X' = subinword( `X', "UNIVE" , "UNIVERSITY",.)
+ 17.         qui replace `X' = subinword( `X', "UNIVER", "UNIVERSITY",.)
+ 18.         qui replace `X' = subinword( `X', "UNIVERISTY", "UNIVERSITY",.)
+ 19.         qui replace `X' = subinword( `X', "UNIVERTISY", "UNIVERSITY",.)
+ 20.         qui replace `X' = subinword( `X', "UNIVERSITYS", "UNIVERSITY",.)
+ 21.         qui replace `X' = subinword( `X', "UNIVERSITIES", "UNIVERSITY",.)
+ 22.         qui replace `X' = subinword( `X', "UNIVERSITIE", "UNIVERSITY",.)
+ 23.         
+.         qui replace `X' = subinstr( `X', "UNIVERSITY", "UNIVERSITY ",.)
+ 24.         qui replace `X' =  trim(itrim(`X'))
+ 25.         
+.         * If ends with "UNIVERSITY OF", put it at beginning
+.         qui replace instnm = "UNIVERSITY OF "+instnm if regexm( instnm, " UNI
+> VERSITY OF$")
+ 26.         qui replace instnm = regexr( instnm, " UNIVERSITY OF$", "")
+ 27. 
+.         * Now return all instances of "UNIVERSITY" back to "U"
+.         *  This makes the fuzzy match to work on important words
+.         qui replace `X' = subinword( `X', "UNIVERSITY", "U",.)
+ 28.         
+.         * replace "STATE" with "ST"
+.         qui replace `X' = subinword( `X', "STATE", "ST",.)
+ 29. 
+.         * replace "CMTY" with "COMMUNITY"
+.         qui replace `X' = subinword( `X', "CMTY", "COMMUNITY",.)
+ 30. 
+.         * replace "CC" and "C C" with "COMMUNITY COLLEGE"
+.         qui replace `X' = subinword( `X', "CC", "COMMUNITY COLLEGE",.)
+ 31.         
+.         qui replace `X' = subinword( `X', "C C", "COMMUNITY COLLEGE",.)
+ 32. 
+.         * If ends with "COMMUNITY COLLEGE OF", put it at beginning
+.         qui replace instnm = "COMMUNITY COLLEGE OF "+instnm if regexm( instnm
+> , " COMMUNITY COLLEGE OF$")
+ 33.         qui replace instnm = regexr( instnm, " COMMUNITY COLLEGE OF$", "")
+ 34.                         
+.         * replace "C" and "COL" and "COLL" and "COLLEGES" with "COLLEGE" ( no
+> te "C C" above is done)
+.         qui replace `X' = subinword( `X', "C"       , "COLLEGE",.)
+ 35.         qui replace `X' = subinword( `X', "COL"     , "COLLEGE",.)
+ 36.         qui replace `X' = subinword( `X', "COLL"    , "COLLEGE",.)
+ 37.         qui replace `X' = subinword( `X', "COLLEGES", "COLLEGE",.)
+ 38.         
+.         * If ends with "COLLEGE OF", put it at beginning
+.         qui replace instnm = "COLLEGE OF "+instnm if regexm( instnm, " COLLEG
+> E OF$")
+ 39.         qui replace instnm = regexr( instnm, " COLLEGE OF$", "")
+ 40. 
+.         * Drop the words "THE " "OF " "AND " "AT " "FOR "
+.         qui replace `X' = subinword( `X',"THE","",.)
+ 41.         qui replace `X' = subinword( `X',"OF" ,"",.)
+ 42.         qui replace `X' = subinword( `X',"AND","",.)
+ 43.         qui replace `X' = subinword( `X',"AT" ,"",.)
+ 44.         qui replace `X' = subinword( `X',"FOR","",.)
+ 45.         
+.         * Drop the words "INC" "CAMPUSES" "CAMPUS" "CAM" "CAMP$" CAMPU"
+.         qui replace `X' = subinword( `X', "INC"     ,"",.)
+ 46.         qui replace `X' = subinword( `X', "CAMPUSES","",.)
+ 47.         qui replace `X' = subinword( `X', "CAMPUS"  ,"",.)
+ 48.         qui replace `X' = subinword( `X', "CAMPU"   ,"",.)
+ 49.         qui replace `X' = subinword( `X', "CAMP"    ,"",.)
+ 50.         qui replace `X' = subinword( `X', "CAM"     ,"",.)
+ 51.         qui replace `X' = subinword( `X', "CMP"     ,"",.)
+ 52.         
+.         * Get rid of  extra/trailing/leading spaces
+.         qui replace `X' =  trim(itrim(`X'))
+ 53.         
+.         * replace and "SCH" with "SCHOOL"
+.         qui replace `X' = subinword( `X', "SCH", "SCHOOL",.)
+ 54. 
+.         * replace and "INST" with "INSTITUTE"
+.         qui replace `X' = subinword( `X', "INST", "INSTITUTE",.)
+ 55. 
+.         * replace and "TECHNOLOGY and "TECHNICAL" with "TECH"
+.         qui replace `X' = subinword( `X', "TECHNOLOGY", "TECH",.)
+ 56.         qui replace `X' = subinword( `X', "TECHNICAL" , "TECH",.)
+ 57. 
+.         * replace "INT TECH" with "INSTITUTE TECH"
+.         qui replace `X' = subinword( `X', "INT TECH" , "INSTITUTE TECH",.)
+ 58. 
+.         * replace "POLYTECHNIC" with "POLY"
+.         qui replace `X' = subinword( `X', "POLYTECHNIC"  , "POLY",.)
+ 59.         qui replace `X' = subinword( `X', "POLYTECH"     , "POLY",.)
+ 60.         qui replace `X' = subinword( `X', "POLYTECHNICAL", "POLY",.)
+ 61.         qui replace `X' = subinword( `X', "POLYTECHNICE" , "POLY",.)
+ 62. 
+.         * replace "AGRL" with "AGRICULTURAL"
+.         qui replace `X' = subinword( `X', "AGRL"  , "AGRICULTURAL",.)
+ 63. 
+.         * replace "AGRICULTURAL MECH" and "AGRICULTURAL MECHANICAL" with "A M
+> "
+.         qui replace `X' = subinword( `X', "AGRICULTURAL MECH"      , "A M",.)
+ 64.         qui replace `X' = subinword( `X', "AGRICULTURAL MECHANICAL", "A M"
+> ,.)
+ 65.         
+.         * replace "JR" with "JUNIOR"
+.         qui replace `X' = subinword( `X', "JR"  , "JUNIOR",.)
+ 66.         
+.         * replace "GRAD" with "GRADUATE"
+.         qui replace `X' = subinword( `X', "GRAD"  , "GRADUATE",.)
+ 67. 
+.         * replace "INTL" with "INTERNATIONAL"
+.         qui replace `X' = subinword( `X', "INTL"  , "INTERNATIONAL",.)
+ 68.         
+.         * replace "CTY" and "CNTY" with "COUNTY"
+.         qui replace `X' = subinword( `X', "CTY" , "COUNTY",.)
+ 69.         qui replace `X' = subinword( `X', "CNTY", "COUNTY",.)
+ 70.         
+.         * replace "NORTH" with "N"
+.         * qui replace `X' = subinword( `X', "NORTH"  , "N",.)
+. 
+.         * replace "EAST" with "E"
+.         * qui replace `X' = subinword( `X', "EAST"  , "E",.)
+.         
+.         * replace "SOUTH" with "S"
+.         * qui replace `X' = subinword( `X', "SOUTH"  , "S",.)
+. 
+.         * replace "WEST" with "W"
+.         * qui replace `X' = subinword( `X', "WEST"  , "W",.)
+. 
+.         * replace "STHN" with "SOUTHERN"
+.         qui replace `X' = subinword( `X', "STHN"  , "SOUTHERN",.)
+ 71.         
+.         * replace "STHESTN" with "SOUTHEASTERN"
+.         qui replace `X' = subinword( `X', "STHESTN"  , "SOUTHEASTERN",.)
+ 72. 
+.         * replace "STHWSTRN" with "SOUTHWESTERN"
+.         qui replace `X' = subinword( `X', "STHWSTRN"  , "SOUTHWESTERN",.)
+ 73. 
+.         * replace "ESTN" with "EASTERN"
+.         qui replace `X' = subinword( `X', "ESTN"  , "EASTERN",.)
+ 74.         
+.         * replace "WSTN" with "WESTERN"
+.         qui replace `X' = subinword( `X', "WSTN"  , "WESTERN",.)
+ 75. 
+.         * replace "SAINT" and "SNT" with "ST"
+.         qui replace `X' = subinword( `X', "SAINT", "ST",.)
+ 76.         qui replace `X' = subinword( `X', "SNT"  , "ST",.)
+ 77. 
+.         * replace "SEM" with "SEMINARY"
+.         qui replace `X' = subinword( `X', "SEM"  , "SEMINARY",.)
+ 78. 
+.         * replace "THEO" and "THEOL" and "THEOLOGICAL" with "THEOLOGY"
+.         qui replace `X' = subinword( `X', "THEO"        , "THEOLOGY",.)
+ 79.         qui replace `X' = subinword( `X', "THEOL"       , "THEOLOGY",.)
+ 80.         qui replace `X' = subinword( `X', "THEOLOGICAL" , "THEOLOGY",.)
+ 81.         
+.         * replace "INTELL" with "INTELLIGENCE"
+.         qui replace `X' = subinword( `X', "INTELL"  , "INTELLIGENCE",.)
+ 82.         
+.         * replace "MGMT" with "MANAGEMENT"
+.         qui replace `X' = subinword( `X', "MGMT"  , "MANAGEMENT",.)
+ 83.         
+.         * replace "MOUNT" with "MT"
+.         qui replace `X' = subinword( `X', "MOUNT"  , "MT",.)
+ 84. 
+.         * replace "FORT" with "FT"
+.         qui replace `X' = subinword( `X', "FORT"  , "FT",.)
+ 85. 
+.         * replace "CTR" with "CENTER"
+.         qui replace `X' = subinword( `X', "CTR"  , "CENTER",.)
+ 86.         
+.         * replace "MEDICINE" AND "MEDICAL" with "MED"
+.         qui replace `X' = subinword( `X',"MEDICINE","MED",.)
+ 87.         qui replace `X' = subinword( `X',"MEDICAL" ,"MED",.)
+ 88. 
+.         * replace "SCI", "SCIEN" and "SCIENCES" with "SCIENCE"
+.         qui replace `X' = subinword( `X', "SCI"     , "SCIENCE",.)
+ 89.         qui replace `X' = subinword( `X', "SCIEN"   , "SCIENCE",.)
+ 90.         qui replace `X' = subinword( `X', "SCIENCES", "SCIENCE",.)
+ 91. 
+.         * replace "HLTH" with "HEALTH"
+.         qui replace `X' = subinword( `X', "HLTH"  , "HEALTH",.)
+ 92. 
+.         * replace "ENVRNMTL" with "ENVIRONMENTAL"
+.         qui replace `X' = subinword( `X', "ENVRNMTL"  , "ENVIRONMENTAL",.)
+ 93. 
+.                 * replace "PROF" with "PROFESSIONAL"
+.         qui replace `X' = subinword( `X', "PROF"  , "PROFESSIONAL",.)
+ 94. 
+.         * replace "AVN" with "AVIATION"
+.         qui replace `X' = subinword( `X', "AVN"  , "AVIATION",.)
+ 95.         
+.         * States
+.         qui replace `X' = subinword( `X', "AL"   , "ALABAMA",.)       if stab
+> br=="AL"
+ 96.         qui replace `X' = subinword( `X', "ALA"  , "ALABAMA",.)       if s
+> tabbr=="AL"
+ 97.         qui replace `X' = subinword( `X', "AK"   , "ALASKA",.)        if s
+> tabbr=="AK"
+ 98.         qui replace `X' = subinword( `X', "ALAS" , "ALASKA",.)        if s
+> tabbr=="AK"
+ 99.         qui replace `X' = subinword( `X', "CA"   , "CALIFORNIA",.)    if s
+> tabbr=="CA"
+100.         qui replace `X' = subinword( `X', "CAL"  , "CALIFORNIA",.)    if s
+> tabbr=="CA"
+101.         qui replace `X' = subinword( `X', "FL"   , "FLORIDA",.)       if s
+> tabbr=="FL"
+102.         qui replace `X' = subinword( `X', "FLA"  , "FLORIDA",.)       if s
+> tabbr=="FL"
+103.         qui replace `X' = subinword( `X', "IND"  , "INDIANA",.)       if s
+> tabbr=="IN"
+104.         qui replace `X' = subinword( `X', "IL"   , "ILLINOIS",.)      if s
+> tabbr=="IL"
+105.         qui replace `X' = subinword( `X', "ILL"  , "ILLINOIS",.)      if s
+> tabbr=="IL"
+106.         qui replace `X' = subinword( `X', "LA"   , "LOUISIANA",.)     if s
+> tabbr=="LA"
+107.         qui replace `X' = subinword( `X', "MD"   , "MARYLAND",.)      if s
+> tabbr=="MD"
+108.         qui replace `X' = subinword( `X', "NJ"   , "NEW JERSEY",.)    if s
+> tabbr=="NJ"
+109.         qui replace `X' = subinword( `X', "NM"   , "NEW MEXICO",.)    if s
+> tabbr=="NM"
+110.         qui replace `X' = subinword( `X', "NC"   , "N CAROLINA",.)    if s
+> tabbr=="NC"
+111.         qui replace `X' = subinword( `X', "ND"   , "N DAKOTA",.)      if s
+> tabbr=="ND"
+112.         qui replace `X' = subinword( `X', "OK"   , "OKLAHOMA",.)      if s
+> tabbr=="OK"
+113.         qui replace `X' = subinword( `X', "OKLA" , "OKLAHOMA",.)      if s
+> tabbr=="OK"
+114.         qui replace `X' = subinword( `X', "PA"   , "PENNSYLVANIA",.)  if s
+> tabbr=="PA"
+115.         qui replace `X' = subinword( `X', "PENN" , "PENNSYLVANIA",.)  if s
+> tabbr=="PA"
+116.         qui replace `X' = subinword( `X', "SC"   , "S CAROLINA",.)    if s
+> tabbr=="SC"
+117.         qui replace `X' = subinword( `X', "SD"   , "S DAKOTA",.)      if s
+> tabbr=="SD"
+118.         qui replace `X' = subinword( `X', "TN"   , "TENNESSEE",.)     if s
+> tabbr=="TN"
+119.         qui replace `X' = subinword( `X', "TENN" , "TENNESSEE",.)     if s
+> tabbr=="TN"
+120.         qui replace `X' = subinword( `X', "VA"   , "VIRGINIA",.)      if s
+> tabbr=="VA"
+121.         qui replace `X' = subinword( `X', "VA"   , "VIRGINIA",.)      if s
+> tabbr=="WV"
+122.         
+.         * Get rid of  extra/trailing/leading spaces, again
+.         qui replace `X' =  trim(itrim(`X'))
+123.         
+.         *** More locational specific changes
+.         * replace "SN" with "SAN" at beginning
+.         qui replace `X' = subinword( `X', "SN","SAN",1)
+124.         
+.         * replace "CY" and "CIT" with "city" at end
+.         qui replace `X' = regexr( `X', "( CY$)"  , " CITY")             
+125.         qui replace `X' = regexr( `X', "( CIT$)"  , " CITY")            
+126.         
+.         * replace "MTN" with "MOUNTAIN" at end
+.         qui replace `X' = regexr( `X', "( MTN$)"  , " MOUNTAIN")             
+>    
+127.         
+.         * replace "PK" with "PARK" at end
+.         qui replace `X' = regexr( `X', "( PK$)"  , " PARK")
+128.         
+.         * replace "STA" with "STATION" at end
+.         qui replace `X' = regexr( `X', "( STA$)"  , " STATION")
+129.         
+.         * replace "VL" with "VILLE" at end, with or without space
+.         qui replace `X' = regexr( `X', "VL$"  , "VILLE")
+130.         
+.         * replace "WDS" with "WOODS" at end
+.         qui replace `X' = regexr( `X', "( WDS$)"  , " WOODS")
+131.         
+.         qui replace `X' = subinword( `X', "PITTSBG"  , "PITTSBURGH",.) if sta
+> bbr=="PA"
+132.         qui replace `X' = subinword( `X', "PITTSBURG", "PITTSBURGH",.) if 
+> stabbr=="PA"
+133.         
+.         * Get rid of  extra/trailing/leading spaces, again
+.         qui replace `X' =  trim(itrim(`X'))
+134.         
+.         * 3 different types of modified campuses: MAIN, ALL, CENTRAL/ADMIN. S
+> tandardize
+.         * replace "OFC" and "OFCS" with "OFFICE"
+.         qui replace `X' = subinword( `X', "OFC"  ,  "OFFICE",.)
+135.         qui replace `X' = subinword( `X', "OFCS"  ,  "OFFICE",.)
+136.         
+.         * replace "SYS" and "SYSW" with "SYSTEM"
+.         qui replace `X' = subinword( `X', "SYS"  ,  "SYSTEM",.)
+137.         qui replace `X' = subinword( `X', "SYSW"  ,  "SYSTEM",.)
+138.         
+.         * replace "ADM" with "ADMIN"
+.         qui replace `X' = subinword( `X', "ADM","ADMIN",.)
+139.         
+.         * Standarize Main Campuses
+.         qui replace `X' = regexr(`X', " MAIN CAMPUS", " MAIN")
+140.         qui replace `X' = regexr(`X', " MAIN CAM"   , " MAIN")
+141.         qui replace `X' = regexr(`X', " MAIN CAP"   , " MAIN")
+142.         qui replace `X' = regexr(`X', " MAIN$"      , " MAIN")  
+143.         
+.         * Get rid of Main Campuses? I think so...
+.         qui replace `X' = regexr( `X', " MAIN$"  , "")
+144. 
+.         * Standardize Central, Central Office, CEN OFFICE. 
+.         *  Potentially get rid of CENTRAL in NCERDC data. If someone goes to 
+> U VIRGINIA CENTRAL, they probably went to U VIRGINIA or U VIRGINIA MAIN, and 
+> we'll have 
+.         *   more info about them if so
+.         qui replace `X' = subinword(`X', "CENTRAL OFFICE"      , "CENTRAL",.)
+145.         qui replace `X' = subinword(`X', "CENTRAL OFF"         , "CENTRAL"
+> ,.)
+146.         qui replace `X' = subinword(`X', "CEN OFFICE"          , "CENTRAL"
+> ,.)
+147.         qui replace `X' = subinword(`X', "CEN OFF"             , "CENTRAL"
+> ,.)
+148.         qui replace `X' = subinword(`X', "ADMIN CENTRAL OFFICE", "CENTRAL"
+> ,.)
+149.         qui replace `X' = subinword(`X', "ADMIN CENTRAL"       , "CENTRAL"
+> ,.)
+150.         qui replace `X' = subinword(`X', "ADMIN CEN"           , "CENTRAL"
+> ,.)
+151.         * qui replace `X' = regexr( `X', " CENTRAL$"  , "") if NCERDC (in 
+> NCERDC file)
+.         
+.         * Related to SYSTEM and ALL should end in ALL
+.         qui replace `X' = subinword(`X',"SYSTEM ADMIN ALL$","ALL",.)
+152.         qui replace `X' = subinword(`X',"SYSTEM ADMIN$","ALL",.)
+153.         qui replace `X' = subinword(`X',"GEN ADMIN ALL$","ALL",.)
+154.         qui replace `X' = subinword(`X',"GEN ADMIN$","ALL",.)
+155.         qui replace `X' = subinword(`X',"ADMIN OFFFICE$","ALL",.)
+156.         qui replace `X' = subinword(`X',"ALL INSTITUTE$","ALL",.)
+157.         qui replace `X' = regexr(`X', "SYSTEM$", "ALL")
+158.         
+.         * Get rid of  extra/trailing/leading spaces, again
+.         qui replace `X' =  trim(itrim(`X'))
+159.         
+.         *** Individual institution fixes, roughly ordered by magnitude
+. 
+.         * ST U NEW YORK - (Arose because of NEW PALTZ, should resolve itself 
+> now)
+.         qui replace `X' = regexr( `X',"ST U NEW YORK","SUNY")
+160.         qui replace `X' = regexr(`X', "SUNY SUNY", "SUNY")
+161. 
+.         qui replace instnm = "SUNY "+instnm if regexm( instnm, " SUNY")
+162.         qui replace instnm = regexr( instnm, " SUNY", "")
+163.         
+.         * CITY U NEW YORK
+.         qui replace `X' = regexr( `X',"CITY U NEW YORK","CUNY")
+164.         qui replace `X' = regexr(`X', "CUNY CUNY", "CUNY")
+165. 
+.         qui replace instnm = "CUNY "+instnm if regexm( instnm, " CUNY")
+166.         qui replace instnm = regexr( instnm, " CUNY", "")
+167. 
+.         
+.         * MIAMI U, all OXFORD should say OXFORD
+.         qui replace `X' = regexr( `X', "^MIAMI U$","MIAMI U OXFORD") if city=
+> ="OXFORD"
+168.         
+.         * RUTGERS - TOTAL MESS
+.         qui replace `X' = regexr( `X', "RUTGERS ST U NEW JERSEY", "RUTGERS U"
+> )
+169.         qui replace `X' = regexr( `X', "RUTGERS ST U"           , "RUTGERS
+>  U")
+170.         
+.         qui replace `X' = regexr( `X', "$RUTGERS U^"            , "RUTGERS U 
+> NEW BRUNSWICK") if city=="NEW BRUNSWICK"
+171.         qui replace `X' = regexr( `X', "$RUTGERS U ALL^"        , "RUTGERS
+>  U NEW BRUNSWICK") // this is asserting that those at "ALL" should just be pu
+> t at "MAIN"
+172.         
+.         * LONG ISLAND
+.         qui replace `X' = regexr( `X', "^LONG ISLAND U W POST$","LONG ISLAND 
+> U COLLEGE W POST")
+173.         
+.         * U MASSACHUSETTS
+.         qui replace `X' = "U MASSACHUSETTS" if `X'=="U MASSACHUSETTS AMHERST"
+>  & city=="AMHERST"
+174. 
+.         * ST JOHNS
+.         qui replace `X' = regexr( `X', "ST JOHNS U NEW YORK", "ST JOHNS U")
+175. 
+.         * SE COLLEGE ASSEMBLIES OF GOD
+.         qui replace `X' = regexr( `X', "^SE COLLEGE", "SOUTHEASTERN COLLEGE")
+176. 
+.         * TULANE U
+.         qui replace `X' = "TULANE U" if `X'=="TULANE U LOUISIANA"
+177.         
+.         * SOUTHERN ILLINOIS U
+.         qui replace `X' = "SOUTHERN ILLINOIS U CARBONDALE" if `X'=="SOUTHERN 
+> ILLINOIS U" & city=="CARBONDALE" 
+178. 
+.         * WILLIAM MARY ALL COLLEGE
+.         qui replace `X' = "COLLEGE WILLIAM MARY" if `X'=="WILLIAM MARY ALL CO
+> LLEGE"
+179.         qui replace `X' = "COLLEGE WILLIAM MARY" if `X'=="COLLEGE WM MARY"
+180.         
+.         * INDIANA PURDUE U
+.         qui replace `X' = subinword(`X',"INDIANA PURDUE U","INDIANA U PURDUE 
+> U",.)
+181. 
+.         * PENNSYLVANIA ST U PENN ST
+.         qui replace `X' = subinword(`X',"PENNSYLVANIA ST U PENN ST","PENNSYLV
+> ANIA ST U",.)
+182.         qui replace `X' = subinword(`X',"PENNSYLVANIA ST U PENNSYLVANIA ST
+> ","PENNSYLVANIA ST U",.)
+183.         qui replace `X' = subinword(`X',"ABINGTON COLLEGE$","ABINGTON",.)
+184.         qui replace `X' = subinword(`X',"ALTOONA COLLEGE$","ALTOONA",.)
+185.         
+.         * CLINCH VALLEY COLLEGE UVA
+.         qui replace `X' = subinword(`X',"CLINCH VALLEY COLLEGE UVA","U VIRGIN
+> IA CLINCH VALLEY COLLEGE",.)
+186.         
+.         * OHIO/AUBURN U ALL - potentially need to come up with a better way t
+> o handle these.
+.         qui replace `X' = subinword(`X',"OHIO U ALL","OHIO U",.)
+187.         qui replace `X' = subinword(`X',"AUBURN U ALL","AUBURN U",.)
+188.         
+.         * COLUMBIA
+.         qui replace `X' = regexr( `X', "^COLUMBIA U$", "COLUMBIA U IN CITY NE
+> W YORK")
+189.         
+.         * BOWLING GRN to BOWLING GREEN
+.         qui replace `X' = subinword( `X', "GRN"  , "GREEN",.)
+190.         
+.         * INTER CONTINENTAL shouldn't have a space
+.         qui replace `X' = regexr( `X', "INTER CONTINENTAL" , "INTERCONTINENTA
+> L")
+191.         
+.         * U PITTSBURGH, the main campus sometimes has PITTSBURGH twice
+.         qui replace `X' = regexr( `X', "PITTSBURGH PITTSBURGH", "PITTSBURGH")
+192.         
+.         * NORTHWESTERN ST U - really?
+.         qui replace `X' = regexr( `X', "^NORTHWESTERN ST U$", "NORTHWESTERN S
+> T U LOUISIANA") if city=="NATCHITOCHES"
+193.         qui replace `X' = regexr( `X', "^NORTHWESTERN ST U$", "NORTHWESTER
+> N OKLAHOMA ST U")  if city=="ALVA"
+194. 
+.         * U S CAROLINA
+.         qui replace `X' = "U S CAROLINA COLUMBIA" if `X'=="U S CAROLINA" & ci
+> ty==""
+195.         
+.         * Get rid of  extra/trailing/leading spaces, again
+.         qui replace `X' =  trim(itrim(`X'))
+196. }
+(0 real changes made)
+(3 real changes made)
+(1 real change made)
+(0 real changes made)
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+(8 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+
+. 
+end of do-file
+
+. drop city
+
+. 
+. * Rename to match up with year 2000 (year chosen at random)
+. replace instnm="OHIO ST U"                                     if instnm=="OH
+> IO ST U COLUMBUS"        
+(1 real change made)
+
+. replace instnm="PENNSYLVANIA ST U"                             if instnm=="PE
+> NNSYLVANIA ST U PARK"
+(1 real change made)
+
+. replace instnm="U MASSACHUSETTS"                               if instnm=="U 
+> MASSACHUSETTS AMHERST"
+(1 real change made)
+
+. replace instnm="U MICHIGAN ANN ARBOR"                          if instnm=="U 
+> MICHIGAN"
+(1 real change made)
+
+. replace instnm="U OKLAHOMA NORMAN"                             if instnm=="U 
+> OKLAHOMA"
+(1 real change made)
+
+. replace instnm="U SOUTH CAROLINA COLUMBIA"                     if instnm=="U 
+> SOUTH CAROLINA"
+(1 real change made)
+
+. replace instnm="LOUISIANA ST U AG MECH HEBERT LAWS CENTER"     if instnm=="LO
+> UISIANA ST U A M COLLEGE"
+(1 real change made)
+
+. replace instnm="RUTGERS U NEW BRUNSWICK"                       if instnm=="RU
+> TGERS U NEW BRUNSWICK PISCATAWAY"
+(1 real change made)
+
+. replace instnm="U ARKANSAS LITTLE ROCK"                        if instnm=="U 
+> ARKANSAS"
+(1 real change made)
+
+. replace instnm="U ILLINOIS URBANA"                             if instnm=="U 
+> ILLINOIS URBANA CHAMPAIGN"
+(1 real change made)
+
+. replace instnm="U MONTANA MISSOULA"                            if instnm=="U 
+> MONTANA"
+(1 real change made)
+
+. replace instnm="U VERMONT ST AGRICULTURAL COLLEGE"             if instnm=="U 
+> VERMONT"
+(1 real change made)
+
+. replace instnm="U WASHINGTON SEATTLE"                          if instnm=="U 
+> WASHINGTON"
+(1 real change made)
+
+. 
+. tempfile holderflag
+
+. save `holderflag', replace
+(note: file /tmp/St22482.000001 not found)
+file /tmp/St22482.000001 saved
+
+. 
+. !unzip -u ipeds_inst_final.dta.zip
+
+Archive:  ipeds_inst_final.dta.zip
+  inflating: ipeds_inst_final.dta    
+
+. use if year==2000 using ipeds_inst_final, clear
+(IPEDS Institutions, clean instnm and city)
+
+. !rm ipeds_inst_final.dta
+
+
+. 
+. merge m:1 instnm using `holderflag', assert(master match) keep(match) nogen
+(note: variable stabbr was str2, now str3 to accommodate using data's values)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                                51  
+    -----------------------------------------
+
+. 
+. * Note: U of DC is only institution to not offer a doctor's degree
+. tab hloffer
+
+              Highest level of offering |      Freq.     Percent        Cum.
+----------------------------------------+-----------------------------------
+                        Master's degree |          1        1.96        1.96
+                        Doctor's degree |         50       98.04      100.00
+----------------------------------------+-----------------------------------
+                                  Total |         51      100.00
+
+. 
+. keep unitid state stabbr
+
+. gen flagship=1
+
+. 
+. tempfile holderflag2
+
+. save `holderflag2', replace
+(note: file /tmp/St22482.000002 not found)
+file /tmp/St22482.000002 saved
+
+. 
+. *-----------------------
+. * Grab fips data
+. * --Merge state and county
+. * --Choose one county per zip
+. * --For now, keeping the lowest fips5; eventually get pop data to get the mos
+> t pop
+. *-----------------------
+. insheet using statefips.csv, clear
+(3 vars, 60 obs)
+
+. keep fips stabbr
+
+. rename fips fips2
+
+. merge 1:m stabbr using zipctyAB, assert(master match) keep(match) nogen
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                            53,296  
+    -----------------------------------------
+
+. gen fips5 = fips2*1000+fips3
+
+. order zipcode fips2 fips3 fips5 stabbr countyname
+
+. sort  zipcode fips2 fips3 fips5
+
+. 
+. bys zipcode (fips5): keep if _n==1
+(12,123 observations deleted)
+
+. isid zipcode
+
+. compress
+  variable stabbr was str4 now str2
+  (82,346 bytes saved)
+
+. tempfile holderzipfips
+
+. save `holderzipfips', replace
+(note: file /tmp/St22482.000003 not found)
+file /tmp/St22482.000003 saved
+
+. 
+. contract fips5 stabbr countyname
+
+. drop _freq
+
+. drop if mi(countyname)
+(56 observations deleted)
+
+. gsort stabbr countyname -fips5
+
+. by    stabbr countyname: drop if _n==2
+(4 observations deleted)
+
+. isid stabbr countyname
+
+. tempfile holderonlyfips
+
+. save `holderonlyfips', replace
+(note: file /tmp/St22482.000004 not found)
+file /tmp/St22482.000004 saved
+
+. 
+. *------------------------------------------------------
+. * Clean IPEDS data and merge in fips data in stages
+. *------------------------------------------------------
+. * use unitid year instnm city stabbr zip countynm hloffer using ipeds_inst_fi
+> nal, clear 
+. !unzip ipeds_inst_final.dta.zip
+
+Archive:  ipeds_inst_final.dta.zip
+  inflating: ipeds_inst_final.dta    
+
+. use ipeds_inst_final, clear
+(IPEDS Institutions, clean instnm and city)
+
+. !rm ipeds_inst_final.dta
+
+
+. replace countynm = upper(countynm)
+(53,101 real changes made)
+
+. replace countynm = regexr(countynm," COUNTY$","")
+(46,498 real changes made)
+
+. replace countynm = regexr(countynm," MUNICIPIO$","")
+(945 real changes made)
+
+. replace countynm = regexr(countynm," CO$","")
+(307 real changes made)
+
+. replace countynm = regexr(countynm,"^COUNTY OF ","")
+(8 real changes made)
+
+. 
+. bys unitid (year): egen modezip = mode(zip), minmode
+Warning: at least one group contains all missing values or contains multiple
+modes.  Generating missing values for the mode of these groups.  Use the
+missing, maxmode, minmode, or nummode() options to control this behavior.
+(6 missing values generated)
+
+. 
+. * First: just merge on current zip (only missing 7 times, mostly for cert pro
+> grams)
+. drop if mi(zip)
+(7 observations deleted)
+
+. rename zip zipcode
+
+. merge m:1 zipcode using `holderzipfips', keep(master match) keepusing(fips5 c
+> ountyname) gen(merge1)
+(note: variable zipcode was long, now double to accommodate using data's
+       values)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                        12,033
+        from master                    12,033  (merge1==1)
+        from using                          0  (merge1==2)
+
+    matched                           261,532  (merge1==3)
+    -----------------------------------------
+
+. rename countyname countyname_1
+
+. rename fips5      fips5_1
+
+. 
+. * For those without a match, merge again using stabbr countynm
+. rename countynm countyname
+
+.         merge m:1 stabbr countyname using `holderonlyfips', keep(master match
+> ) gen(merge2)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                       112,535
+        from master                   112,535  (merge2==1)
+        from using                          0  (merge2==2)
+
+    matched                           161,030  (merge2==3)
+    -----------------------------------------
+
+. rename countyname countynm
+
+. rename fips5 fips5_2
+
+. bys unitid (year): egen modefips5_2 = mode(fips5_2), minmode
+Warning: at least one group contains all missing values or contains multiple
+modes.  Generating missing values for the mode of these groups.  Use the
+missing, maxmode, minmode, or nummode() options to control this behavior.
+(24716 missing values generated)
+
+. 
+. gen fips5 = fips5_1
+(12,033 missing values generated)
+
+. replace fips5 = fips5_2 if mi(fips5_1) & ~mi(fips5_2)
+(6,156 real changes made)
+
+. * We still have 5.8K/275K that don't have a fips5, though half (2.9K) are 
+. *  either in PR and/or less than Associates degree
+. 
+. *----------------------------------------------
+. * Get tuition in 1,000 constant 2010$ 
+. *----------------------------------------------
+. ssc install cpigen
+checking cpigen consistency and verifying not already installed...
+all files already exist and are up to date.
+
+. cpigen
+Variables month and quarter missing, annual CPI will be generated
+(30734 missing values generated)
+
+. * https://www.usinflationcalculator.com/inflation/consumer-price-index-and-an
+> nual-percent-changes-from-1913-to-2008/
+. replace cpiu = 236.736/172.2 if year==2014
+(7,720 real changes made)
+
+. replace cpiu = 237.017/172.2 if year==2015
+(7,664 real changes made)
+
+. replace cpiu = 240.007/172.2 if year==2016
+(7,628 real changes made)
+
+. replace cpiu = 245.120/172.2 if year==2017
+(0 real changes made)
+
+. 
+. gen  cpiu2010a = cpiu if year==2010
+(266,284 missing values generated)
+
+. egen cpiu2010b = max(cpiu2010a)
+
+. gen  cpiu2010  = cpiu/cpiu2010b
+
+. 
+. foreach X in 2 3 6 7 {
+  2.         replace tuition`X' = tuition`X'/(cpiu2010*1000)
+  3. }
+variable tuition2 was long now double
+(120,759 real changes made)
+variable tuition3 was long now double
+(122,774 real changes made)
+variable tuition6 was long now double
+(49,041 real changes made)
+variable tuition7 was long now double
+(48,862 real changes made)
+
+. label var tuition2      "Tuition and fees FT 1 yr undergrad, in-state (K, 201
+> 0$)" 
+
+. label var tuition3      "Tuition and fees FT 1 yr undergrad, out-of-state (K,
+>  2010$)" 
+
+. label var tuition6      "Tuition and fees FT 1 yr grad, in-state (K, 2010$)" 
+
+. label var tuition7      "Tuition and fees FT 1 yr grad, out-of-state (K, 2010
+> $)" 
+
+. 
+. drop cpi* tuition1 tuition5
+
+. 
+. *----------------------------------------------
+. * Merge in "flagship" ... er... flag
+. *----------------------------------------------
+. merge m:1 unitid stabbr using `holderflag2', keepusing(unitid stabbr flagship
+> ) assert(master match) nogen
+(note: variable stabbr was str2, now str3 to accommodate using data's values)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                       271,933
+        from master                   271,933  
+        from using                          0  
+
+    matched                             1,632  
+    -----------------------------------------
+
+. recode flagship (. = 0)
+(flagship: 271933 changes made)
+
+. 
+. *----------------------------------------------
+. * Save intermim1 version: unitid year is the unit of obs
+. *  Drop 'instnm' so file is 33% smaller
+. *----------------------------------------------
+. drop instnm
+
+. compress
+  variable flagship was float now byte
+  variable zipcode was double now long
+  variable stabbr was str3 now str2
+  (2,188,520 bytes saved)
+
+. label data "IPEDS Interim Data - UNITID Year"
+
+. save ipeds_interim1.dta, replace
+(note: file ipeds_interim1.dta not found)
+file ipeds_interim1.dta saved
+
+. !zip -m ipeds_interim1.dta.zip ipeds_interim1.dta
+
+updating: ipeds_interim1.dta (deflated 81%)
+
+. 
+. *============================================================================
+. * Create summary measures by county (fips5) and state (flagship tuition)
+. *============================================================================
+. gen AAonly = hloffer==2
+
+. gen AAplus = inrange(hloffer,2,9)
+
+. gen BAplus = inrange(hloffer,3,9)
+
+. 
+. gen public    = inst_control==1
+
+. gen forprofit = inst_control==2
+
+. gen nonprofit = inst_control==3 | inst_control==4
+
+. 
+. * For tuition, assume we only care about in-state...?
+. gen publicTuition2    = tuition2 if public
+(222,365 missing values generated)
+
+. gen publicTuition2AA  = tuition2 if public & AAonly
+(270,841 missing values generated)
+
+. gen publicTuition2BA  = tuition2 if public & BAplus
+(225,383 missing values generated)
+
+. 
+. gen privateTuition2   = tuition2 if  forprofit | nonprofit
+(203,469 missing values generated)
+
+. gen privateTuition2AA = tuition2 if (forprofit | nonprofit) & AAonly
+(271,776 missing values generated)
+
+. gen privateTuition2BA = tuition2 if (forprofit | nonprofit) & BAplus
+(205,778 missing values generated)
+
+. 
+. gen flagshipTuition = tuition2 if flagship==1
+(272,092 missing values generated)
+
+. bys stabbr year: egen flagshipTuition2 = max(flagshipTuition)
+(21683 missing values generated)
+
+. 
+. * For 1988 and 2005 (and most years post 1988), flagship tuition data is vali
+> d
+. assert ~mi(flagshipTuition2) if ~inlist(stabbr,"AS", "CM", "FM", "GU", "MH", 
+> "MP", "PR", "PW") & ~inlist(stabbr, "M", "TT", "VI") & inlist(year,1988,2005)
+
+. * Issues: NH in 1990; NC in 1989; MS in 2000, 2001; FL in 1990, 2000
+. tab stabbr year if mi(flagshipTuition2) & ~inlist(stabbr,"AS", "CM", "FM", "G
+> U", "MH", "MP", "PR", "PW") & ~inlist(stabbr, "M", "TT", "VI")
+
+     State |
+abbreviati |
+    on per |
+      post |
+    office |                          year
+     specs |      1985       1986       1987       1989       1990 |     Total
+-----------+-------------------------------------------------------+----------
+        AK |        22         22         38          0          0 |        82 
+        AL |        84         85        119          0          0 |       288 
+        AQ |         1          1          0          0          0 |         2 
+        AR |        43         43        101          0          0 |       187 
+        AZ |        33         33         80          0          0 |       146 
+        CA |       330        331        726          0          0 |     1,387 
+        CO |        55         55         99          0          0 |       209 
+        CT |        52         52        147          0          0 |       251 
+        DC |        19         19         38          0          0 |        76 
+        DE |        12         12         25          0          0 |        49 
+        FL |        93         91        345          0        414 |     1,370 
+        GA |        84         82        169          0          0 |       335 
+        HI |        15         15         37          0          0 |        67 
+        IA |        63         59        124          0          0 |       246 
+        ID |        10         10         34          0          0 |        54 
+        IL |       180        177        428          0          0 |       785 
+        IN |        84         85        201          0          0 |       370 
+        KS |        56         56        114          0          0 |       226 
+        KY |        61         47        111          0          0 |       219 
+        LA |        36         36        176          0          0 |       248 
+        MA |       129        129        259          0          0 |       517 
+        MD |        66         65        161          0          0 |       292 
+        ME |        33         32         54          0          0 |       119 
+        MI |        95         96        269          0          0 |       460 
+        MN |        76         76        153          0          0 |       305 
+        MO |       102        102        228          0          0 |       432 
+        MS |        44         44         77          0          0 |       307 
+        MT |        19         18         47          0          0 |        84 
+        NC |       130        130        180        202          0 |       642 
+        ND |        23         23         41          0          0 |        87 
+        NE |        31         31         79          0          0 |       141 
+        NH |        30         30         51          0         58 |       169 
+        NJ |        64         64        210          0          0 |       338 
+        NM |        28         28         50          0          0 |       106 
+        NV |        11         11         37          0          0 |        59 
+        NY |       335        336        623          0          0 |     1,294 
+        OH |       157        158        389          0          0 |       704 
+        OK |        50         51         94          0          0 |       195 
+        OR |        50         50        140          0          0 |       240 
+        PA |       215        215        480          0          0 |       910 
+        RI |        15         15         33          0          0 |        63 
+        SC |        66         65        105          0          0 |       236 
+        SD |        21         21         38          0          0 |        80 
+        TN |        87         87        181          0          0 |       355 
+        TQ |         2          2          0          0          0 |         4 
+        TX |       176        177        369          0          0 |       722 
+        UT |        17         17         30          0          0 |        64 
+        VA |        78         79        143          0          0 |       300 
+        VT |        26         26         31          0          0 |        83 
+        WA |        57         57         84          0          0 |       198 
+        WI |        66         66        103          0          0 |       235 
+        WV |        31         31         61          0          0 |       123 
+        WY |         8          8         13          0          0 |        29 
+-----------+-------------------------------------------------------+----------
+     Total |     3,671      3,651      7,925        202        472 |    16,490 
+
+
+     State |
+abbreviati |
+    on per |
+      post |
+    office |         year
+     specs |      2000       2001 |     Total
+-----------+----------------------+----------
+        AK |         0          0 |        82 
+        AL |         0          0 |       288 
+        AQ |         0          0 |         2 
+        AR |         0          0 |       187 
+        AZ |         0          0 |       146 
+        CA |         0          0 |     1,387 
+        CO |         0          0 |       209 
+        CT |         0          0 |       251 
+        DC |         0          0 |        76 
+        DE |         0          0 |        49 
+        FL |       427          0 |     1,370 
+        GA |         0          0 |       335 
+        HI |         0          0 |        67 
+        IA |         0          0 |       246 
+        ID |         0          0 |        54 
+        IL |         0          0 |       785 
+        IN |         0          0 |       370 
+        KS |         0          0 |       226 
+        KY |         0          0 |       219 
+        LA |         0          0 |       248 
+        MA |         0          0 |       517 
+        MD |         0          0 |       292 
+        ME |         0          0 |       119 
+        MI |         0          0 |       460 
+        MN |         0          0 |       305 
+        MO |         0          0 |       432 
+        MS |        73         69 |       307 
+        MT |         0          0 |        84 
+        NC |         0          0 |       642 
+        ND |         0          0 |        87 
+        NE |         0          0 |       141 
+        NH |         0          0 |       169 
+        NJ |         0          0 |       338 
+        NM |         0          0 |       106 
+        NV |         0          0 |        59 
+        NY |         0          0 |     1,294 
+        OH |         0          0 |       704 
+        OK |         0          0 |       195 
+        OR |         0          0 |       240 
+        PA |         0          0 |       910 
+        RI |         0          0 |        63 
+        SC |         0          0 |       236 
+        SD |         0          0 |        80 
+        TN |         0          0 |       355 
+        TQ |         0          0 |         4 
+        TX |         0          0 |       722 
+        UT |         0          0 |        64 
+        VA |         0          0 |       300 
+        VT |         0          0 |        83 
+        WA |         0          0 |       198 
+        WI |         0          0 |       235 
+        WV |         0          0 |       123 
+        WY |         0          0 |        29 
+-----------+----------------------+----------
+     Total |       500         69 |    16,490 
+
+
+. 
+. * Drop outlying territories
+. drop if inlist(stabbr,"AS", "CM", "FM", "GU", "MH", "MP", "PR", "PW") | inlis
+> t(stabbr, "AQ", "M", "TT", "TQ", "VI")
+(5,199 observations deleted)
+
+. 
+. 
+. collapse (sum) numBA = BAplus (sum) numAA = AAonly (mean) tuitionBApublic = p
+> ublicTuition2BA (mean) tuitionBAprivate = privateTuition2BA (mean) tuitionAAp
+> ublic = publicTuition2AA (mean) tuitionAAprivate = privateTuition2AA (max) tu
+> itionFlagship = flagshipTuition2 , by(fips5 year)
+
+. drop if mi(fips5) | mi(year)
+(32 observations deleted)
+
+. 
+. sort  year fips5
+
+. order year fips5
+
+. 
+. save ipeds_final.dta, replace
+file ipeds_final.dta saved
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/jared/WageReturnsRepo/Data/IPEDS/ipeds_all_combine.log
+  log type:  text
+ closed on:   6 Mar 2019, 11:31:06
+-------------------------------------------------------------------------------

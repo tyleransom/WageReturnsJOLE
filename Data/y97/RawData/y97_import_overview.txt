@@ -1,0 +1,51 @@
+Variables needed
+
+demographics
+- sex
+- race
+- birth month
+- birth year
+- sample weights
+- interview month
+- relationship to parents/HH head
+- household size
+- born in US
+- ASVAB
+- PIAT
+- Family income
+- Parental education
+- reason missed interview
+
+school
+- mapping of calendar year to school grade (for pre-1997 schooling)
+- highest grade completed
+- highest degree received
+- month received various degrees
+- K12 monthly enrollment status
+- College monthly enrollment status
+
+college
+- school type (elementary/middle/HS/college)
+- school unique ID (across survey years)
+- college enrollment dates **MAY BE ABLE TO USE A NEW VARIABLE HERE**
+- cumulative GPA
+- term-by-term GPA
+- middle and HS grades
+- college major
+- college grade scale
+
+work
+- hourly wage/compensation
+- annual wage/salary income
+- weekly employment status
+- weekly hours worked
+- industry
+- occupation
+- internship
+- weekly job IDs (main job that week)
+- weekly job IDs (2nd-8th concurrent jobs that week)
+- annual hours worked
+- annual weeks worked
+- annual job ID roster
+- hours per week at each job
+- number of jobs each year

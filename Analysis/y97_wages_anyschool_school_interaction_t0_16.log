@@ -1,0 +1,353 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/data/ransom/WageReturnsRepo/Analysis/y97_wages_anyschool_sch
+> ool_interaction_t0_16.log
+  log type:  text
+ opened on:  16 Mar 2019, 16:12:20
+
+. set matsize 4000
+
+. 
+. *****************************************************************************
+. * Perform mlogits on data to use at starting points for V++
+. *  MFX Model
+. *****************************************************************************
+. *============================================================================
+. * Import data, define macros, gen variables
+. *============================================================================
+. 
+. if "`c(username)'"=="jared"  global secretdir [REDACTED]
+
+. if "`c(username)'"=="ransom" global secretdir [REDACTED]nl
+> sy/"
+
+. 
+. use if cohortFlag==1997 & ~female using ${secretdir}/yCombined_scaled_t0_16.d
+> ta, clear
+
+. drop if inlist(birthYear,1957,1958)
+(0 observations deleted)
+
+. 
+. * local Pvars79O black hispanic born1957 born1958 born1959          foreignBo
+> rn
+. * local Pvars79Y black hispanic born1961 born1962 born1963          foreignBo
+> rn
+. local Pvars79  black hispanic born1959 born1960 born1961 born1962 born1963 fo
+> reignBorn
+
+. local Pvars97  black hispanic born1980 born1981 born1982 born1983          fo
+> reignBorn
+
+. local Qvars    afqt m_afqt
+
+. local Mvars    empPct incPerCapita
+
+. local Avars    potExpt potExpSq potExpCu
+
+. 
+. local Svars    schoolOnlyt schoolOnlySq schoolOnlyCu
+
+. local Svars1   anySchoolt anySchoolBlack anySchoolHisp anySchoolSq anySchoolC
+> u 
+
+. local Svars2   anySchoolt  anySchoolSq  anySchoolCu
+
+. local Svars3   anySchoolt anySchoolBlack anySchoolHisp anySchoolSq anySchoolS
+> qBlack anySchoolSqHisp anySchoolCu anySchoolCuBlack anySchoolCuHisp anySchool
+> Qr                              
+
+. 
+. local Zvars    workK12t workK12Sq workK12schoolOnly workK12Cu workColleget wo
+> rkCollegeSq workCollegeschoolOnly workCollegeCu
+
+. local Zvars1   workK12t workK12Black workK12Hisp workK12Sq workK12Cu workColl
+> eget workCollegeBlack workCollegeHisp workCollegeSq workCollegeCu
+
+. local Zvars2   workK12t workK12Sq workK12anySchool  workK12Cu workColleget wo
+> rkCollegeSq workCollegeanySchool  workCollegeCu
+
+. local Zvars3   workK12t workK12Black workK12Hisp workK12Sq workK12SqBlack wor
+> kK12SqHisp workK12Cu workK12CuBlack workK12CuHisp workK12Qr workColleget work
+> CollegeBlack workCollegeHisp workCollegeSq workCollegeSqBlack workCollegeSqHi
+> sp workCollegeCu workCollegeCuBlack workCollegeCuHisp workCollegeQr          
+>           
+
+. 
+. local Evars    workPTonlyt workPTSq workPTschoolOnly workPTCu workFTonlyt wor
+> kFTSq workFTschoolOnly workFTCu militaryt militarySq militaryCu othert otherS
+> q otherCu
+
+. local Evars1   workPTonlyt workPTBlack workPTHisp workPTSq workPTCu workPTQr 
+> workFTonlyt workFTBlack workFTHisp workFTSq workFTCu workFTQr militaryt milit
+> aryBlack militaryHisp militarySq militaryCu militaryQr othert otherBlack othe
+> rHisp otherSq otherCu otherQr
+
+. local Evars2   workPTonlyt workPTSq workPTanySchool  workPTCu workFTonlyt wor
+> kFTSq workFTanySchool  workFTCu militaryt militarySq militaryCu othert otherS
+> q otherCu
+
+. local Evars3   workPTonlyt workPTBlack workPTHisp workPTSq workPTSqBlack work
+> PTSqHisp workPTCu workPTCuBlack workPTCuHisp workPTQr workFTonlyt workFTBlack
+>  workFTHisp workFTSq workFTSqBlack workFTSqHisp workFTCu workFTCuBlack workFT
+> CuHisp workFTQr militaryt militaryBlack militaryHisp militarySq militarySqBla
+> ck militarySqHisp militaryCu militaryCuBlack militaryCuHisp militaryQr othert
+>  otherBlack otherHisp otherSq otherSqBlack otherSqHisp otherCu otherCuBlack o
+> therCuHisp otherQr
+
+. local Ivars3   workK12anySchool workCollegeanySchool workCollegeworkK12 workP
+> TanySchool workPTworkK12 workPTworkCollege workFTanySchool workFTworkK12 work
+> FTworkCollege workFTworkPT                              
+
+. 
+. local risk     gradHS grad4yr
+
+. local work     inSchWork PTwork
+
+. 
+. gen inSchWork  = (activity==2 | activity==12 | activity==22)
+
+. gen PTwork     = (activity==3 | activity==13 | activity==23)
+
+. 
+. 
+. *============================================================================
+. * Summary statistics (for comparison with V++ data read-in)
+. *============================================================================
+. recode lnWage lnWageAlt lnWageNoSelf lnWageAltNoSelf lnWageJobMain  (-999=.)
+(lnWage: 345373 changes made)
+(lnWageAlt: 346086 changes made)
+(lnWageNoSelf: 370517 changes made)
+(lnWageAltNoSelf: 370537 changes made)
+(lnWageJobMain: 763644 changes made)
+
+. sum lnWageNoSelf `Pvars97' `Mvars' `Svars2' `Zvars2' `Evars2' `Fvars' if inli
+> st(activity,2,3,4,12,13,14,22,23,24) & ~mi(lnWageNoSelf), sep(0)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+lnWageNoSelf |    422,114    1.809259     .481873   .6934183   3.906742
+       black |    422,114    .2217671    .4154358          0          1
+    hispanic |    422,114     .221452    .4152246          0          1
+    born1980 |    422,114    .1855447    .3887392          0          1
+    born1981 |    422,114     .206873    .4050641          0          1
+    born1982 |    422,114    .2073895    .4054374          0          1
+    born1983 |    422,114    .2118124    .4085931          0          1
+ foreignBorn |    422,114    .0631607     .243252          0          1
+      empPct |    422,114    .8748124    .2244599   .3332505   2.593753
+incPerCapita |    422,114    18.50569    5.394197   7.827414    65.0181
+  anySchoolt |    422,114     3.64968     2.38241          0   16.66667
+ anySchoolSq |    422,114    1.899602    2.390528          0   27.77778
+ anySchoolCu |    422,114    1.236324     2.36499          0    46.2963
+    workK12t |    422,114    .9302378    .7638756          0   7.666667
+   workK12Sq |    422,114    .1448847    .1960936          0   5.877778
+workK12any~l |    422,114    .3689844    .4192743          0   6.963889
+   workK12Cu |    422,114    .0271696    .0685749          0   4.506296
+workColleget |    422,114    1.223068    1.776339          0   14.08333
+workColleg~q |    422,114    .4651266    1.083345          0   19.83403
+workColleg~l |    422,114    .8120564    1.539953          0   23.47222
+workColleg~u |    422,114    .2316954     .834635          0   27.93292
+ workPTonlyt |    422,114    .9968608    1.162101          0   15.16667
+    workPTSq |    422,114    .2344206    .6756986          0   23.00278
+workPTanyS~l |    422,114    .3422799    .4748031          0   6.922222
+    workPTCu |    422,114    .0920937    .5393799          0   34.88755
+ workFTonlyt |    422,114     3.66196    3.484203          0   17.83333
+    workFTSq |    422,114    2.554959    3.899568          0   31.80278
+workFTanyS~l |    422,114    1.308452    1.486407          0   9.184028
+    workFTCu |    422,114    2.210355    4.673205          0   56.71495
+   militaryt |    422,114    .1369052    .7452893          0   11.58333
+  militarySq |    422,114    .0574198    .4456516          0   13.41736
+  militaryCu |    422,114    .0308889    .3590614          0   15.54178
+      othert |    422,114    .9277697    1.432515          0   16.08333
+     otherSq |    422,114    .2912851     1.04151          0   25.86736
+     otherCu |    422,114    .1578939    1.022783          0   41.60334
+
+. 
+. 
+. *============================================================================
+. * Main Specification
+. *============================================================================
+. *--------------------------------------
+. * Reg2--Variance varies across wage types
+. *--------------------------------------
+. gen byte dummy = (2)*( inlist(activity,2,12,22)) + (3)*( inlist(activity,3,13
+> ,23)) + (4)*( inlist(activity,4,14,24))
+
+. global dumbo dummy
+
+. 
+. capture program drop normal
+
+.         program normal
+  1.         version 11.2
+  2.         args lnf Xb sigma2 sigma3 sigma4
+  3.         quietly replace `lnf'=( ${dumbo}==2)*ln(normalden(${ML_y1}, `Xb', 
+> `sigma2'))+( ${dumbo}==3)*ln(normalden(${ML_y1}, `Xb', `sigma3'))+( ${dumbo}=
+> =4)*ln(normalden(${ML_y1}, `Xb', `sigma4'))
+  4. end
+
+. 
+. ml model lf normal (lnWageNoSelf = `Pvars97' `Mvars' `Svars2' `Zvars2' `Evars
+> 2' `risk' `work') /sigma2 /sigma3 /sigma4 if inlist(activity,2,3,4,12,13,14,2
+> 2,23,24) & ~mi(lnWageNoSelf), vce(cluster id)
+
+. ml max
+
+initial:       log pseudolikelihood =     -<inf>  (could not be evaluated)
+feasible:      log pseudolikelihood = -1738480.7
+rescale:       log pseudolikelihood = -575125.62
+rescale eq:    log pseudolikelihood = -322055.23
+Iteration 0:   log pseudolikelihood = -322055.23  (not concave)
+Iteration 1:   log pseudolikelihood = -213585.34  
+Iteration 2:   log pseudolikelihood = -203044.17  
+Iteration 3:   log pseudolikelihood = -180531.48  
+Iteration 4:   log pseudolikelihood = -179888.45  
+Iteration 5:   log pseudolikelihood = -179885.24  
+Iteration 6:   log pseudolikelihood = -179885.24  
+
+                                                Number of obs     =    422,114
+                                                Wald chi2(38)     =    8162.21
+Log pseudolikelihood = -179885.24               Prob > chi2       =     0.0000
+
+                                 (Std. Err. adjusted for 4,200 clusters in id)
+------------------------------------------------------------------------------
+             |               Robust
+lnWageNoSelf |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+eq1          |
+       black |   -.093637   .0107314    -8.73   0.000    -.1146703   -.0726038
+    hispanic |  -.0257257   .0112167    -2.29   0.022    -.0477099   -.0037414
+    born1980 |   .0178885   .0143717     1.24   0.213    -.0102796    .0460566
+    born1981 |   .0171757   .0138374     1.24   0.215     -.009945    .0442965
+    born1982 |    .006981   .0131402     0.53   0.595    -.0187734    .0327354
+    born1983 |  -.0071891   .0126889    -0.57   0.571    -.0320589    .0176807
+ foreignBorn |   .0126405   .0197619     0.64   0.522    -.0260922    .0513731
+      empPct |  -.1919674   .0217947    -8.81   0.000    -.2346843   -.1492505
+incPerCapita |   .0169679   .0010261    16.54   0.000     .0149569     .018979
+  anySchoolt |   -.002275   .0135262    -0.17   0.866    -.0287859    .0242358
+ anySchoolSq |   .0437894   .0305595     1.43   0.152     -.016106    .1036849
+ anySchoolCu |  -.0079519   .0197819    -0.40   0.688    -.0467237    .0308199
+    workK12t |   .0144633   .0230317     0.63   0.530    -.0306781    .0596047
+   workK12Sq |   .0056832   .1162279     0.05   0.961    -.2221194    .2334858
+workK12any~l |  -.0493343   .0304182    -1.62   0.105    -.1089528    .0102842
+   workK12Cu |   .0366912   .1416447     0.26   0.796    -.2409273    .3143097
+workColleget |   .0893647   .0187193     4.77   0.000     .0526756    .1260538
+workColleg~q |  -.0451034   .0621166    -0.73   0.468    -.1668496    .0766429
+workColleg~l |  -.0788323   .0560459    -1.41   0.160    -.1886802    .0310155
+workColleg~u |   .0494559   .0341947     1.45   0.148    -.0175644    .1164762
+ workPTonlyt |  -.0437865   .0153407    -2.85   0.004    -.0738538   -.0137193
+    workPTSq |   .0865572   .0449887     1.92   0.054     -.001619    .1747334
+workPTanyS~l |  -.0682085   .0184718    -3.69   0.000    -.1044125   -.0320045
+    workPTCu |  -.0072141   .0351425    -0.21   0.837    -.0760922     .061664
+ workFTonlyt |   .1042541   .0057932    18.00   0.000     .0928997    .1156085
+    workFTSq |  -.0811803   .0098928    -8.21   0.000    -.1005698   -.0617908
+workFTanyS~l |   .0033173   .0052558     0.63   0.528    -.0069839    .0136185
+    workFTCu |   .0272381   .0050423     5.40   0.000     .0173554    .0371208
+   militaryt |   .0390941   .0290023     1.35   0.178    -.0177494    .0959375
+  militarySq |   .0636709   .0998174     0.64   0.524    -.1319675    .2593094
+  militaryCu |  -.0820133   .0747675    -1.10   0.273    -.2285548    .0645283
+      othert |  -.0613822   .0111916    -5.48   0.000    -.0833173    -.039447
+     otherSq |   .0972562   .0269987     3.60   0.000     .0443397    .1501727
+     otherCu |  -.0410525   .0166886    -2.46   0.014    -.0737614   -.0083435
+      gradHS |   .0493007   .0106195     4.64   0.000     .0284868    .0701146
+     grad4yr |   .2265602   .0184021    12.31   0.000     .1904928    .2626276
+   inSchWork |  -.1148108    .008013   -14.33   0.000    -.1305159   -.0991056
+      PTwork |  -.0591809   .0072656    -8.15   0.000    -.0734212   -.0449405
+       _cons |    1.37381   .0227157    60.48   0.000     1.329288    1.418332
+-------------+----------------------------------------------------------------
+sigma2       |
+       _cons |   .3396667   .0060599    56.05   0.000     .3277896    .3515439
+-------------+----------------------------------------------------------------
+sigma3       |
+       _cons |   .4374221   .0089532    48.86   0.000     .4198741      .45497
+-------------+----------------------------------------------------------------
+sigma4       |
+       _cons |   .3678206   .0039396    93.36   0.000     .3600991    .3755421
+------------------------------------------------------------------------------
+
+. estimates store reg2
+
+. qui outreg2 using y97_wages_anyschool_school_interaction_t0_16, excel replace
+>  bdec(4) sdec(4) ctitle(WagesDiffVar)
+ : 
+. 
+. *--------------------------------------
+. * Create output for starting values for V++
+. *--------------------------------------
+. estimates restore reg2
+(results reg2 are active now)
+
+. matrix  wage1   = e(b)'
+
+. matrix  wage1v  = vecdiag(e(V))'
+
+. matmap  wage1v wage1se, map(sqrt(@))
+
+. matrix  like1   = e(ll)
+
+. 
+. matrix wage_coef  = wage1[1..rowsof(wage1)-3            , 1]
+
+. matrix wage_sigma = wage1[rowsof(wage1)-2..rowsof(wage1), 1]
+
+. matrix wage_all   = [wage_coef \ wage_sigma]
+
+. 
+. matrix wage_se_coef  = wage1se[1..rowsof(wage1se)-3              , 1]
+
+. matrix wage_se_sigma = wage1se[rowsof(wage1se)-2..rowsof(wage1se), 1]
+
+. matrix wage_se_all   = [wage_se_coef \ wage_se_sigma]
+
+. 
+. svmat  wage_coef
+
+. svmat  wage_sigma
+
+. svmat  wage_all
+
+. 
+. svmat  wage_se_coef
+
+. svmat  wage_se_sigma
+
+. svmat  wage_se_all
+
+. 
+. matrix wage_output = [wage_coef , wage_se_coef]
+
+. matrix sigma_output = [wage_sigma , wage_se_sigma]
+
+. 
+. outsheet wage_all    using y97_wages_anyschool_school_interaction_t0_16_coef.
+> csv if !mi(wage_all), comma replace
+
+. outsheet wage_se_all using y97_wages_anyschool_school_interaction_t0_16_se.cs
+> v   if !mi(wage_all), comma replace
+
+. 
+. putexcel A1=("WageCoefs") A2=matrix(wage_output ,rownames) using y97_wages_an
+> yschool_school_interaction_t0_16.xlsx, sheet ("WageCoefs") modify
+file y97_wages_anyschool_school_interaction_t0_16.xlsx saved
+
+. putexcel F1=("WageLike")  F2=matrix(like1       ,rownames) using y97_wages_an
+> yschool_school_interaction_t0_16.xlsx, sheet ("WageCoefs") modify
+file y97_wages_anyschool_school_interaction_t0_16.xlsx saved
+
+. putexcel A1=("WageCoefs") A2=matrix(sigma_output,rownames) using y97_wages_an
+> yschool_school_interaction_t0_16.xlsx, sheet ("WageSigmas") modify
+file y97_wages_anyschool_school_interaction_t0_16.xlsx saved
+
+. 
+. matrix drop _all
+
+. drop wage_coef-wage_se_all
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/data/ransom/WageReturnsRepo/Analysis/y97_wages_anyschool_sch
+> ool_interaction_t0_16.log
+  log type:  text
+ closed on:  16 Mar 2019, 16:13:47
+-------------------------------------------------------------------------------

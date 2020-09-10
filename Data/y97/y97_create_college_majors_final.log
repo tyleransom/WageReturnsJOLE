@@ -1,0 +1,272 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /afs/econ.duke.edu/data/vjh3/WageReturns/Data/y97/y97_create_colle
+> ge_majors_final.log
+  log type:  text
+ opened on:  30 Jan 2014, 13:55:49
+
+. 
+. use /afs/econ.duke.edu/data/vjh3/WageReturns/Data/y97/y97_coll_major.dta
+
+. 
+. lab def vl_Majors   0 "None/Don't Know"   1 "Agriculture/Natural resources"  
+>  2 "Anthropology"   3 "Archaeology"   4 "Architecture/Environmental design"  
+>  5 "Area studies"   6 "Biological sciences"   7 "Business management"   8 "Co
+> mmunications"   9 "Computer/Information science"  10 "Criminology"  11 "Econo
+> mics"  12 "Education"  13 "Engineering"  14 "English"  15 "Ethnic studies"  1
+> 6 "Fine and applied arts"  17 "Foreign languages"  18 "History"  19 "Home eco
+> nomics"  20 "Interdisciplinary studies"  21 "Mathematics"  22 "Nursing"  23 "
+> Other health professions"  24 "Philosophy"  25 "Physical sciences"  26 "Polit
+> ical science and government"  27 "Pre-dental"  28 "Pre-law"  29 "Pre-med"  30
+>  "Pre-vet"  31 "Psychology"  32 "Sociology"  33 "Theology/religious studies" 
+>  36 "Nutrition/Dietetics"  37 "Hotel/Hospitality management"  99 "Other field
+>  (SPECIFY)" 999 "UNCODABLE"
+
+. lab val finalMajor vl_Majors
+
+. 
+. gen STEM      = inlist(finalMajor,6,9,13,21,22,25,27,29,30,36)
+
+. gen Business  = inlist(finalMajor,7)
+
+. gen Hum       = inlist(finalMajor,5,8,14,15,16,17,24,28,33)
+
+. gen Econ      = inlist(finalMajor,11)
+
+. gen SocSci    = inlist(finalMajor,2,3,10,18,26,31,32)
+
+. gen Other     = inlist(finalMajor,0,1,4,12,19,20,23,37) | inrange(finalMajor,
+> 38,.)
+
+. gen MissMajor = mi(finalMajor) & everGrad4yr
+
+. 
+. lab val STEM      vl_Majors
+
+. lab val Business  vl_Majors
+
+. lab val Hum       vl_Majors
+
+. lab val Econ      vl_Majors
+
+. lab val SocSci    vl_Majors
+
+. lab val Other     vl_Majors
+
+. lab val MissMajor vl_Majors
+
+. 
+. gen MajorAgg = .
+(296472 missing values generated)
+
+. replace MajorAgg = 1 if STEM     
+(13398 real changes made)
+
+. replace MajorAgg = 2 if Business 
+(13266 real changes made)
+
+. replace MajorAgg = 3 if Hum      
+(11979 real changes made)
+
+. replace MajorAgg = 4 if Econ     
+(1650 real changes made)
+
+. replace MajorAgg = 5 if SocSci   
+(13728 real changes made)
+
+. replace MajorAgg = 6 if Other    
+(14982 real changes made)
+
+. replace MajorAgg = 7 if MissMajor
+(1716 real changes made)
+
+. 
+. lab def vl_MajorAgg 1 "STEM" 2 "Business" 3 "Humanities" 4 "Economics" 5 "Soc
+> ial Sciences" 6 "Other" 7 "Missing Major"
+
+. lab val MajorAgg vl_MajorAgg
+
+. 
+. keep if ~female & everGrad4yr & year==1997
+(295568 observations deleted)
+
+. tab finalMajor if STEM     
+
+                       finalMajor |      Freq.     Percent        Cum.
+----------------------------------+-----------------------------------
+              Biological sciences |         38       16.38       16.38
+     Computer/Information science |         68       29.31       45.69
+                      Engineering |         84       36.21       81.90
+                      Mathematics |         14        6.03       87.93
+                          Nursing |          6        2.59       90.52
+                Physical sciences |         18        7.76       98.28
+                          Pre-med |          1        0.43       98.71
+                          Pre-vet |          1        0.43       99.14
+              Nutrition/Dietetics |          2        0.86      100.00
+----------------------------------+-----------------------------------
+                            Total |        232      100.00
+
+. tab finalMajor if Business 
+
+                       finalMajor |      Freq.     Percent        Cum.
+----------------------------------+-----------------------------------
+              Business management |        194      100.00      100.00
+----------------------------------+-----------------------------------
+                            Total |        194      100.00
+
+. tab finalMajor if Hum      
+
+                       finalMajor |      Freq.     Percent        Cum.
+----------------------------------+-----------------------------------
+                     Area studies |          4        2.78        2.78
+                   Communications |         49       34.03       36.81
+                          English |         19       13.19       50.00
+                   Ethnic studies |          1        0.69       50.69
+            Fine and applied arts |         38       26.39       77.08
+                Foreign languages |          5        3.47       80.56
+                       Philosophy |         15       10.42       90.97
+                          Pre-law |          1        0.69       91.67
+       Theology/religious studies |         12        8.33      100.00
+----------------------------------+-----------------------------------
+                            Total |        144      100.00
+
+. tab finalMajor if Econ     
+
+                       finalMajor |      Freq.     Percent        Cum.
+----------------------------------+-----------------------------------
+                        Economics |         35      100.00      100.00
+----------------------------------+-----------------------------------
+                            Total |         35      100.00
+
+. tab finalMajor if SocSci   
+
+                       finalMajor |      Freq.     Percent        Cum.
+----------------------------------+-----------------------------------
+                     Anthropology |          3        2.14        2.14
+                      Criminology |         28       20.00       22.14
+                          History |         23       16.43       38.57
+ Political science and government |         35       25.00       63.57
+                       Psychology |         36       25.71       89.29
+                        Sociology |         15       10.71      100.00
+----------------------------------+-----------------------------------
+                            Total |        140      100.00
+
+. tab finalMajor if Other    
+
+                       finalMajor |      Freq.     Percent        Cum.
+----------------------------------+-----------------------------------
+                  None/Don't Know |          4        2.96        2.96
+    Agriculture/Natural resources |         12        8.89       11.85
+Architecture/Environmental design |         14       10.37       22.22
+                        Education |         35       25.93       48.15
+                   Home economics |          3        2.22       50.37
+        Interdisciplinary studies |         10        7.41       57.78
+         Other health professions |         22       16.30       74.07
+     Hotel/Hospitality management |          3        2.22       76.30
+                               38 |          2        1.48       77.78
+                               40 |          1        0.74       78.52
+                               41 |          1        0.74       79.26
+                               43 |          3        2.22       81.48
+                               45 |          1        0.74       82.22
+                               46 |          1        0.74       82.96
+            Other field (SPECIFY) |         20       14.81       97.78
+                        UNCODABLE |          3        2.22      100.00
+----------------------------------+-----------------------------------
+                            Total |        135      100.00
+
+. tab finalMajor if MissMajor
+no observations
+
+. 
+. tab MajorAgg
+
+       MajorAgg |      Freq.     Percent        Cum.
+----------------+-----------------------------------
+           STEM |        232       25.66       25.66
+       Business |        194       21.46       47.12
+     Humanities |        144       15.93       63.05
+      Economics |         35        3.87       66.92
+Social Sciences |        140       15.49       82.41
+          Other |        135       14.93       97.35
+  Missing Major |         24        2.65      100.00
+----------------+-----------------------------------
+          Total |        904      100.00
+
+. 
+. tab finalMajor
+
+                       finalMajor |      Freq.     Percent        Cum.
+----------------------------------+-----------------------------------
+                  None/Don't Know |          4        0.45        0.45
+    Agriculture/Natural resources |         12        1.36        1.82
+                     Anthropology |          3        0.34        2.16
+Architecture/Environmental design |         14        1.59        3.75
+                     Area studies |          4        0.45        4.20
+              Biological sciences |         38        4.32        8.52
+              Business management |        194       22.05       30.57
+                   Communications |         49        5.57       36.14
+     Computer/Information science |         68        7.73       43.86
+                      Criminology |         28        3.18       47.05
+                        Economics |         35        3.98       51.02
+                        Education |         35        3.98       55.00
+                      Engineering |         84        9.55       64.55
+                          English |         19        2.16       66.70
+                   Ethnic studies |          1        0.11       66.82
+            Fine and applied arts |         38        4.32       71.14
+                Foreign languages |          5        0.57       71.70
+                          History |         23        2.61       74.32
+                   Home economics |          3        0.34       74.66
+        Interdisciplinary studies |         10        1.14       75.80
+                      Mathematics |         14        1.59       77.39
+                          Nursing |          6        0.68       78.07
+         Other health professions |         22        2.50       80.57
+                       Philosophy |         15        1.70       82.27
+                Physical sciences |         18        2.05       84.32
+ Political science and government |         35        3.98       88.30
+                          Pre-law |          1        0.11       88.41
+                          Pre-med |          1        0.11       88.52
+                          Pre-vet |          1        0.11       88.64
+                       Psychology |         36        4.09       92.73
+                        Sociology |         15        1.70       94.43
+       Theology/religious studies |         12        1.36       95.80
+              Nutrition/Dietetics |          2        0.23       96.02
+     Hotel/Hospitality management |          3        0.34       96.36
+                               38 |          2        0.23       96.59
+                               40 |          1        0.11       96.70
+                               41 |          1        0.11       96.82
+                               43 |          3        0.34       97.16
+                               45 |          1        0.11       97.27
+                               46 |          1        0.11       97.39
+            Other field (SPECIFY) |         20        2.27       99.66
+                        UNCODABLE |          3        0.34      100.00
+----------------------------------+-----------------------------------
+                            Total |        880      100.00
+
+. 
+. ren finalMajor collegeMajorField
+
+. ren MajorAgg collegeMajorUberField
+
+. gen cohortFlag = 1997
+
+. keep if year == 1997
+(0 observations deleted)
+
+. ren ID id
+
+. 
+. keep id cohortFlag collegeMajorField collegeMajorUberField
+
+. save /afs/econ.duke.edu/data/vjh3/WageReturns/Data/y97/y97_college_majors_fin
+> al, replace
+file /afs/econ.duke.edu/data/vjh3/WageReturns/Data/y97/y97_college_majors_final
+> .dta saved
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /afs/econ.duke.edu/data/vjh3/WageReturns/Data/y97/y97_create_colle
+> ge_majors_final.log
+  log type:  text
+ closed on:  30 Jan 2014, 13:55:50
+-------------------------------------------------------------------------------

@@ -1,0 +1,1121 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/data/ransom/WageReturnsRepo/Analysis/y97_asvab_noFvars_t0_16
+> .log
+  log type:  text
+ opened on:  16 Mar 2019, 16:05:38
+
+. set matsize 4000
+
+. 
+. global graphics_path Graphics/
+
+. 
+. *****************************************************************************
+. * Perform mlogits on data to use at starting points for V++
+. *  MFX Model
+. *****************************************************************************
+. *============================================================================
+. * Import data, define macros, gen variables
+. *============================================================================
+. 
+. if "`c(username)'"=="jared"  global secretdir [REDACTED]
+
+. if "`c(username)'"=="ransom" global secretdir [REDACTED]nl
+> sy/"
+
+. 
+. use if cohortFlag==1997 & ~female using ${secretdir}/yCombined_scaled_t0_16.d
+> ta, clear
+
+. * drop if inlist(birthYear,1957,1958)
+. 
+. * structural
+. * asvab`asvab' = `Pvars79O' `Fvars'
+. * flex
+. * qui reg asvab`asvab' `Pvars79O' `Fvars1'  `Svars1'  `Zvars1'  `Evars0'  `Iv
+> ars3' `risk' `work'
+. * more flex
+. * qui reg asvab`asvab' `Pvars79O' `Fvars15' `Svars15' `Zvars25' `Evars25' `Iv
+> ars3' `risk' `work'
+. * most flex
+. * qui reg asvab`asvab' `Pvars79O' `Fvars2'  `Svars3'  `Zvars3'  `Evars3'  `Iv
+> ars3' `risk' `work'
+. 
+. * local Pvars79O black hispanic born1957 born1958 born1959          foreignBo
+> rn
+. * local Pvars79Y black hispanic born1961 born1962 born1963          foreignBo
+> rn
+. local Pvars79  black hispanic born1959 born1960 born1961 born1962 born1963 fo
+> reignBorn
+
+. local Pvars97  black hispanic born1980 born1981 born1982 born1983          fo
+> reignBorn
+
+. local Fvars    
+
+. local Fvars0   
+
+. local Fvars1   
+
+. local Fvars15  
+
+. local Fvars2   
+
+. 
+. local Svars    schoolOnlyt schoolOnlySq schoolOnlyCu
+
+. local Svars00  anySchoolt
+
+. local Svars0   anySchoolt  anySchoolSq
+
+. local Svars1   anySchoolt  anySchoolSq  anySchoolCu
+
+. local Svars2   anySchoolt  anySchoolSq  anySchoolCu
+
+. local Svars25  anySchoolt anySchoolBlack anySchoolHisp anySchoolSq anySchoolS
+> qBlack anySchoolSqHisp anySchoolCu                              
+
+. local Svars3   anySchoolt anySchoolBlack anySchoolHisp anySchoolSq anySchoolS
+> qBlack anySchoolSqHisp anySchoolCu anySchoolCuBlack anySchoolCuHisp anySchool
+> Qr                              
+
+. 
+. local Zvars    workK12t workK12Sq workK12schoolOnly workK12Cu workColleget wo
+> rkCollegeSq workCollegeschoolOnly workCollegeCu
+
+. local Zvars00  workK12t workColleget  
+
+. local Zvars1   workK12t workK12Sq           workColleget workCollegeSq 
+
+. local Zvars15  workK12t workK12Black workK12Hisp workK12Sq workK12Cu workColl
+> eget workCollegeBlack workCollegeHisp workCollegeSq workCollegeCu            
+>         
+
+. local Zvars2   workK12t workK12Sq workK12Cu workColleget workCollegeSq workCo
+> llegeCu
+
+. local Zvars3   workK12t workK12Black workK12Hisp workK12Sq workK12SqBlack wor
+> kK12SqHisp workK12Cu workK12CuBlack workK12CuHisp workK12Qr workColleget work
+> CollegeBlack workCollegeHisp workCollegeSq workCollegeSqBlack workCollegeSqHi
+> sp workCollegeCu workCollegeCuBlack workCollegeCuHisp workCollegeQr          
+>           
+
+. 
+. local Evars    workPTonlyt workPTSq workPTschoolOnly workPTCu workFTonlyt wor
+> kFTSq workFTschoolOnly workFTCu militaryt militarySq militaryCu othert otherS
+> q otherCu
+
+. local Evars000 workPTonlyt workFTonlyt militaryt  
+
+. local Evars00  workPTonlyt workPTSq workFTonlyt workFTSq militaryt militarySq
+>  
+
+. local Evars0   workPTonlyt workPTSq workPTCu workFTonlyt workFTSq workFTCu mi
+> litaryt militarySq militaryCu
+
+. local Evars1   workPTonlyt workPTSq workFTonlyt workFTSq militaryt militarySq
+>  othert otherSq
+
+. local Evars2   workPTonlyt workPTSq workPTCu workFTonlyt workFTSq workFTanySc
+> hool  workFTCu militaryt militarySq militaryCu othert otherSq otherCu
+
+. local Evars25  workPTonlyt workPTBlack workPTHisp workPTSq workPTSqBlack work
+> PTSqHisp workPTCu workFTonlyt workFTBlack workFTHisp workFTSq workFTSqBlack w
+> orkFTSqHisp workFTCu militaryt militaryBlack militaryHisp militarySq military
+> SqBlack militarySqHisp militaryCu
+
+. local Evars3   workPTonlyt workPTBlack workPTHisp workPTSq workPTSqBlack work
+> PTSqHisp workPTCu workPTCuBlack workPTCuHisp workPTQr workFTonlyt workFTBlack
+>  workFTHisp workFTSq workFTSqBlack workFTSqHisp workFTCu workFTCuBlack workFT
+> CuHisp workFTQr militaryt militaryBlack militaryHisp militarySq militarySqBla
+> ck militarySqHisp militaryCu militaryCuBlack militaryCuHisp militaryQr
+
+. local Ivars3   workK12anySchool workCollegeanySchool workCollegeworkK12 workP
+> TanySchool workPTworkK12 workPTworkCollege workFTanySchool workFTworkK12 work
+> FTworkCollege workFTworkPT                              
+
+. 
+. local risk     gradHS grad4yr
+
+. local work     inSchWork PTwork
+
+. 
+. gen inSchWork  = (activity==2 | activity==12 | activity==22)
+
+. gen PTwork     = (activity==3 | activity==13 | activity==23)
+
+. 
+. 
+. *============================================================================
+. * Regressions
+. *============================================================================
+. capture program drop normal
+
+. program normal
+  1. version 11.2
+  2. args lnf Xb sigma
+  3. quietly replace `lnf'=ln(normalden(${ML_y1}, `Xb', `sigma'))
+  4. end
+
+. 
+. * Pvars only
+. foreach asvab in AR CS MK NO PC WK {
+  2.         ml model lf normal (asvab`asvab' = `Pvars97') /sigma if ~m_asvab`a
+> svab' & firstObs
+  3.         ml max
+  4.         estimates store       reg`asvab'
+  5.         predict asvab`asvab'hatStructFirstObs, xb
+  6.         qui reg asvab`asvab' `Pvars97' if ~m_asvab`asvab' & agemo==2801
+  7.         predict asvab`asvab'hatStruct if e(sample), xb
+  8.         matrix asvab`asvab'StructR2a = e(r2_a)
+  9.         svmat  asvab`asvab'StructR2a
+ 10.         generat Dasvab`asvab'Struct = asvab`asvab'-asvab`asvab'hatStruct
+ 11. }
+
+initial:       log likelihood =     -<inf>  (could not be evaluated)
+feasible:      log likelihood = -9816.7921
+rescale:       log likelihood = -6749.6501
+rescale eq:    log likelihood = -5082.0432
+Iteration 0:   log likelihood = -5082.0432  
+Iteration 1:   log likelihood = -4951.6175  
+Iteration 2:   log likelihood = -4750.6259  
+Iteration 3:   log likelihood =  -4747.716  
+Iteration 4:   log likelihood = -4747.7086  
+Iteration 5:   log likelihood = -4747.7086  
+
+                                                Number of obs     =      3,506
+                                                Wald chi2(7)      =     728.89
+Log likelihood = -4747.7086                     Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+     asvabAR |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+eq1          |
+       black |  -.9727492   .0382063   -25.46   0.000    -1.047632   -.8978662
+    hispanic |  -.6560464   .0421961   -15.55   0.000    -.7387492   -.5733436
+    born1980 |   .0575765   .0516323     1.12   0.265     -.043621     .158774
+    born1981 |   .0951992   .0495125     1.92   0.055    -.0018435    .1922418
+    born1982 |   .0578355   .0495989     1.17   0.244    -.0393766    .1550476
+    born1983 |    .031938   .0493943     0.65   0.518     -.064873    .1287491
+ foreignBorn |   .0462559   .0654656     0.71   0.480    -.0820544    .1745661
+       _cons |   .3424263   .0377345     9.07   0.000     .2684679    .4163847
+-------------+----------------------------------------------------------------
+sigma        |
+       _cons |   .9372813   .0111931    83.74   0.000     .9153433    .9592193
+------------------------------------------------------------------------------
+(789,718 missing values generated)
+(789,718 missing values generated)
+
+initial:       log likelihood =     -<inf>  (could not be evaluated)
+feasible:      log likelihood =  -9155.537
+rescale:       log likelihood =  -6193.929
+rescale eq:    log likelihood = -5117.6387
+Iteration 0:   log likelihood = -5117.6387  
+Iteration 1:   log likelihood = -5012.8849  
+Iteration 2:   log likelihood = -5009.8731  
+Iteration 3:   log likelihood = -5009.8668  
+Iteration 4:   log likelihood = -5009.8668  
+
+                                                Number of obs     =      3,446
+                                                Wald chi2(7)      =     187.49
+Log likelihood = -5009.8668                     Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+     asvabCS |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+eq1          |
+       black |  -.5557784   .0425833   -13.05   0.000    -.6392401   -.4723167
+    hispanic |  -.3262942   .0469869    -6.94   0.000    -.4183869   -.2342016
+    born1980 |   .0065831   .0576626     0.11   0.909    -.1064336    .1195998
+    born1981 |    .048403   .0552453     0.88   0.381    -.0598758    .1566819
+    born1982 |  -.0600646   .0553303    -1.09   0.278    -.1685101    .0483808
+    born1983 |   .0048992   .0551534     0.09   0.929    -.1031995    .1129978
+ foreignBorn |  -.0114281   .0728368    -0.16   0.875    -.1541856    .1313294
+       _cons |   .4111449   .0422222     9.74   0.000     .3283909    .4938988
+-------------+----------------------------------------------------------------
+sigma        |
+       _cons |   1.035498   .0124732    83.02   0.000     1.011051    1.059945
+------------------------------------------------------------------------------
+(789,766 missing values generated)
+(789,766 missing values generated)
+
+initial:       log likelihood =     -<inf>  (could not be evaluated)
+feasible:      log likelihood = -8658.0744
+rescale:       log likelihood = -6229.4312
+rescale eq:    log likelihood = -4969.4616
+Iteration 0:   log likelihood = -4969.4616  
+Iteration 1:   log likelihood = -4834.2897  
+Iteration 2:   log likelihood = -4707.6781  
+Iteration 3:   log likelihood = -4706.7534  
+Iteration 4:   log likelihood = -4706.7525  
+Iteration 5:   log likelihood = -4706.7525  
+
+                                                Number of obs     =      3,498
+                                                Wald chi2(7)      =     564.20
+Log likelihood = -4706.7525                     Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+     asvabMK |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+eq1          |
+       black |  -.8496206   .0379235   -22.40   0.000    -.9239492    -.775292
+    hispanic |  -.5675133   .0418712   -13.55   0.000    -.6495794   -.4854472
+    born1980 |   .0563514    .051223     1.10   0.271    -.0440438    .1567466
+    born1981 |   .0674758   .0491578     1.37   0.170    -.0288717    .1638232
+    born1982 |   .0322099   .0492253     0.65   0.513      -.06427    .1286897
+    born1983 |   .0513141   .0490562     1.05   0.296    -.0448344    .1474626
+ foreignBorn |   .1452685   .0649095     2.24   0.025     .0180483    .2724887
+       _cons |   .4217362   .0374604    11.26   0.000     .3483152    .4951571
+-------------+----------------------------------------------------------------
+sigma        |
+       _cons |   .9292447   .0111098    83.64   0.000     .9074699    .9510195
+------------------------------------------------------------------------------
+(789,724 missing values generated)
+(789,724 missing values generated)
+
+initial:       log likelihood =     -<inf>  (could not be evaluated)
+feasible:      log likelihood = -7739.2619
+rescale:       log likelihood = -5792.9873
+rescale eq:    log likelihood =  -4785.619
+Iteration 0:   log likelihood =  -4785.619  
+Iteration 1:   log likelihood = -4703.4568  
+Iteration 2:   log likelihood = -4693.4089  
+Iteration 3:   log likelihood = -4693.4036  
+Iteration 4:   log likelihood = -4693.4036  
+
+                                                Number of obs     =      3,445
+                                                Wald chi2(7)      =     181.89
+Log likelihood = -4693.4036                     Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+     asvabNO |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+eq1          |
+       black |  -.4605079   .0388653   -11.85   0.000    -.5366825   -.3843332
+    hispanic |  -.3983201   .0428836    -9.29   0.000    -.4823704   -.3142699
+    born1980 |    .053761   .0526239     1.02   0.307    -.0493799    .1569019
+    born1981 |   .0258931   .0504178     0.51   0.608     -.072924    .1247102
+    born1982 |  -.0137915   .0504954    -0.27   0.785    -.1127607    .0851776
+    born1983 |   .0087904   .0503513     0.17   0.861    -.0898963    .1074771
+ foreignBorn |   .0852287   .0664724     1.28   0.200    -.0450547    .2155121
+       _cons |   .4078289   .0385332    10.58   0.000     .3323052    .4833527
+-------------+----------------------------------------------------------------
+sigma        |
+       _cons |   .9450124   .0113849    83.01   0.000     .9226985    .9673264
+------------------------------------------------------------------------------
+(789,767 missing values generated)
+(789,767 missing values generated)
+
+initial:       log likelihood =     -<inf>  (could not be evaluated)
+feasible:      log likelihood = -10225.123
+rescale:       log likelihood = -6898.2971
+rescale eq:    log likelihood = -5134.5803
+Iteration 0:   log likelihood = -5134.5803  
+Iteration 1:   log likelihood =  -4931.902  
+Iteration 2:   log likelihood = -4884.2124  
+Iteration 3:   log likelihood = -4883.7537  
+Iteration 4:   log likelihood = -4883.7536  
+
+                                                Number of obs     =      3,504
+                                                Wald chi2(7)      =     522.96
+Log likelihood = -4883.7536                     Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+     asvabPC |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+eq1          |
+       black |  -.8609801   .0397562   -21.66   0.000    -.9389008   -.7830595
+    hispanic |  -.5469032    .043906   -12.46   0.000    -.6329573    -.460849
+    born1980 |   .0318166   .0537179     0.59   0.554    -.0734686    .1371018
+    born1981 |   .0911067   .0515487     1.77   0.077     -.009927    .1921403
+    born1982 |  -.0311928   .0516024    -0.60   0.546    -.1323316     .069946
+    born1983 |   .0533867   .0513895     1.04   0.299    -.0473349    .1541082
+ foreignBorn |  -.0258012   .0681111    -0.38   0.705    -.1592964    .1076941
+       _cons |   .2895623   .0392601     7.38   0.000      .212614    .3665106
+-------------+----------------------------------------------------------------
+sigma        |
+       _cons |   .9751409   .0116485    83.71   0.000     .9523103    .9979716
+------------------------------------------------------------------------------
+(789,719 missing values generated)
+(789,719 missing values generated)
+
+initial:       log likelihood =     -<inf>  (could not be evaluated)
+feasible:      log likelihood = -7964.1279
+rescale:       log likelihood = -6065.3738
+rescale eq:    log likelihood =  -4800.617
+Iteration 0:   log likelihood =  -4800.617  
+Iteration 1:   log likelihood = -4474.7814  
+Iteration 2:   log likelihood = -4452.9652  
+Iteration 3:   log likelihood = -4452.9089  
+Iteration 4:   log likelihood = -4452.9089  
+
+                                                Number of obs     =      3,505
+                                                Wald chi2(7)      =     744.04
+Log likelihood = -4452.9089                     Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+     asvabWK |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+eq1          |
+       black |   -.893333   .0351408   -25.42   0.000    -.9622076   -.8244584
+    hispanic |  -.6199151   .0388096   -15.97   0.000    -.6959805   -.5438497
+    born1980 |   .0625176   .0474856     1.32   0.188    -.0305524    .1555876
+    born1981 |   .0669476    .045552     1.47   0.142    -.0223327    .1562279
+    born1982 |   .0488807   .0456155     1.07   0.284     -.040524    .1382854
+    born1983 |    .074955   .0454273     1.65   0.099    -.0140809    .1639909
+ foreignBorn |  -.1165111   .0602084    -1.94   0.053    -.2345173    .0014951
+       _cons |   .4495294   .0347045    12.95   0.000     .3815097     .517549
+-------------+----------------------------------------------------------------
+sigma        |
+       _cons |   .8620054   .0102956    83.73   0.000     .8418264    .8821844
+------------------------------------------------------------------------------
+(789,718 missing values generated)
+(789,718 missing values generated)
+
+. 
+. qui outreg2 [regAR regCS regMK regNO regPC regWK] using y97_asvab_noFvars_t0_
+> 16, excel replace bdec(4) sdec(4) ctitle(asvabs)
+ : 
+. 
+. *--------------------------------------
+. * More flexible specification (fit), including engogenous variable, estimated
+>  at agemo==2801
+. *--------------------------------------
+. capture program drop normal
+
+. program normal
+  1. version 11.2
+  2. args lnf Xb sigma
+  3. quietly replace `lnf'=ln(normalden(${ML_y1}, `Xb', `sigma'))
+  4. end
+
+. 
+. * Pvars and Fvars and more, oh my
+. foreach asvab in AR CS MK NO PC WK {
+  2.         * Linear specification
+.         qui reg asvab`asvab' `Pvars97' `Fvars0'  `Svars00'  `Zvars00'  `Evars
+> 000' `risk' `work' if ~m_asvab`asvab' & agemo==2801
+  3.         predict asvab`asvab'hatLin if e(sample), xb
+  4.         matrix asvab`asvab'LinR2a = e(r2_a)
+  5.         svmat  asvab`asvab'LinR2a
+  6.         generat Dasvab`asvab'Lin = asvab`asvab'-asvab`asvab'hatLin
+  7.         qui estat ic
+  8.         matrix ic`asvab'Lin = r(S)
+  9.         local aic`asvab'Lin = ic`asvab'Lin[1,5]
+ 10.         local bic`asvab'Lin = ic`asvab'Lin[1,6]
+ 11.         
+.         * Quadratic specification
+.         qui reg asvab`asvab' `Pvars97' `Fvars'  `Svars0'  `Zvars1'  `Evars00'
+>  `risk' `work' if ~m_asvab`asvab' & agemo==2801
+ 12.         predict asvab`asvab'hatQuad if e(sample), xb
+ 13.         matrix asvab`asvab'QuadR2a = e(r2_a)
+ 14.         svmat  asvab`asvab'QuadR2a
+ 15.         generat Dasvab`asvab'Quad = asvab`asvab'-asvab`asvab'hatQuad
+ 16.         qui estat ic
+ 17.         matrix ic`asvab'Quad = r(S)
+ 18.         local aic`asvab'Quad = ic`asvab'Quad[1,5]
+ 19.         local bic`asvab'Quad = ic`asvab'Quad[1,6]
+ 20.         
+.         * Preferred specification (currently listed in the NPdecompositions d
+> ocument)
+.         qui reg asvab`asvab' `Pvars97' `Fvars1'  `Svars1'  `Zvars1'  `Evars0'
+>   `Ivars3' `risk' `work' if ~m_asvab`asvab' & agemo==2801
+ 21.         estimates store       reg`asvab'fit
+ 22.         predict asvab`asvab'hat if e(sample), xb
+ 23.         matrix asvab`asvab'R2a = e(r2_a)
+ 24.         svmat  asvab`asvab'R2a
+ 25.         generat Dasvab`asvab' = asvab`asvab'-asvab`asvab'hat
+ 26.         qui estat ic
+ 27.         matrix ic`asvab' = r(S)
+ 28.         local aic`asvab' = ic`asvab'[1,5]
+ 29.         local bic`asvab' = ic`asvab'[1,6]
+ 30.         
+.         * More flexible specification
+.         qui reg asvab`asvab' `Pvars97' `Fvars15' `Svars15' `Zvars25' `Evars25
+> ' `Ivars3' `risk' `work' if ~m_asvab`asvab' & agemo==2801
+ 31.         qui estat ic
+ 32.         matrix ic`asvab'hatMoreFlex = r(S)
+ 33.         local aic`asvab'hatMoreFlex = ic`asvab'hatMoreFlex[1,5]
+ 34.         local bic`asvab'hatMoreFlex = ic`asvab'hatMoreFlex[1,6]
+ 35.         predict asvab`asvab'hatMoreFlex if e(sample), xb
+ 36.         matrix asvab`asvab'MoreFlexR2a = e(r2_a)
+ 37.         svmat  asvab`asvab'MoreFlexR2a
+ 38.         generat Dasvab`asvab'MoreFlex = asvab`asvab'-asvab`asvab'hatMoreFl
+> ex
+ 39.         
+.         * Most flexible specification
+.         qui reg asvab`asvab' `Pvars97' `Fvars2'  `Svars3'  `Zvars3'  `Evars3'
+>   `Ivars3' `risk' `work' if ~m_asvab`asvab' & agemo==2801
+ 40.         qui estat ic
+ 41.         matrix ic`asvab'hatMostFlex = r(S)
+ 42.         local aic`asvab'hatMostFlex = ic`asvab'hatMostFlex[1,5]
+ 43.         local bic`asvab'hatMostFlex = ic`asvab'hatMostFlex[1,6]
+ 44.         predict asvab`asvab'hatMostFlex if e(sample), xb
+ 45.         matrix asvab`asvab'MostFlexR2a = e(r2_a)
+ 46.         svmat  asvab`asvab'MostFlexR2a
+ 47.         generat Dasvab`asvab'MostFlex = asvab`asvab'-asvab`asvab'hatMostFl
+> ex
+ 48. }
+(789,718 missing values generated)
+(789,718 missing values generated)
+(789,718 missing values generated)
+(789,718 missing values generated)
+(789,718 missing values generated)
+(789,718 missing values generated)
+(789,718 missing values generated)
+(789,718 missing values generated)
+(789,718 missing values generated)
+(789,718 missing values generated)
+(789,766 missing values generated)
+(789,766 missing values generated)
+(789,766 missing values generated)
+(789,766 missing values generated)
+(789,766 missing values generated)
+(789,766 missing values generated)
+(789,766 missing values generated)
+(789,766 missing values generated)
+(789,766 missing values generated)
+(789,766 missing values generated)
+(789,724 missing values generated)
+(789,724 missing values generated)
+(789,724 missing values generated)
+(789,724 missing values generated)
+(789,724 missing values generated)
+(789,724 missing values generated)
+(789,724 missing values generated)
+(789,724 missing values generated)
+(789,724 missing values generated)
+(789,724 missing values generated)
+(789,767 missing values generated)
+(789,767 missing values generated)
+(789,767 missing values generated)
+(789,767 missing values generated)
+(789,767 missing values generated)
+(789,767 missing values generated)
+(789,767 missing values generated)
+(789,767 missing values generated)
+(789,767 missing values generated)
+(789,767 missing values generated)
+(789,719 missing values generated)
+(789,719 missing values generated)
+(789,719 missing values generated)
+(789,719 missing values generated)
+(789,719 missing values generated)
+(789,719 missing values generated)
+(789,719 missing values generated)
+(789,719 missing values generated)
+(789,719 missing values generated)
+(789,719 missing values generated)
+(789,718 missing values generated)
+(789,718 missing values generated)
+(789,718 missing values generated)
+(789,718 missing values generated)
+(789,718 missing values generated)
+(789,718 missing values generated)
+(789,718 missing values generated)
+(789,718 missing values generated)
+(789,718 missing values generated)
+(789,718 missing values generated)
+
+. 
+. * compare model fits
+. sum asvab?? Dasvab* if agemo==2801, sep(0)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+     asvabAR |      3,582    .0307188    .9400284  -1.939057   1.934505
+     asvabCS |      3,582    .1732799    .9561237  -2.249643   2.693824
+     asvabMK |      3,582     .134545    .9145964  -1.865726   1.970425
+     asvabNO |      3,582    .1979683    .8702587  -2.417545    1.48744
+     asvabPC |      3,582    .0084086    .9474197   -1.97382    1.56745
+     asvabWK |      3,582    .1301429    .8647079  -2.247054   1.516649
+DasvabARSt~t |      2,913    7.45e-09    .9456091  -2.379028   2.492779
+DasvabCSSt~t |      2,865    1.61e-09    1.036424  -2.757441   2.648978
+DasvabMKSt~t |      2,907    3.74e-09    .9384349  -2.385874   2.423374
+DasvabNOSt~t |      2,864    5.37e-09    .9419433  -2.888873   1.554122
+DasvabPCSt~t |      2,912   -8.23e-09    .9775912  -2.387774   2.169633
+DasvabWKSt~t |      2,913   -5.28e-09    .8633762  -2.801814   1.923761
+ DasvabARLin |      2,913    6.22e-10    .8243545  -2.598789    2.72125
+DasvabARQuad |      2,913    6.78e-10     .818101  -2.617971   2.745057
+    DasvabAR |      2,913    1.11e-09    .8134467  -2.623424   2.774357
+Da~RMoreFlex |      2,913    1.33e-09    .8214481  -2.592263   2.790808
+Da~RMostFlex |      2,913   -3.70e-10    .8061206  -2.562025   2.914704
+ DasvabCSLin |      2,865    1.36e-09    .9650376  -3.218986   2.910925
+DasvabCSQuad |      2,865   -8.03e-11    .9585659  -3.225925   2.876975
+    DasvabCS |      2,865    6.79e-11    .9514972  -3.165314   2.662061
+Da~SMoreFlex |      2,865   -5.22e-10    .9557797  -3.183629   2.716348
+Da~SMostFlex |      2,865    7.04e-10    .9445217  -3.212359   2.699904
+ DasvabMKLin |      2,907    8.79e-10    .7911849  -3.177505   2.628189
+DasvabMKQuad |      2,907    1.80e-10    .7815478  -2.734441     2.6121
+    DasvabMK |      2,907   -2.78e-10     .773681  -2.618408   2.510744
+D~MKMoreFlex |      2,907   -2.18e-10     .780076  -2.674524   2.437371
+D~MKMostFlex |      2,907   -1.55e-10    .7638883  -2.702265   2.521786
+ DasvabNOLin |      2,864   -3.65e-10    .8536794  -3.070844   2.255726
+DasvabNOQuad |      2,864   -1.83e-10    .8467175  -3.112287   2.220653
+    DasvabNO |      2,864    1.63e-10    .8446512  -3.130635   2.212574
+Da~OMoreFlex |      2,864   -2.97e-10    .8508507  -3.075447   2.187152
+Da~OMostFlex |      2,864    4.22e-10    .8350466  -3.033694   2.295896
+ DasvabPCLin |      2,912    8.69e-10    .8530626  -3.062434   2.367584
+DasvabPCQuad |      2,912    3.44e-10    .8438417  -3.023467   2.385208
+    DasvabPC |      2,912   -2.24e-11    .8398023  -2.965234   2.442149
+Da~CMoreFlex |      2,912    3.35e-10    .8454129  -2.904981    2.43721
+Da~CMostFlex |      2,912    3.19e-10    .8286368  -2.919718   2.608288
+ DasvabWKLin |      2,913    3.72e-10    .7685088   -2.91503   1.904156
+DasvabWKQuad |      2,913   -3.09e-10     .761984  -2.752464   1.958068
+    DasvabWK |      2,913   -1.47e-10    .7603953  -2.785942   1.958465
+D~WKMoreFlex |      2,913   -3.70e-10    .7661714  -2.840594   2.021943
+D~WKMostFlex |      2,913    2.00e-10    .7482849  -2.700825   2.097538
+
+. 
+. foreach asvab in AR CS MK NO PC WK {
+  2.         * qui gen SSE_`asvab'         = sum((asvab`asvab' - asvab`asvab'ha
+> t        )^2)
+.         * qui gen SSE_`asvab'MoreFlex = sum((asvab`asvab' - asvab`asvab'hatMo
+> reFlex)^2)
+.         * qui gen SSE_`asvab'MostFlex = sum((asvab`asvab' - asvab`asvab'hatMo
+> stFlex)^2)
+.         
+.         disp "`asvab': AIC"
+  3.         disp `aic`asvab''
+  4.         disp `aic`asvab'hatMoreFlex'
+  5.         disp `aic`asvab'hatMostFlex'
+  6. 
+.         disp "`asvab': BIC"
+  7.         disp `bic`asvab''
+  8.         disp `bic`asvab'hatMoreFlex'
+  9.         disp `bic`asvab'hatMostFlex'
+ 10.         
+.         * Graphs of adjusted R2
+.         capture drop specCat specR2a
+ 11.         capture label drop vlspecR2a
+ 12.         lab def vlspecR2a 1 "Linear" 2 "Quadratic" 3 "Flexible" 4 "More fl
+> exible" 5 "Most flexible"
+ 13.         generat specCat = _n if _n<=5
+ 14.         generat specR2a = .
+ 15.         lab val specR2a vlspecR2a
+ 16.         replace specR2a = asvab`asvab'LinR2a1[1] if _n==1
+ 17.         replace specR2a = asvab`asvab'QuadR2a1[1] if _n==2
+ 18.         replace specR2a = asvab`asvab'R2a1[1] if _n==3
+ 19.         replace specR2a = asvab`asvab'MoreFlexR2a1[1] if _n==4
+ 20.         replace specR2a = asvab`asvab'MostFlexR2a1[1] if _n==5
+ 21.         
+.         l specR2a asvab`asvab'LinR2a1 asvab`asvab'QuadR2a1 asvab`asvab'R2a1 a
+> svab`asvab'MoreFlexR2a1 asvab`asvab'MostFlexR2a1 in 1/5
+ 22.         
+.         graph bar specR2a, over(specCat) graphregion(color(white)) ytitle("Ad
+> justed R{superscript:2}") yscale(range(0 .55)) ylabel(0(.1).5)
+ 23.         graph export ${graphics_path}asvab`asvab'R2aFit97.eps, replace // 
+> can change to PNG if desired
+ 24.         
+.         * Graphs of residuals
+.         _pctile Dasvab`asvab'Struct if agemo==2801 & ~m_asvab`asvab', percent
+> iles(50)
+ 25.         scalar median1 = r(r1)
+ 26.         _pctile Dasvab`asvab'Lin if agemo==2801 & ~m_asvab`asvab', percent
+> iles(50)
+ 27.         scalar median2 = r(r1)
+ 28.         _pctile Dasvab`asvab'Quad if agemo==2801 & ~m_asvab`asvab', percen
+> tiles(50)
+ 29.         scalar median3 = r(r1)
+ 30.         _pctile Dasvab`asvab' if agemo==2801 & ~m_asvab`asvab', percentile
+> s(50)
+ 31.         scalar median4 = r(r1)
+ 32.         _pctile Dasvab`asvab'MoreFlex if agemo==2801 & ~m_asvab`asvab', pe
+> rcentiles(50)
+ 33.         scalar median5 = r(r1)
+ 34.         _pctile Dasvab`asvab'MostFlex if agemo==2801 & ~m_asvab`asvab', pe
+> rcentiles(50)
+ 35.         scalar median6 = r(r1)
+ 36.         graph twoway ( kdensity Dasvab`asvab'Lin if agemo==2801 & ~m_asvab
+> `asvab') ( kdensity Dasvab`asvab'Quad if agemo==2801 & ~m_asvab`asvab') ( kde
+> nsity Dasvab`asvab' if agemo==2801 & ~m_asvab`asvab', lpattern(_) ) ( kdensit
+> y Dasvab`asvab'MoreFlex if agemo==2801 & ~m_asvab`asvab', lpattern("...") ) (
+>  kdensity Dasvab`asvab'MostFlex if agemo==2801 & ~m_asvab`asvab', lpattern("-
+> .") ) ///
+>         , xline(`=median1', lcolor(navy)) xline(`=median2', lpattern(_) lcolo
+> r(maroon)) xline(`=median3', lpattern("...") lcolor(forest_green)) xline(`=me
+> dian4', lpattern("-.") lcolor(dkorange)) ///
+>           legend(label(1 "Linear") label(2 "Quadratic") label(3 "Flexible") l
+> abel(4 "More flexible") label(5 "Most flexible") cols(2) symxsize(10) keygap(
+> 1) ) graphregion(color(white)) xscale(range(-3.5 3.5)) xlabel(-3(1)3) xtitle(
+> "Residual") ytitle("Density")
+ 37.         graph export ${graphics_path}Dasvab`asvab'fit97.eps, replace // ca
+> n change to PNG if desired
+ 38.         
+.         _pctile asvab`asvab'hatStruct if agemo==2801 & ~m_asvab`asvab', perce
+> ntiles(50)
+ 39.         scalar median7 = r(r1)
+ 40.         _pctile asvab`asvab'hatLin if agemo==2801 & ~m_asvab`asvab', perce
+> ntiles(50)
+ 41.         scalar median8 = r(r1)
+ 42.         _pctile asvab`asvab'hatQuad if agemo==2801 & ~m_asvab`asvab', perc
+> entiles(50)
+ 43.         scalar median9 = r(r1)
+ 44.         _pctile asvab`asvab'hat if agemo==2801 & ~m_asvab`asvab', percenti
+> les(50)
+ 45.         scalar median10 = r(r1)
+ 46.         _pctile asvab`asvab'hatMoreFlex if agemo==2801 & ~m_asvab`asvab', 
+> percentiles(50)
+ 47.         scalar median11 = r(r1)
+ 48.         _pctile asvab`asvab'hatMostFlex if agemo==2801 & ~m_asvab`asvab', 
+> percentiles(50)
+ 49.         scalar median12 = r(r1)
+ 50.         _pctile asvab`asvab' if agemo==2801 & ~m_asvab`asvab', percentiles
+> (50)
+ 51.         scalar median13 = r(r1)
+ 52.         
+.         graph twoway ( kdensity asvab`asvab' if agemo==2801 & ~m_asvab`asvab'
+> ) ( kdensity asvab`asvab'hatLin if agemo==2801 & ~m_asvab`asvab', lcolor(teal
+> ) lpattern("--..")) ( kdensity asvab`asvab'hatQuad if agemo==2801 & ~m_asvab`
+> asvab', lcolor(maroon) lpattern(_)) ( kdensity asvab`asvab'hat if agemo==2801
+>  & ~m_asvab`asvab', lcolor(forestgreen) lpattern("...") ) ( kdensity asvab`as
+> vab'hatMostFlex if agemo==2801 & ~m_asvab`asvab', lcolor(dkorange) lpattern("
+> -.") ) ///
+>         , xline(`=median8', lcolor(teal) lpattern("--..")) xline(`=median9', 
+> lpattern(_) lcolor(maroon)) xline(`=median10', lpattern("...") lcolor(forest_
+> green)) xline(`=median12', lpattern("-.") lcolor(dkorange)) xline(`=median13'
+> , lcolor(navy)) ///
+>           legend(label(1 "Data") label(2 "Linear") label(3 "Quadratic") label
+> (4 "Flexible") label(5 "Most flexible") cols(2) symxsize(10) keygap(1) ) grap
+> hregion(color(white)) xscale(range(-3.5 3.5)) xlabel(-3(1)3) xtitle("Test Sco
+> re") ytitle("Density")
+ 53.         graph export ${graphics_path}Dasvab`asvab'compareDensity97.eps, re
+> place // can change to PNG if desired
+ 54.         
+.         graph twoway ( scatter Dasvab`asvab'Struct asvab`asvab' if agemo==280
+> 1 & ~m_asvab`asvab') ( scatter Dasvab`asvab' asvab`asvab' if agemo==2801 ) ( 
+> scatter Dasvab`asvab'MoreFlex asvab`asvab' if agemo==2801 ) ( scatter Dasvab`
+> asvab'MostFlex asvab`asvab' if agemo==2801 ) ///
+>         , legend(label(1 "Structural") label(2 "Flexible") label(3 "More flex
+> ible") label(4 "Most flexible") cols(2) symxsize(10) keygap(1) ) graphregion(
+> color(white)) xtitle("Actual ASVAB") ytitle("Actual - Predicted ASVAB")
+ 55.         graph export ${graphics_path}Dasvab`asvab'scatter97.eps, replace /
+> / can change to PNG if desired
+ 56. 
+.         graph twoway ( scatter Dasvab`asvab'Struct   asvab`asvab' if agemo==2
+> 801 & ~m_asvab`asvab') ///
+>         , graphregion(color(white)) xtitle("Actual ASVAB") ytitle("Actual - P
+> redicted ASVAB")
+ 57.         graph export ${graphics_path}Dasvab`asvab'scatterStruct97.eps, rep
+> lace // can change to PNG if desired
+ 58.         
+.         graph twoway ( scatter Dasvab`asvab'Lin   asvab`asvab' if agemo==2801
+>  & ~m_asvab`asvab') ///
+>         , graphregion(color(white)) xtitle("Actual ASVAB") ytitle("Actual - P
+> redicted ASVAB")
+ 59.         graph export ${graphics_path}Dasvab`asvab'scatterLin97.eps, replac
+> e // can change to PNG if desired
+ 60.         
+.         graph twoway ( scatter Dasvab`asvab'Quad   asvab`asvab' if agemo==280
+> 1 & ~m_asvab`asvab') ///
+>         , graphregion(color(white)) xtitle("Actual ASVAB") ytitle("Actual - P
+> redicted ASVAB")
+ 61.         graph export ${graphics_path}Dasvab`asvab'scatterQuad97.eps, repla
+> ce // can change to PNG if desired
+ 62.         
+.         graph twoway ( scatter Dasvab`asvab'         asvab`asvab' if agemo==2
+> 801 & ~m_asvab`asvab') ///
+>         , graphregion(color(white)) xtitle("Actual ASVAB") ytitle("Actual - P
+> redicted ASVAB")
+ 63.         graph export ${graphics_path}Dasvab`asvab'scatterFlex97.eps, repla
+> ce // can change to PNG if desired
+ 64.         
+.         graph twoway ( scatter Dasvab`asvab'MoreFlex asvab`asvab' if agemo==2
+> 801 & ~m_asvab`asvab') ///
+>         , graphregion(color(white)) xtitle("Actual ASVAB") ytitle("Actual - P
+> redicted ASVAB")
+ 65.         graph export ${graphics_path}Dasvab`asvab'scatterMoreFlex97.eps, r
+> eplace // can change to PNG if desired
+ 66.         
+.         graph twoway ( scatter Dasvab`asvab'MostFlex asvab`asvab' if agemo==2
+> 801 & ~m_asvab`asvab') ///
+>         , graphregion(color(white)) xtitle("Actual ASVAB") ytitle("Actual - P
+> redicted ASVAB")
+ 67.         graph export ${graphics_path}Dasvab`asvab'scatterMostFlex97.eps, r
+> eplace // can change to PNG if desired
+ 68. }
+AR: AIC
+7138.8131
+7205.8397
+7174.1053
+AR: BIC
+7365.9368
+7462.8481
+7664.2143
+(792,626 missing values generated)
+(792,631 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+     +---------------------------------------------------------------------+
+     |      specR2a   asvabA..   asvabA..   as~RR2a1   asvabA..   asvabA.. |
+     |---------------------------------------------------------------------|
+  1. | .37080895901    .370809   .3790318   .3830877   .3697957   .3847335 |
+  2. | .37903183699          .          .          .          .          . |
+  3. | .38308772445          .          .          .          .          . |
+  4. | .36979570985          .          .          .          .          . |
+  5. |  .3847334981          .          .          .          .          . |
+     +---------------------------------------------------------------------+
+(file Graphics/asvabARR2aFit97.eps written in EPS format)
+(file Graphics/DasvabARfit97.eps written in EPS format)
+(note:  named style forestgreen not found in class color, default attributes
+    used)
+(note:  named style forestgreen not found in class color, default attributes
+    used)
+(file Graphics/DasvabARcompareDensity97.eps written in EPS format)
+(file Graphics/DasvabARscatter97.eps written in EPS format)
+(file Graphics/DasvabARscatterStruct97.eps written in EPS format)
+(file Graphics/DasvabARscatterLin97.eps written in EPS format)
+(file Graphics/DasvabARscatterQuad97.eps written in EPS format)
+(file Graphics/DasvabARscatterFlex97.eps written in EPS format)
+(file Graphics/DasvabARscatterMoreFlex97.eps written in EPS format)
+(file Graphics/DasvabARscatterMostFlex97.eps written in EPS format)
+CS: AIC
+7920.6302
+7956.3619
+7966.4687
+CS: BIC
+8147.1225
+8212.6558
+8455.2153
+(792,626 missing values generated)
+(792,631 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+     +---------------------------------------------------------------------+
+     |      specR2a   asvabC..   asvabC..   as~SR2a1   asvabC..   asvabC.. |
+     |---------------------------------------------------------------------|
+  1. | .17358124256   .1735812   .1829063   .1909258     .18218   .1901402 |
+  2. | .18290629983          .          .          .          .          . |
+  3. | .19092580676          .          .          .          .          . |
+  4. | .18218001723          .          .          .          .          . |
+  5. | .19014017284          .          .          .          .          . |
+     +---------------------------------------------------------------------+
+(file Graphics/asvabCSR2aFit97.eps written in EPS format)
+(file Graphics/DasvabCSfit97.eps written in EPS format)
+(note:  named style forestgreen not found in class color, default attributes
+    used)
+(note:  named style forestgreen not found in class color, default attributes
+    used)
+(file Graphics/DasvabCScompareDensity97.eps written in EPS format)
+(file Graphics/DasvabCSscatter97.eps written in EPS format)
+(file Graphics/DasvabCSscatterStruct97.eps written in EPS format)
+(file Graphics/DasvabCSscatterLin97.eps written in EPS format)
+(file Graphics/DasvabCSscatterQuad97.eps written in EPS format)
+(file Graphics/DasvabCSscatterFlex97.eps written in EPS format)
+(file Graphics/DasvabCSscatterMoreFlex97.eps written in EPS format)
+(file Graphics/DasvabCSscatterMostFlex97.eps written in EPS format)
+MK: AIC
+6832.8611
+6890.7203
+6846.8026
+MK: BIC
+7059.9064
+7147.64
+7336.7425
+(792,626 missing values generated)
+(792,631 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+     +---------------------------------------------------------------------+
+     |      specR2a   asvabM..   asvabM..   a~MKR2a1   asvabM..   asvabM.. |
+     |---------------------------------------------------------------------|
+  1. | .38606160879   .3860616     .39968   .4088338   .3979714   .4147281 |
+  2. | .39967998862          .          .          .          .          . |
+  3. | .40883380175          .          .          .          .          . |
+  4. | .39797142148          .          .          .          .          . |
+  5. | .41472813487          .          .          .          .          . |
+     +---------------------------------------------------------------------+
+(file Graphics/asvabMKR2aFit97.eps written in EPS format)
+(file Graphics/DasvabMKfit97.eps written in EPS format)
+(note:  named style forestgreen not found in class color, default attributes
+    used)
+(note:  named style forestgreen not found in class color, default attributes
+    used)
+(file Graphics/DasvabMKcompareDensity97.eps written in EPS format)
+(file Graphics/DasvabMKscatter97.eps written in EPS format)
+(file Graphics/DasvabMKscatterStruct97.eps written in EPS format)
+(file Graphics/DasvabMKscatterLin97.eps written in EPS format)
+(file Graphics/DasvabMKscatterQuad97.eps written in EPS format)
+(file Graphics/DasvabMKscatterFlex97.eps written in EPS format)
+(file Graphics/DasvabMKscatterMoreFlex97.eps written in EPS format)
+(file Graphics/DasvabMKscatterMostFlex97.eps written in EPS format)
+NO: AIC
+7235.6127
+7287.5011
+7258.106
+NO: BIC
+7462.0918
+7543.78
+7746.8239
+(792,626 missing values generated)
+(792,631 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+     +---------------------------------------------------------------------+
+     |      specR2a   asvabN..   asvabN..   as~OR2a1   asvabN..   asvabN.. |
+     |---------------------------------------------------------------------|
+  1. | .21590460837   .2159046   .2270116   .2269691   .2141895   .2324998 |
+  2. |  .2270116061          .          .          .          .          . |
+  3. | .22696910799          .          .          .          .          . |
+  4. | .21418946981          .          .          .          .          . |
+  5. | .23249979317          .          .          .          .          . |
+     +---------------------------------------------------------------------+
+(file Graphics/asvabNOR2aFit97.eps written in EPS format)
+(file Graphics/DasvabNOfit97.eps written in EPS format)
+(note:  named style forestgreen not found in class color, default attributes
+    used)
+(note:  named style forestgreen not found in class color, default attributes
+    used)
+(file Graphics/DasvabNOcompareDensity97.eps written in EPS format)
+(file Graphics/DasvabNOscatter97.eps written in EPS format)
+(file Graphics/DasvabNOscatterStruct97.eps written in EPS format)
+(file Graphics/DasvabNOscatterLin97.eps written in EPS format)
+(file Graphics/DasvabNOscatterQuad97.eps written in EPS format)
+(file Graphics/DasvabNOscatterFlex97.eps written in EPS format)
+(file Graphics/DasvabNOscatterMoreFlex97.eps written in EPS format)
+(file Graphics/DasvabNOscatterMostFlex97.eps written in EPS format)
+PC: AIC
+7322.0929
+7370.8729
+7332.1409
+PC: BIC
+7549.2035
+7627.8665
+7822.2218
+(792,626 missing values generated)
+(792,631 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+     +---------------------------------------------------------------------+
+     |      specR2a   asvabP..   asvabP..   as~CR2a1   asvabP..   asvabP.. |
+     |---------------------------------------------------------------------|
+  1. |  .3370718956   .3370719   .3499781   .3530503   .3432345    .360346 |
+  2. | .34997814894          .          .          .          .          . |
+  3. | .35305032134          .          .          .          .          . |
+  4. | .34323447943          .          .          .          .          . |
+  5. | .36034601927          .          .          .          .          . |
+     +---------------------------------------------------------------------+
+(file Graphics/asvabPCR2aFit97.eps written in EPS format)
+(file Graphics/DasvabPCfit97.eps written in EPS format)
+(note:  named style forestgreen not found in class color, default attributes
+    used)
+(note:  named style forestgreen not found in class color, default attributes
+    used)
+(file Graphics/DasvabPCcompareDensity97.eps written in EPS format)
+(file Graphics/DasvabPCscatter97.eps written in EPS format)
+(file Graphics/DasvabPCscatterStruct97.eps written in EPS format)
+(file Graphics/DasvabPCscatterLin97.eps written in EPS format)
+(file Graphics/DasvabPCscatterQuad97.eps written in EPS format)
+(file Graphics/DasvabPCscatterFlex97.eps written in EPS format)
+(file Graphics/DasvabPCscatterMoreFlex97.eps written in EPS format)
+(file Graphics/DasvabPCscatterMostFlex97.eps written in EPS format)
+WK: AIC
+6745.8962
+6799.984
+6740.3621
+WK: BIC
+6973.0198
+7056.9924
+7230.4711
+(792,626 missing values generated)
+(792,631 missing values generated)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+     +---------------------------------------------------------------------+
+     |      specR2a   asvabW..   asvabW..   a~WKR2a1   asvabW..   asvabW.. |
+     |---------------------------------------------------------------------|
+  1. | .35053685308   .3505369   .3601922   .3597547   .3488586   .3703496 |
+  2. | .36019223928          .          .          .          .          . |
+  3. | .35975474119          .          .          .          .          . |
+  4. | .34885859489          .          .          .          .          . |
+  5. | .37034958601          .          .          .          .          . |
+     +---------------------------------------------------------------------+
+(file Graphics/asvabWKR2aFit97.eps written in EPS format)
+(file Graphics/DasvabWKfit97.eps written in EPS format)
+(note:  named style forestgreen not found in class color, default attributes
+    used)
+(note:  named style forestgreen not found in class color, default attributes
+    used)
+(file Graphics/DasvabWKcompareDensity97.eps written in EPS format)
+(file Graphics/DasvabWKscatter97.eps written in EPS format)
+(file Graphics/DasvabWKscatterStruct97.eps written in EPS format)
+(file Graphics/DasvabWKscatterLin97.eps written in EPS format)
+(file Graphics/DasvabWKscatterQuad97.eps written in EPS format)
+(file Graphics/DasvabWKscatterFlex97.eps written in EPS format)
+(file Graphics/DasvabWKscatterMoreFlex97.eps written in EPS format)
+(file Graphics/DasvabWKscatterMostFlex97.eps written in EPS format)
+
+. 
+. * export data
+. preserve
+
+.         keep if firstObs==1 | agemo==2801
+(784,606 observations deleted)
+
+.         bys id (year month): keep if _n==_N
+(3,582 observations deleted)
+
+.         outsheet id year age agemo asvabAR asvabCS asvabMK asvabNO asvabPC as
+> vabWK m_asvabAR m_asvabCS m_asvabMK m_asvabNO m_asvabPC m_asvabWK `Pvars97' `
+> Fvars0' `Svars00' `Zvars00' `Evars000'        `risk' `work' using y97_asvab_f
+> it_dataLinear.csv, comma replace nolabel
+
+.         outsheet id year age agemo asvabAR asvabCS asvabMK asvabNO asvabPC as
+> vabWK m_asvabAR m_asvabCS m_asvabMK m_asvabNO m_asvabPC m_asvabWK `Pvars97' `
+> Fvars1' `Svars1'  `Zvars1'  `Evars0' `Ivars3' `risk' `work' using y97_asvab_f
+> it_dataChosen.csv, comma replace nolabel
+
+.         outsheet id year age agemo asvabAR asvabCS asvabMK asvabNO asvabPC as
+> vabWK m_asvabAR m_asvabCS m_asvabMK m_asvabNO m_asvabPC m_asvabWK `Pvars97' `
+> Fvars2' `Svars3'  `Zvars3'  `Evars3' `Ivars3' `risk' `work' using y97_asvab_f
+> it_data.csv      , comma replace nolabel
+
+. restore
+
+. 
+. qui outreg2 [regARfit regCSfit regMKfit regNOfit regPCfit regWKfit] using y97
+> _asvab_noFvars_t0_16_fit, excel replace bdec(4) sdec(4) ctitle(asvabs)
+ : 
+. 
+. *============================================================================
+. * Create output for starting values for V++
+. *============================================================================
+. * Create a [K+size(sigma)] x [6] matrix
+. estimates restore regAR
+(results regAR are active now)
+
+. matrix           parmAR   = e(b)'
+
+. matrix           parmARv  = vecdiag(e(V))'
+
+. matmap           parmARv parmARse, map(sqrt(@))
+
+. estimates restore regCS
+(results regCS are active now)
+
+. matrix           parmCS   = e(b)'
+
+. matrix           parmCSv  = vecdiag(e(V))'
+
+. matmap           parmCSv parmCSse, map(sqrt(@))
+
+. estimates restore regMK
+(results regMK are active now)
+
+. matrix           parmMK   = e(b)'
+
+. matrix           parmMKv  = vecdiag(e(V))'
+
+. matmap           parmMKv parmMKse, map(sqrt(@))
+
+. estimates restore regNO
+(results regNO are active now)
+
+. matrix           parmNO   = e(b)'
+
+. matrix           parmNOv  = vecdiag(e(V))'
+
+. matmap           parmNOv parmNOse, map(sqrt(@))
+
+. estimates restore regPC
+(results regPC are active now)
+
+. matrix           parmPC   = e(b)'
+
+. matrix           parmPCv  = vecdiag(e(V))'
+
+. matmap           parmPCv parmPCse, map(sqrt(@))
+
+. estimates restore regWK
+(results regWK are active now)
+
+. matrix           parmWK   = e(b)'
+
+. matrix           parmWKv  = vecdiag(e(V))'
+
+. matmap           parmWKv parmWKse, map(sqrt(@))
+
+. 
+. * Now extract the coef and sigma matrix; then vec and combine them
+. matrix parmAll   = [parmAR , parmCS , parmMK , parmNO , parmPC , parmWK]
+
+. matrix parmAllse = [parmARse , parmCSse , parmMKse , parmNOse , parmPCse , pa
+> rmWKse]
+
+. matrix coefAll   = parmAll[1..rowsof(parmAll)-1 , 1..6]
+
+. matrix coefAllse = parmAllse[1..rowsof(parmAllse)-1 , 1..6]
+
+. matrix sigmaAll  = parmAll[rowsof(parmAll)      , 1..6]
+
+. matrix sigmaAllse= parmAllse[rowsof(parmAllse)      , 1..6]
+
+. 
+. matrix coefSigmaAll = [vec(coefAll) \ vec(sigmaAll)]
+
+. svmat  coefSigmaAll
+
+. matrix seSigmaAll   = [vec(coefAllse) \ vec(sigmaAllse)]
+
+. svmat  seSigmaAll  
+
+. 
+. * Export
+. preserve
+
+.         keep coefSigmaAll
+
+.         drop if coefSigmaAll==.
+(792,577 observations deleted)
+
+.         outsheet coefSigmaAll using y97_asvab_noFvars_t0_16_coef.csv, comma r
+> eplace
+
+. restore
+
+. 
+. preserve
+
+.         keep seSigmaAll
+
+.         drop if seSigmaAll==.
+(792,577 observations deleted)
+
+.         outsheet seSigmaAll using y97_asvab_noFvars_t0_16_se.csv, comma repla
+> ce
+
+. restore
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/data/ransom/WageReturnsRepo/Analysis/y97_asvab_noFvars_t0_16
+> .log
+  log type:  text
+ closed on:  16 Mar 2019, 16:12:20
+-------------------------------------------------------------------------------

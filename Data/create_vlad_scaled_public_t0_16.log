@@ -1,0 +1,841 @@
+
+. 
+. clear all
+
+. set mem 5g
+set memory ignored.
+    Memory no longer needs to be set in modern Statas; memory adjustments are performed on the fly automatically.
+
+. set maxvar 30000
+
+
+. * This do-file creates the *vlad.dat and .dta files
+. 
+. !unzip -u yCombinedAnalysisPublic_t0_16.dta.zip
+
+
+. use       yCombinedAnalysisPublic_t0_16.dta
+
+. !rm       yCombinedAnalysisPublic_t0_16.dta
+
+
+. 
+. * Rename variables
+. rename annualOccMain  occupation
+
+. rename annualIndMain  industry
+
+. rename hoursWorked    hours
+
+. 
+. *--------
+. * Macros
+. *--------
+. local AFQTvars  afqt asvabAR asvabCS asvabMK asvabNO asvabPC asvabWK m_afqt m_asvabAR m_asvabCS m_asvabMK m_asvabNO m_asvabPC m_asvabWK
+
+. local Pvars79  black hispanic born1957 born1958 born1959 born1960 born1961 born1962 born1963  foreignBorn
+
+. local Pvars79O black hispanic born1957 born1958 born1959                                      foreignBorn
+
+. local Pvars79Y black hispanic                                     born1961 born1962 born1963  foreignBorn
+
+. local Pvars97  black hispanic born1980 born1981 born1982 born1983                             foreignBorn
+
+. * local Mvars    empPct incPerCapita numBAperCapita numAAperCapita tuitionFlagship
+. *local Mvars    empPct incPerCapita 
+. local Mvars    
+
+. * local Svars    schoolOnlyt schoolOnlySq  
+. * local Zvars    workK12t workK12Sq workColleget workCollegeSq
+. * local Evars    workPTonlyt workPTSq workFTonlyt workFTSq militaryt militarySq othert otherSq
+. local Svars    schoolOnlyt schoolOnlyBlack schoolOnlyHisp schoolOnlySq schoolOnlySqBlack schoolOnlySqHisp schoolOnlyCu
+
+. local Svars2   anySchoolt  anySchoolBlack  anySchoolHisp  anySchoolSq  anySchoolSqBlack  anySchoolSqHisp  anySchoolCu
+
+. * local Zvars    workK12t workK12Black workK12Hisp workK12Sq workK12SqBlack workK12SqHisp workK12Cu workColleget workCollegeBlack workCollegeHisp workCollegeSq workC
+> ollegeSqBlack workCollegeSqHisp workCollegeCu workGradScht workGradSchBlack workGradSchHisp workGradSchSq workGradSchSqBlack workGradSchSqHisp workGradSchCu
+. local Zvars    workK12t workK12Black workK12Hisp workK12Sq workK12SqBlack workK12SqHisp workK12Cu workColleget workCollegeBlack workCollegeHisp workCollegeSq workCol
+> legeSqBlack workCollegeSqHisp workCollegeCu 
+
+. local Evars    workPTonlyt workPTBlack workPTHisp workPTSq workPTSqBlack workPTSqHisp workPTCu workFTonlyt workFTBlack workFTHisp workFTSq workFTSqBlack workFTSqHisp
+>  workFTCu militaryt militaryBlack militaryHisp militarySq militarySqBlack militarySqHisp militaryCu othert otherBlack otherHisp otherSq otherSqBlack otherSqHisp othe
+> rCu
+
+. local Fvars    hgcMoth hgcMothSq m_hgcMoth hgcFath hgcFathSq m_hgcFath famInc famIncSq m_famInc femaleHeadHH14 liveWithMom14
+
+. *local Cvars    numBAzero numBAperCapita tuitionFlagship
+. local Cvars    
+
+. * local Zvarint  workK12schoolOnly workCollegeschoolOnly workCollegeworkK12 workGradSchschoolOnly workGradSchworkK12 workPTschoolOnly workPTworkK12 workPTworkCollege
+>  workPTworkGradSch workFTschoolOnly workFTworkK12 workFTworkGradSch workFTworkCollege workFTworkPT
+. * local Zvarint2 workK12anySchool  workCollegeanySchool  workCollegeworkK12 workGradSchanySchool  workGradSchworkK12 workPTanySchool  workPTworkK12 workPTworkCollege
+>  workPTworkGradSch workFTanySchool  workFTworkK12 workFTworkGradSch workFTworkCollege workFTworkPT
+. local Zvarint  workK12schoolOnly workCollegeschoolOnly workCollegeworkK12 workPTschoolOnly workPTworkK12 workPTworkCollege workFTschoolOnly workFTworkK12 workFTworkC
+> ollege workFTworkPT
+
+. local Zvarint2 workK12anySchool  workCollegeanySchool  workCollegeworkK12 workPTanySchool  workPTworkK12 workPTworkCollege workFTanySchool  workFTworkK12 workFTworkC
+> ollege workFTworkPT
+
+. local Avars    potExpt potExpSq potExpCu potExpClassict potExpClassicSq potExpClassicCu
+
+. 
+. *------------------------
+. * Keep and generate vars
+. *  wage, wageAlt and wageJobMain
+. *------------------------
+. gen constant = 1
+
+. * capture drop wage lnWage
+. * ren     wageJobMain wage
+. gen     lnWage = log(wage)
+(1,686,527 missing values generated)
+
+. assert  lnWage == .   if inlist(activity_simple,1,5,6)
+
+. replace lnWage = -999 if mi(lnWage)
+(1,686,527 real changes made)
+
+. 
+. gen     lnWageAlt = log(wageAlt)
+(1,685,015 missing values generated)
+
+. assert  lnWageAlt == .   if inlist(activity_simple,1,5,6)
+
+. replace lnWageAlt = -999 if mi(lnWageAlt)
+(1,685,015 real changes made)
+
+. 
+. gen     lnWageNoSelf = log(wageNoSelf)
+(1,786,387 missing values generated)
+
+. assert  lnWageNoSelf == .   if inlist(activity_simple,1,5,6)
+
+. replace lnWageNoSelf = -999 if mi(lnWageNoSelf)
+(1,786,387 real changes made)
+
+. 
+. gen     lnWageAltNoSelf = log(wageAltNoSelf)
+(1,783,606 missing values generated)
+
+. assert  lnWageAltNoSelf == .   if inlist(activity_simple,1,5,6)
+
+. replace lnWageAltNoSelf = -999 if mi(lnWageAltNoSelf)
+(1,783,606 real changes made)
+
+. 
+. gen     lnWageJobMain = log(wageJobMain)
+(3,593,093 missing values generated)
+
+. assert  lnWageJobMain == .   if inlist(activity_simple,1,5,6)
+
+. replace lnWageJobMain = -999 if mi(lnWageJobMain)
+(3,593,093 real changes made)
+
+. 
+. * re-scale activity variables, by dividing by 12
+. foreach var in potExpt potExpClassict schoolOnlyt schoolOnlyBlack schoolOnlyHisp anySchoolt anySchoolBlack anySchoolHisp workK12t workK12Black workK12Hisp workColleg
+> et workCollegeBlack workCollegeHisp workGradScht workGradSchBlack workGradSchHisp workPTonlyt workPTBlack workPTHisp workFTonlyt workFTBlack workFTHisp militaryt mil
+> itaryBlack militaryHisp othert otherBlack otherHisp {
+  2.         replace `var' = `var'/12
+  3. }
+variable potExpt was int now float
+(3,741,894 real changes made)
+variable potExpClassict was int now float
+(3,741,894 real changes made)
+variable schoolOnlyt was int now float
+(3,389,102 real changes made)
+variable schoolOnlyBlack was int now float
+(1,021,003 real changes made)
+variable schoolOnlyHisp was int now float
+(671,949 real changes made)
+variable anySchoolt was int now float
+(3,605,590 real changes made)
+variable anySchoolBlack was int now float
+(1,051,502 real changes made)
+variable anySchoolHisp was int now float
+(710,260 real changes made)
+variable workK12t was byte now float
+(2,343,717 real changes made)
+variable workK12Black was byte now float
+(586,583 real changes made)
+variable workK12Hisp was byte now float
+(448,954 real changes made)
+variable workColleget was int now float
+(1,620,982 real changes made)
+variable workCollegeBlack was int now float
+(402,567 real changes made)
+variable workCollegeHisp was int now float
+(290,949 real changes made)
+variable workGradScht was int now float
+(202,386 real changes made)
+variable workGradSchBlack was int now float
+(38,089 real changes made)
+variable workGradSchHisp was byte now float
+(25,477 real changes made)
+variable workPTonlyt was int now float
+(3,126,828 real changes made)
+variable workPTBlack was int now float
+(881,091 real changes made)
+variable workPTHisp was int now float
+(622,012 real changes made)
+variable workFTonlyt was int now float
+(2,851,602 real changes made)
+variable workFTBlack was int now float
+(792,096 real changes made)
+variable workFTHisp was int now float
+(578,420 real changes made)
+variable militaryt was int now float
+(194,141 real changes made)
+variable militaryBlack was int now float
+(68,232 real changes made)
+variable militaryHisp was int now float
+(32,347 real changes made)
+variable othert was int now float
+(3,251,923 real changes made)
+variable otherBlack was int now float
+(992,570 real changes made)
+variable otherHisp was int now float
+(681,435 real changes made)
+
+. 
+. * re-scale activity Squared variables by dividing by 12*12*10 = 1440
+. foreach var in potExpSq potExpClassicSq schoolOnlySq schoolOnlySqBlack schoolOnlySqHisp anySchoolSq anySchoolSqBlack anySchoolSqHisp workK12Sq workK12SqBlack workK12
+> SqHisp workCollegeSq workCollegeSqBlack workCollegeSqHisp workGradSchSq workGradSchSqBlack workGradSchSqHisp workPTSq workPTSqBlack workPTSqHisp workFTSq workFTSqBla
+> ck workFTSqHisp militarySq militarySqBlack militarySqHisp otherSq otherSqBlack otherSqHisp  {
+  2.         replace `var' = `var'/1440
+  3. }
+(3,741,894 real changes made)
+(3,741,894 real changes made)
+variable schoolOnlySq was int now float
+(3,389,102 real changes made)
+variable schoolOnlySqBlack was int now float
+(1,021,003 real changes made)
+variable schoolOnlySqHisp was int now float
+(671,949 real changes made)
+(3,605,590 real changes made)
+(1,051,502 real changes made)
+(710,260 real changes made)
+variable workK12Sq was int now float
+(2,343,717 real changes made)
+variable workK12SqBlack was int now float
+(586,583 real changes made)
+variable workK12SqHisp was int now float
+(448,954 real changes made)
+variable workCollegeSq was int now float
+(1,620,982 real changes made)
+variable workCollegeSqBlack was int now float
+(402,567 real changes made)
+variable workCollegeSqHisp was int now float
+(290,949 real changes made)
+variable workGradSchSq was int now float
+(202,386 real changes made)
+variable workGradSchSqBlack was int now float
+(38,089 real changes made)
+variable workGradSchSqHisp was int now float
+(25,477 real changes made)
+(3,126,828 real changes made)
+variable workPTSqBlack was int now float
+(881,091 real changes made)
+(622,012 real changes made)
+(2,851,602 real changes made)
+(792,096 real changes made)
+(578,420 real changes made)
+(194,141 real changes made)
+(68,232 real changes made)
+(32,347 real changes made)
+(3,251,923 real changes made)
+(992,570 real changes made)
+(681,435 real changes made)
+
+. 
+. * re-scale activity interaction variables by dividing by 12*12*10 = 1440
+. foreach var in workK12schoolOnly workCollegeschoolOnly workCollegeworkK12 workGradSchschoolOnly workGradSchworkK12 workPTschoolOnly workPTworkK12 workPTworkCollege w
+> orkPTworkGradSch workFTschoolOnly workFTworkK12 workFTworkCollege workFTworkGradSch workFTworkPT workK12anySchool workCollegeanySchool workGradSchanySchool workPTany
+> School workFTanySchool {
+  2.         replace `var' = `var'/1440
+  3. }
+variable workK12schoolOnly was int now float
+(2,131,277 real changes made)
+variable workCollegeschoolOnly was int now float
+(1,548,357 real changes made)
+variable workCollegeworkK12 was int now float
+(1,178,632 real changes made)
+variable workGradSchschoolOnly was int now float
+(199,387 real changes made)
+variable workGradSchworkK12 was int now float
+(140,225 real changes made)
+variable workPTschoolOnly was int now float
+(2,851,990 real changes made)
+variable workPTworkK12 was int now float
+(2,171,874 real changes made)
+variable workPTworkCollege was int now float
+(1,548,163 real changes made)
+variable workPTworkGradSch was int now float
+(197,523 real changes made)
+variable workFTschoolOnly was int now float
+(2,606,945 real changes made)
+variable workFTworkK12 was int now float
+(1,933,963 real changes made)
+variable workFTworkCollege was int now float
+(1,443,725 real changes made)
+variable workFTworkGradSch was int now float
+(196,557 real changes made)
+variable workFTworkPT was int now float
+(2,695,885 real changes made)
+variable workK12anySchool was int now float
+(2,343,717 real changes made)
+(1,620,982 real changes made)
+variable workGradSchanySchool was int now float
+(202,386 real changes made)
+variable workPTanySchool was int now float
+(3,039,543 real changes made)
+variable workFTanySchool was int now float
+(2,767,550 real changes made)
+
+. 
+. * re-scale activity Cubed variables by dividing by 12*12*12*100 = 172800
+. foreach var in potExpCu potExpClassicCu schoolOnlyCu schoolOnlyCuBlack schoolOnlyCuHisp anySchoolCu anySchoolCuBlack anySchoolCuHisp workK12Cu workK12CuBlack workK12
+> CuHisp workCollegeCu workCollegeCuBlack workCollegeCuHisp workGradSchCu workGradSchCuBlack workGradSchCuHisp workPTCu workPTCuBlack workPTCuHisp workFTCu workFTCuBla
+> ck workFTCuHisp militaryCu militaryCuBlack militaryCuHisp otherCu otherCuBlack otherCuHisp  {
+  2.         replace `var' = `var'/172800
+  3. }
+(3,741,894 real changes made)
+(3,741,894 real changes made)
+(3,389,102 real changes made)
+(1,021,003 real changes made)
+(671,949 real changes made)
+(3,605,590 real changes made)
+(1,051,502 real changes made)
+(710,260 real changes made)
+(2,343,717 real changes made)
+(586,583 real changes made)
+(448,954 real changes made)
+(1,620,982 real changes made)
+(402,567 real changes made)
+(290,949 real changes made)
+(202,386 real changes made)
+(38,089 real changes made)
+(25,477 real changes made)
+(3,126,828 real changes made)
+(881,091 real changes made)
+(622,012 real changes made)
+(2,851,602 real changes made)
+(792,096 real changes made)
+(578,420 real changes made)
+(194,141 real changes made)
+(68,232 real changes made)
+(32,347 real changes made)
+(3,251,923 real changes made)
+(992,570 real changes made)
+(681,435 real changes made)
+
+. 
+. * re-scale activity Quartic'ed variables by dividing by 12*12*12*12*1000 = 20736000
+. foreach var in schoolOnlyQr anySchoolQr workK12Qr workCollegeQr workGradSchQr workPTQr workFTQr militaryQr otherQr  {
+  2.         replace `var' = `var'/20736000
+  3. }
+(3,389,102 real changes made)
+(3,605,590 real changes made)
+(2,343,717 real changes made)
+(1,620,982 real changes made)
+(202,386 real changes made)
+(3,126,828 real changes made)
+(2,851,602 real changes made)
+(194,141 real changes made)
+(3,251,923 real changes made)
+
+. 
+. foreach var in  hgcSq hgcMothSq hgcMothSqBlack hgcMothSqHisp hgcFathSq hgcFathSqBlack hgcFathSqHisp famInc famIncBlack famIncHisp {
+  2.         replace `var' = `var'/10
+  3. }
+(3,455,427 real changes made)
+variable hgcMothSq was int now float
+(3,459,689 real changes made)
+variable hgcMothSqBlack was int now float
+(983,855 real changes made)
+variable hgcMothSqHisp was int now float
+(669,465 real changes made)
+variable hgcFathSq was int now float
+(3,054,022 real changes made)
+variable hgcFathSqBlack was int now float
+(763,146 real changes made)
+variable hgcFathSqHisp was int now float
+(564,942 real changes made)
+(2,884,120 real changes made)
+(817,376 real changes made)
+(568,402 real changes made)
+
+. 
+. foreach var in  hgcMothCu hgcMothCuBlack hgcMothCuHisp hgcFathCu hgcFathCuBlack hgcFathCuHisp famIncSq famIncSqBlack famIncSqHisp {
+  2.         replace `var' = `var'/1000
+  3. }
+variable hgcMothCu was int now float
+(3,459,689 real changes made)
+variable hgcMothCuBlack was int now float
+(983,855 real changes made)
+variable hgcMothCuHisp was int now float
+(669,465 real changes made)
+variable hgcFathCu was int now float
+(3,054,022 real changes made)
+variable hgcFathCuBlack was int now float
+(763,146 real changes made)
+variable hgcFathCuHisp was int now float
+(564,942 real changes made)
+(2,884,120 real changes made)
+(817,376 real changes made)
+(568,402 real changes made)
+
+. 
+. foreach var in  hgcMothQr hgcFathQr famIncCu famIncCuBlack famIncCuHisp {
+  2.         replace `var' = `var'/100000
+  3. }
+(3,459,689 real changes made)
+(3,054,022 real changes made)
+(2,884,120 real changes made)
+(817,376 real changes made)
+(568,402 real changes made)
+
+. 
+. foreach var in  famIncQr {
+  2.         replace `var' = `var'/10000000
+  3. }
+(2,884,120 real changes made)
+
+. 
+. save yCombined_scaled_public_t0_16.dta, replace
+(note: file yCombined_scaled_public_t0_16.dta not found)
+file yCombined_scaled_public_t0_16.dta saved
+
+. 
+. 
+. *----------------------------------------------------------------------------
+. * Reshape wide
+. * The 'cons' vars are not included in the reshape since they never change
+. *----------------------------------------------------------------------------
+. local chng   uniqueid period yearmo activity activity_simple lnWage lnWageAlt lnWageNoSelf lnWageAltNoSelf lnWageJobMain hours `Svars' `Svars2' `Zvars' `Evars' `Zvar
+> int2' `Avars' `Mvars' gradHS grad2yr grad4yr gradGraduate
+
+. local cons   cohortFlag id constant female oversampleRace weight `Pvars79' `Pvars97' `AFQTvars' `Fvars' `Cvars'
+
+. local cons79 cohortFlag id constant female oversampleRace weight `Pvars79'           `AFQTvars' `Fvars' `Cvars'
+
+. local cons97 cohortFlag id constant female oversampleRace weight           `Pvars97' `AFQTvars' `Fvars' `Cvars'
+
+. 
+. * sum   `cons79' `chng' if cohortFlag==1979 & ( born1957==1 | born1958==1 | born1959==1 | born1960==1) & !female, separator(0)
+. sum   `cons79' `chng' if cohortFlag==1979 & ~female & ~mi(activity) & born1957==0 & born1958==0 , separator(0)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  cohortFlag |    847,750        1979           0       1979       1979
+          id |    847,750    5268.455    3271.726          5      12686
+    constant |    847,750           1           0          1          1
+      female |    847,750           0           0          0          0
+oversample~e |    847,750    .3858956    .4868064          0          1
+      weight |    847,750      308621    205016.8      40317     975060
+       black |    847,750    .3039752    .4599723          0          1
+    hispanic |    847,750    .1957063    .3967436          0          1
+    born1957 |    847,750           0           0          0          0
+    born1958 |    847,750           0           0          0          0
+    born1959 |    847,750    .1363987    .3432116          0          1
+    born1960 |    847,750    .1746753    .3796894          0          1
+    born1961 |    847,750    .1746482    .3796661          0          1
+    born1962 |    847,750    .1860832     .389174          0          1
+    born1963 |    847,750    .1777222     .382279          0          1
+ foreignBorn |    847,750    .0699463    .2550567          0          1
+        afqt |    847,750   -.0722438    .9685095  -2.092676   1.798375
+     asvabAR |    847,750   -.0339106    .9463375  -1.727604   1.934505
+     asvabCS |    847,750   -.1560695    .8915174  -2.211834    2.63196
+     asvabMK |    847,750   -.1281571    .9490406  -1.844026   1.970425
+     asvabNO |    847,750   -.1802453    .9595365  -2.456047    1.48744
+     asvabPC |    847,750    .0013844    .9361002   -1.97382    1.56745
+     asvabWK |    847,750   -.1084225    .9941999  -2.247054   1.516649
+      m_afqt |    847,750    .0426954    .2021695          0          1
+   m_asvabAR |    847,750    .0426954    .2021695          0          1
+   m_asvabCS |    847,750    .0426954    .2021695          0          1
+   m_asvabMK |    847,750    .0426954    .2021695          0          1
+   m_asvabNO |    847,750    .0426954    .2021695          0          1
+   m_asvabPC |    847,750    .0426954    .2021695          0          1
+   m_asvabWK |    847,750    .0426954    .2021695          0          1
+     hgcMoth |    847,750    10.10586    4.195186          0         20
+   hgcMothSq |    847,750    11.97279     7.00166          0         40
+   m_hgcMoth |    847,750    .0710941    .2569821          0          1
+     hgcFath |    847,750    9.356876    5.406102          0         20
+   hgcFathSq |    847,750     11.6777    9.152652          0         40
+   m_hgcFath |    847,750    .1548829    .3617933          0          1
+      famInc |    847,750    2.188937    2.105194          0   11.50322
+    famIncSq |    847,750    .9223282    1.752532          0   13.23241
+    m_famInc |    847,750    .1835553    .3871213          0          1
+femaleHea~14 |    847,750    .1879434    .3906672          0          1
+liveWithM~14 |    847,750    .9282076     .258144          0          1
+    uniqueid |    847,750     7905268    3271.726    7900005    7912686
+      period |    847,750    115.8276    68.81174          1        240
+      yearmo |    847,750    198718.5    597.1774     197501     200011
+    activity |    847,750    12.14808    6.185889          1         26
+activity_s~e |    847,750    3.775275    1.366565          1          6
+      lnWage |    847,750   -417.4088     493.809       -999   3.910846
+   lnWageAlt |    847,750   -415.9893    493.5741       -999   3.910402
+lnWageNoSelf |    847,750   -450.6555    498.1297       -999   3.910402
+lnWageAltN~f |    847,750   -449.1781    497.9858       -999   3.910402
+lnWageJobM~n |    847,750   -953.8441    207.7398       -999   3.909882
+       hours |    847,750    129.4311    99.78429          0        500
+ schoolOnlyt |    847,750    1.441783    1.271604          0       11.5
+schoo~yBlack |    847,750    .4975771    1.010128          0   8.416667
+school~yHisp |    847,750    .2530011    .7246203          0   8.416667
+schoolOnlySq |    847,750    .3695715    .6598246          0     13.225
+schoo~qBlack |    847,750     .126794    .3970451          0   7.084028
+school~qHisp |    847,750    .0589083    .2606689          0   7.084028
+schoolOnlyCu |    847,750    .1289256    .4177647          0   15.20875
+  anySchoolt |    847,750    2.639086    1.954618          0   14.33333
+anySchoolB~k |    847,750    .7630834    1.499396          0         13
+anySchoolH~p |    847,750    .4555629    1.244047          0   14.08333
+ anySchoolSq |    847,750     1.07853    1.660502          0   20.54445
+anySchoolS~k |    847,750    .2830481    .8842842          0       16.9
+anySchoolS~p |    847,750    .1755188    .7746125          0   19.83403
+ anySchoolCu |    847,750    .5871851    1.500546          0   29.44704
+    workK12t |    847,750    .6101702    .6919126          0   4.416667
+workK12Black |    847,750    .1418251    .4180127          0   4.416667
+ workK12Hisp |    847,750    .1038868    .3547591          0        3.5
+   workK12Sq |    847,750     .085105     .143376          0   1.950694
+workK12SqB~k |    847,750    .0194849    .0825842          0   1.950694
+workK12SqH~p |    847,750    .0136646    .0640929          0      1.225
+   workK12Cu |    847,750    .0144668    .0337167          0   .8615567
+workColleget |    847,750     .587167    1.183724          0         12
+workC~eBlack |    847,750    .1236811    .5665888          0   9.416667
+workCo~eHisp |    847,750    .0987092    .5347185          0   8.666667
+workColleg~q |    847,750    .1745965    .5915012          0       14.4
+workC~qBlack |    847,750     .033632    .2638321          0   8.867361
+workCo~qHisp |    847,750    .0295667     .243572          0   7.511111
+workColleg~u |    847,750    .0732309    .3867022          0      17.28
+ workPTonlyt |    847,750    .9242421    1.043432          0   15.33333
+ workPTBlack |    847,750    .2876061    .7320399          0      12.75
+  workPTHisp |    847,750     .184882    .6075994          0   11.41667
+    workPTSq |    847,750    .1942973     .539964          0   23.51111
+workPTSqBl~k |    847,750    .0618599    .3116033          0   16.25625
+workPTSqHisp |    847,750    .0403358    .2568203          0   13.03403
+    workPTCu |    847,750     .066158    .4232239          0   36.05037
+ workFTonlyt |    847,750     4.10764    4.227604          0       19.5
+ workFTBlack |    847,750    1.055338    2.665878          0   17.83333
+  workFTHisp |    847,750    .8381997    2.535402          0       19.5
+    workFTSq |    847,750    3.474532    5.358692          0     38.025
+workFTSqBl~k |    847,750    .8220633    2.798819          0   31.80278
+workFTSqHisp |    847,750    .7130833    2.821335          0     38.025
+    workFTCu |    847,750    3.566437    7.221437          0   74.14875
+   militaryt |    847,750    .3864301    1.448014          0         17
+militaryBl~k |    847,750    .1591458    .9530919          0   16.58333
+militaryHisp |    847,750    .0571031    .5657657          0   15.83333
+  militarySq |    847,750    .2246071    1.290589          0       28.9
+militarySq~k |    847,750     .093371    .8442058          0   27.50069
+militarySq~p |    847,750    .0323351    .4759569          0   25.06944
+  militaryCu |    847,750    .1774794    1.485597          0      49.13
+      othert |    847,750    1.438899    2.161973          0   19.83333
+  otherBlack |    847,750    .6243087    1.755444          0   19.83333
+   otherHisp |    847,750    .3149439    1.174178          0   19.66667
+     otherSq |    847,750    .6744552    2.206465          0   39.33611
+otherSqBlack |    847,750    .3471341    1.718251          0   39.33611
+ otherSqHisp |    847,750    .1477883    1.061642          0   38.67778
+     otherCu |    847,750    .5269203    2.771174          0   78.01662
+workK12any~l |    847,750    .1935374    .2888773          0   2.839583
+workColleg~l |    847,750     .338668    .9127219          0       17.2
+workColle~12 |    847,750    .0478743    .1397443          0   2.094445
+workPTanyS~l |    847,750    .2530059    .3613476          0   6.135417
+workPTwor~12 |    847,750    .0627916    .1211037          0       3.45
+workPTwork~e |    847,750    .0593137    .1682373          0   4.684028
+workFTanyS~l |    847,750    1.158125    1.511842          0   9.461805
+workFTwor~12 |    847,750      .29275    .5342345          0   5.172222
+workFTwork~e |    847,750    .2890427    .7348906          0   7.493055
+workFTworkPT |    847,750    .5037187    .7679354          0        7.9
+     potExpt |    847,750    7.013213    5.330022   .0833333         20
+    potExpSq |    847,750    7.759426    8.888213   .0006944         40
+    potExpCu |    847,750    9.980284    14.58913   5.79e-06         80
+potExpClas~t |    847,750    17.01321    5.330022   10.08333         30
+potExpClas~q |    847,750    31.78585    19.34359   10.16736         90
+potExpClas~u |    847,750     64.2982    56.34845   10.25209        270
+      gradHS |    847,750    .7353382    .4411532          0          1
+     grad2yr |    847,750    .0513784    .2207684          0          1
+     grad4yr |    847,750    .1045001    .3059084          0          1
+gradGraduate |    847,750    .0162489    .1264314          0          1
+
+. sum   `cons97' `chng' if cohortFlag==1997 & ~female & ~mi(activity)                             , separator(0)
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+  cohortFlag |    792,631        1997           0       1997       1997
+          id |    792,631    4527.474    2603.075          2       9021
+    constant |    792,631           1           0          1          1
+      female |    792,631           0           0          0          0
+oversample~e |    792,631    .2540653    .4353347          0          1
+      weight |    792,631      214866    89031.99      84613     535706
+       black |    792,631    .2623402    .4399069          0          1
+    hispanic |    792,631    .2134095    .4097147          0          1
+    born1980 |    792,631    .2004993    .4003743          0          1
+    born1981 |    792,631    .2150547    .4108605          0          1
+    born1982 |    792,631     .205995    .4044271          0          1
+    born1983 |    792,631    .1968861    .3976458          0          1
+ foreignBorn |    792,631    .0634608    .2437901          0          1
+        afqt |    792,631    .0787748    .8916843  -2.270343    1.82093
+     asvabAR |    792,631    .0295535    .9336224  -1.939057   1.934505
+     asvabCS |    792,631    .1695844    .9530069  -2.249643   2.693824
+     asvabMK |    792,631    .1319463    .9078475  -1.865726   1.970425
+     asvabNO |    792,631    .1928222    .8678698  -2.417545    1.48744
+     asvabPC |    792,631    .0064898    .9436737   -1.97382    1.56745
+     asvabWK |    792,631     .128867    .8584397  -2.247054   1.516649
+      m_afqt |    792,631    .2071708    .4052792          0          1
+   m_asvabAR |    792,631     .193645    .3951541          0          1
+   m_asvabCS |    792,631    .2069197    .4050977          0          1
+   m_asvabMK |    792,631    .1952308    .3963785          0          1
+   m_asvabNO |    792,631    .2071708    .4052792          0          1
+   m_asvabPC |    792,631     .193973    .3954082          0          1
+   m_asvabWK |    792,631    .1936967    .3951942          0          1
+     hgcMoth |    792,631    11.55153    4.318641          0         20
+   hgcMothSq |    792,631    15.20884    8.059775          0         40
+   m_hgcMoth |    792,631    .0754916    .2641831          0          1
+     hgcFath |    792,631    10.02113    5.815472          0         20
+   hgcFathSq |    792,631    13.42428    9.889296          0         40
+   m_hgcFath |    792,631    .2013724    .4010259          0          1
+      famInc |    792,631     2.19934    2.644063  -3.065647   15.70899
+    famIncSq |    792,631    1.182816    3.237418          0   24.67723
+    m_famInc |    792,631    .2572824    .4371366          0          1
+femaleHea~14 |    792,631     .273228    .4456172          0          1
+liveWithM~14 |    792,631     .884819    .3192404          0          1
+    uniqueid |    792,631     9704527    2603.075    9700002    9709021
+      period |    792,631    100.5672    61.55363          1        240
+      yearmo |    792,631    200630.1    516.4258     199601     201607
+    activity |    792,631    11.97931    6.478226          1         26
+activity_s~e |    792,631    3.585311    1.532215          1          6
+      lnWage |    792,631   -434.2628     496.263       -999   3.909962
+   lnWageAlt |    792,631   -435.1611    496.3806       -999    3.90784
+lnWageNoSelf |    792,631   -466.0211    499.3437       -999   3.906742
+lnWageAltN~f |    792,631   -466.0462    499.3455       -999    3.90784
+lnWageJobM~n |    792,631    -962.402    187.8459       -999   3.904055
+       hours |    792,631    117.5324    103.0662          0        500
+ schoolOnlyt |    792,631    1.465161    1.357304          0   14.16667
+schoo~yBlack |    792,631    .4170476    .9823535          0   14.16667
+school~yHisp |    792,631    .3081014    .8200642          0   9.916667
+schoolOnlySq |    792,631    .3988967    .7914101          0   20.06944
+schoo~qBlack |    792,631    .1138946    .4648692          0   20.06944
+school~qHisp |    792,631    .0767431    .3473747          0   9.834028
+schoolOnlyCu |    792,631    .1549198    .5730855          0   28.43171
+  anySchoolt |    792,631    3.129426    2.328598          0   18.16667
+anySchoolB~k |    792,631     .726734    1.620511          0   16.16667
+anySchoolH~p |    792,631    .6264334     1.58627          0   18.16667
+ anySchoolSq |    792,631    1.521567    2.197955          0   33.00278
+anySchoolS~k |    792,631    .3154196    1.092804          0   26.13611
+anySchoolS~p |    792,631    .2908667    1.139389          0   33.00278
+ anySchoolCu |    792,631    .9588731     2.14397          0   59.95505
+    workK12t |    792,631    .7985354    .7563631          0   7.666667
+workK12Black |    792,631     .165243    .4521391          0        3.5
+ workK12Hisp |    792,631    .1498218    .4490064          0   4.416667
+   workK12Sq |    792,631    .1209743    .1867418          0   5.877778
+workK12SqB~k |    792,631    .0231735     .088895          0      1.225
+workK12SqH~p |    792,631    .0224053    .0943378          0   1.950694
+   workK12Cu |    792,631    .0224685    .0674083          0   4.506296
+workColleget |    792,631    .8753246    1.557689          0   14.08333
+workC~eBlack |    792,631    .1472362    .6971287          0   10.33333
+workCo~eHisp |    792,631    .1711126    .7847131          0      11.75
+workColleg~q |    792,631    .3192585    .9048724          0   19.83403
+workC~qBlack |    792,631    .0507666    .3618196          0   10.67778
+workCo~qHisp |    792,631    .0645053    .4450969          0   13.80625
+workColleg~u |    792,631     .155622    .6800559          0   27.93292
+ workPTonlyt |    792,631    .8966078    1.163036          0         16
+ workPTBlack |    792,631    .2559408    .7605946          0   11.16667
+  workPTHisp |    792,631    .1825196    .6387278          0         16
+    workPTSq |    792,631    .2156558    .6644892          0       25.6
+workPTSqBl~k |    792,631    .0644009    .3479423          0   12.46944
+workPTSqHisp |    792,631    .0441286    .3498962          0       25.6
+    workPTCu |    792,631    .0862846    .5473091          0      40.96
+ workFTonlyt |    792,631    2.727738    3.263891          0   17.83333
+ workFTBlack |    792,631    .5923832     1.77675          0      16.75
+  workFTHisp |    792,631    .6364777    1.991799          0      17.75
+    workFTSq |    792,631    1.809353     3.37724          0   31.80278
+workFTSqBl~k |    792,631    .3507756    1.515165          0   28.05625
+workFTSqHisp |    792,631     .437236    1.869205          0   31.50625
+    workFTCu |    792,631    1.521615     3.91239          0   56.71495
+   militaryt |    792,631     .220586    1.048595          0   16.08333
+militaryBl~k |    792,631    .0486372    .5062695          0   16.08333
+militaryHisp |    792,631    .0512857    .5322138          0   15.41667
+  militarySq |    792,631    .1148209    .8077477          0   25.86736
+militarySq~k |    792,631    .0258674     .397014          0   25.86736
+militarySq~p |    792,631    .0285881    .4383452          0   23.76736
+  militaryCu |    792,631    .0796117    .8032292          0   41.60334
+      othert |    792,631    1.253436    2.061642          0   18.91667
+  otherBlack |    792,631    .5497542    1.714847          0   18.91667
+   otherHisp |    792,631    .2639257    .9865927          0         17
+     otherSq |    792,631    .5821465    1.926186          0   35.78403
+otherSqBlack |    792,631    .3242925    1.623798          0   35.78403
+ otherSqHisp |    792,631    .1043021    .7504153          0       28.9
+     otherCu |    792,631    .4324724    2.216198          0   67.69145
+workK12any~l |    792,631    .2992814    .3928501          0   6.963889
+workColleg~l |    792,631    .5731526    1.314266          0   23.47222
+workColle~12 |    792,631    .0900006    .2097365          0    2.68125
+workPTanyS~l |    792,631    .2871346    .4483854          0   6.922222
+workPTwor~12 |    792,631    .0770452    .1417435          0    2.65625
+workPTwork~e |    792,631    .0785707    .2152345          0   5.498611
+workFTanyS~l |    792,631    .9252038    1.320601          0   9.184028
+workFTwor~12 |    792,631    .2572642    .4636221          0   4.697917
+workFTwork~e |    792,631    .2865178    .7012299          0   7.540278
+workFTworkPT |    792,631    .3393354    .6009168          0   7.388889
+     potExpt |    792,631    5.251171    4.520827   .0833333         20
+    potExpSq |    792,631    4.801264    6.339509   .0006944         40
+    potExpCu |    792,631    5.248146    9.067046   5.79e-06         80
+potExpClas~t |    792,631    15.25117    4.520827   10.08333         30
+potExpClas~q |    792,631    25.30361    15.19927   10.16736         90
+potExpClas~u |    792,631    45.40545     40.8617   10.25209        270
+      gradHS |    792,631    .7249893    .4465199          0          1
+     grad2yr |    792,631    .0469638    .2115616          0          1
+     grad4yr |    792,631    .1173812    .3218742          0          1
+gradGraduate |    792,631    .0193987    .1379217          0          1
+
+. keep  `cons'   `chng' agemo
+
+. order `cons'   `chng'
+
+. 
+. reshape wide `chng', i(cohortFlag id) j(agemo)
+(note: j = 1601 1602 1603 1604 1605 1606 1607 1608 1609 1610 1611 1612 1701 1702 1703 1704 1705 1706 1707 1708 1709 1710 1711 1712 1801 1802 1803 1804 1805 1806 1807 1
+> 808 1809 1810 1811 1812 1901 1902 1903 1904 1905 1906 1907 1908 1909 1910 1911 1912 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 2011 2012 2101 2102 2103 2104 2
+> 105 2106 2107 2108 2109 2110 2111 2112 2201 2202 2203 2204 2205 2206 2207 2208 2209 2210 2211 2212 2301 2302 2303 2304 2305 2306 2307 2308 2309 2310 2311 2312 2401 2
+> 402 2403 2404 2405 2406 2407 2408 2409 2410 2411 2412 2501 2502 2503 2504 2505 2506 2507 2508 2509 2510 2511 2512 2601 2602 2603 2604 2605 2606 2607 2608 2609 2610 2
+> 611 2612 2701 2702 2703 2704 2705 2706 2707 2708 2709 2710 2711 2712 2801 2802 2803 2804 2805 2806 2807 2808 2809 2810 2811 2812 2901 2902 2903 2904 2905 2906 2907 2
+> 908 2909 2910 2911 2912 3001 3002 3003 3004 3005 3006 3007 3008 3009 3010 3011 3012 3101 3102 3103 3104 3105 3106 3107 3108 3109 3110 3111 3112 3201 3202 3203 3204 3
+> 205 3206 3207 3208 3209 3210 3211 3212 3301 3302 3303 3304 3305 3306 3307 3308 3309 3310 3311 3312 3401 3402 3403 3404 3405 3406 3407 3408 3409 3410 3411 3412 3501 3
+> 502 3503 3504 3505 3506 3507 3508 3509 3510 3511 3512)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                  3.7e+06   ->   18420
+Number of variables                 133   ->   20925
+j variable (240 values)           agemo   ->   (dropped)
+xij variables:
+                               uniqueid   ->   uniqueid1601 uniqueid1602 ... uniqueid3512
+                                 period   ->   period1601 period1602 ... period3512
+                                 yearmo   ->   yearmo1601 yearmo1602 ... yearmo3512
+                               activity   ->   activity1601 activity1602 ... activity3512
+                        activity_simple   ->   activity_simple1601 activity_simple1602 ... activity_simple3512
+                                 lnWage   ->   lnWage1601 lnWage1602 ... lnWage3512
+                              lnWageAlt   ->   lnWageAlt1601 lnWageAlt1602 ... lnWageAlt3512
+                           lnWageNoSelf   ->   lnWageNoSelf1601 lnWageNoSelf1602 ... lnWageNoSelf3512
+                        lnWageAltNoSelf   ->   lnWageAltNoSelf1601 lnWageAltNoSelf1602 ... lnWageAltNoSelf3512
+                          lnWageJobMain   ->   lnWageJobMain1601 lnWageJobMain1602 ... lnWageJobMain3512
+                                  hours   ->   hours1601 hours1602 ... hours3512
+                            schoolOnlyt   ->   schoolOnlyt1601 schoolOnlyt1602 ... schoolOnlyt3512
+                        schoolOnlyBlack   ->   schoolOnlyBlack1601 schoolOnlyBlack1602 ... schoolOnlyBlack3512
+                         schoolOnlyHisp   ->   schoolOnlyHisp1601 schoolOnlyHisp1602 ... schoolOnlyHisp3512
+                           schoolOnlySq   ->   schoolOnlySq1601 schoolOnlySq1602 ... schoolOnlySq3512
+                      schoolOnlySqBlack   ->   schoolOnlySqBlack1601 schoolOnlySqBlack1602 ... schoolOnlySqBlack3512
+                       schoolOnlySqHisp   ->   schoolOnlySqHisp1601 schoolOnlySqHisp1602 ... schoolOnlySqHisp3512
+                           schoolOnlyCu   ->   schoolOnlyCu1601 schoolOnlyCu1602 ... schoolOnlyCu3512
+                             anySchoolt   ->   anySchoolt1601 anySchoolt1602 ... anySchoolt3512
+                         anySchoolBlack   ->   anySchoolBlack1601 anySchoolBlack1602 ... anySchoolBlack3512
+                          anySchoolHisp   ->   anySchoolHisp1601 anySchoolHisp1602 ... anySchoolHisp3512
+                            anySchoolSq   ->   anySchoolSq1601 anySchoolSq1602 ... anySchoolSq3512
+                       anySchoolSqBlack   ->   anySchoolSqBlack1601 anySchoolSqBlack1602 ... anySchoolSqBlack3512
+                        anySchoolSqHisp   ->   anySchoolSqHisp1601 anySchoolSqHisp1602 ... anySchoolSqHisp3512
+                            anySchoolCu   ->   anySchoolCu1601 anySchoolCu1602 ... anySchoolCu3512
+                               workK12t   ->   workK12t1601 workK12t1602 ... workK12t3512
+                           workK12Black   ->   workK12Black1601 workK12Black1602 ... workK12Black3512
+                            workK12Hisp   ->   workK12Hisp1601 workK12Hisp1602 ... workK12Hisp3512
+                              workK12Sq   ->   workK12Sq1601 workK12Sq1602 ... workK12Sq3512
+                         workK12SqBlack   ->   workK12SqBlack1601 workK12SqBlack1602 ... workK12SqBlack3512
+                          workK12SqHisp   ->   workK12SqHisp1601 workK12SqHisp1602 ... workK12SqHisp3512
+                              workK12Cu   ->   workK12Cu1601 workK12Cu1602 ... workK12Cu3512
+                           workColleget   ->   workColleget1601 workColleget1602 ... workColleget3512
+                       workCollegeBlack   ->   workCollegeBlack1601 workCollegeBlack1602 ... workCollegeBlack3512
+                        workCollegeHisp   ->   workCollegeHisp1601 workCollegeHisp1602 ... workCollegeHisp3512
+                          workCollegeSq   ->   workCollegeSq1601 workCollegeSq1602 ... workCollegeSq3512
+                     workCollegeSqBlack   ->   workCollegeSqBlack1601 workCollegeSqBlack1602 ... workCollegeSqBlack3512
+                      workCollegeSqHisp   ->   workCollegeSqHisp1601 workCollegeSqHisp1602 ... workCollegeSqHisp3512
+                          workCollegeCu   ->   workCollegeCu1601 workCollegeCu1602 ... workCollegeCu3512
+                            workPTonlyt   ->   workPTonlyt1601 workPTonlyt1602 ... workPTonlyt3512
+                            workPTBlack   ->   workPTBlack1601 workPTBlack1602 ... workPTBlack3512
+                             workPTHisp   ->   workPTHisp1601 workPTHisp1602 ... workPTHisp3512
+                               workPTSq   ->   workPTSq1601 workPTSq1602 ... workPTSq3512
+                          workPTSqBlack   ->   workPTSqBlack1601 workPTSqBlack1602 ... workPTSqBlack3512
+                           workPTSqHisp   ->   workPTSqHisp1601 workPTSqHisp1602 ... workPTSqHisp3512
+                               workPTCu   ->   workPTCu1601 workPTCu1602 ... workPTCu3512
+                            workFTonlyt   ->   workFTonlyt1601 workFTonlyt1602 ... workFTonlyt3512
+                            workFTBlack   ->   workFTBlack1601 workFTBlack1602 ... workFTBlack3512
+                             workFTHisp   ->   workFTHisp1601 workFTHisp1602 ... workFTHisp3512
+                               workFTSq   ->   workFTSq1601 workFTSq1602 ... workFTSq3512
+                          workFTSqBlack   ->   workFTSqBlack1601 workFTSqBlack1602 ... workFTSqBlack3512
+                           workFTSqHisp   ->   workFTSqHisp1601 workFTSqHisp1602 ... workFTSqHisp3512
+                               workFTCu   ->   workFTCu1601 workFTCu1602 ... workFTCu3512
+                              militaryt   ->   militaryt1601 militaryt1602 ... militaryt3512
+                          militaryBlack   ->   militaryBlack1601 militaryBlack1602 ... militaryBlack3512
+                           militaryHisp   ->   militaryHisp1601 militaryHisp1602 ... militaryHisp3512
+                             militarySq   ->   militarySq1601 militarySq1602 ... militarySq3512
+                        militarySqBlack   ->   militarySqBlack1601 militarySqBlack1602 ... militarySqBlack3512
+                         militarySqHisp   ->   militarySqHisp1601 militarySqHisp1602 ... militarySqHisp3512
+                             militaryCu   ->   militaryCu1601 militaryCu1602 ... militaryCu3512
+                                 othert   ->   othert1601 othert1602 ... othert3512
+                             otherBlack   ->   otherBlack1601 otherBlack1602 ... otherBlack3512
+                              otherHisp   ->   otherHisp1601 otherHisp1602 ... otherHisp3512
+                                otherSq   ->   otherSq1601 otherSq1602 ... otherSq3512
+                           otherSqBlack   ->   otherSqBlack1601 otherSqBlack1602 ... otherSqBlack3512
+                            otherSqHisp   ->   otherSqHisp1601 otherSqHisp1602 ... otherSqHisp3512
+                                otherCu   ->   otherCu1601 otherCu1602 ... otherCu3512
+                       workK12anySchool   ->   workK12anySchool1601 workK12anySchool1602 ... workK12anySchool3512
+                   workCollegeanySchool   ->   workCollegeanySchool1601 workCollegeanySchool1602 ... workCollegeanySchool3512
+                     workCollegeworkK12   ->   workCollegeworkK121601 workCollegeworkK121602 ... workCollegeworkK123512
+                        workPTanySchool   ->   workPTanySchool1601 workPTanySchool1602 ... workPTanySchool3512
+                          workPTworkK12   ->   workPTworkK121601 workPTworkK121602 ... workPTworkK123512
+                      workPTworkCollege   ->   workPTworkCollege1601 workPTworkCollege1602 ... workPTworkCollege3512
+                        workFTanySchool   ->   workFTanySchool1601 workFTanySchool1602 ... workFTanySchool3512
+                          workFTworkK12   ->   workFTworkK121601 workFTworkK121602 ... workFTworkK123512
+                      workFTworkCollege   ->   workFTworkCollege1601 workFTworkCollege1602 ... workFTworkCollege3512
+                           workFTworkPT   ->   workFTworkPT1601 workFTworkPT1602 ... workFTworkPT3512
+                                potExpt   ->   potExpt1601 potExpt1602 ... potExpt3512
+                               potExpSq   ->   potExpSq1601 potExpSq1602 ... potExpSq3512
+                               potExpCu   ->   potExpCu1601 potExpCu1602 ... potExpCu3512
+                         potExpClassict   ->   potExpClassict1601 potExpClassict1602 ... potExpClassict3512
+                        potExpClassicSq   ->   potExpClassicSq1601 potExpClassicSq1602 ... potExpClassicSq3512
+                        potExpClassicCu   ->   potExpClassicCu1601 potExpClassicCu1602 ... potExpClassicCu3512
+                                 gradHS   ->   gradHS1601 gradHS1602 ... gradHS3512
+                                grad2yr   ->   grad2yr1601 grad2yr1602 ... grad2yr3512
+                                grad4yr   ->   grad4yr1601 grad4yr1602 ... grad4yr3512
+                           gradGraduate   ->   gradGraduate1601 gradGraduate1602 ... gradGraduate3512
+-----------------------------------------------------------------------------
+
+. order        `cons'
+
+. 
+. * JA: I already did the hard work in data_import to line these up, BUT it seems we 
+. *     should have had the same var list in both and then just set to missing those
+. *     with the `wrong' birth cohort. Que sera...
+. preserve
+
+.         drop born198?
+
+.         order `cons79'
+
+. 
+.         * outsheet using y79m_vlad_scaled_full_cohorts_t0_16.csv if cohortFlag==1979, comma replace nolabel
+.         * drop if born1957==1 | born1958==1 | born1959==1 | born1960==1
+.         outsheet using y79_vlad_scaled_public_t0_16.csv              if cohortFlag==1979, comma replace nolabel
+(note: file y79_vlad_scaled_public_t0_16.csv not found)
+
+. restore
+
+. preserve
+
+.         drop born195? born196?
+
+.         order `cons97'
+
+. 
+.         outsheet using y97_vlad_scaled_public_t0_16.csv if cohortFlag==1997, comma replace nolabel
+(note: file y97_vlad_scaled_public_t0_16.csv not found)
+
+.         * ! cp -pf y97m_vlad_scaled_full_cohorts_t0_16.csv y97m_vlad_scaled_t0_16.csv
+. restore
+
+. 
+. ! chmod 774 *.dta
+
+
+. log close
+      name:  <unnamed>
+       log:  /hpc/group/econ/tmr17/WageReturnsRepo/Data/create_vlad_scaled_public_t0_16.log
+  log type:  text
+ closed on:   9 Apr 2020, 15:30:56
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------

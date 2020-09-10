@@ -1,0 +1,2945 @@
+A00026.00    [VERSION_R26]                                  Survey Year: 2014
+  PRIMARY VARIABLE
+
+ 
+             VERSION_R26_1
+ 
+COMMENT: PUBLIC RELEASE IDENTIFICATION NUMBER
+ 
+    7071           1 TO 999
+  -------
+    7071
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    7071   VALID SKIP(-4)       0     NON-INTERVIEW(-5)    5615
+ 
+Min:            458        Max:            458        Mean:                 458
+ 
+Lead In: None.
+Default Next Question: T50192.00
+--------------------------------------------------------------------------------
+R00001.00    [CASEID]                                       Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             IDENTIFICATION CODE
+ 
+ORIGINAL QUESTION NAME: CASEID
+ 
+NOTE: THIS NUMBER WAS ASSIGNED ACCORDING TO THE RECORD NUMBER OF EACH RESPONDENT
+ON THE TAPE. THE FIRST RESPONDENT WAS ASSIGNED ID#1, THE SECOND WAS ASSIGNED 
+ID#2, ETC.
+ 
+ACTUAL NUMBER
+ 
+UNIVERSE: All
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              1        Max:          12686        Mean:              6343.5
+ 
+Lead In: None.
+Default Next Question: R00001.49
+--------------------------------------------------------------------------------
+R00003.00    [Q1-3_A~M]                                     Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             DATE OF BIRTH - MONTH
+ 
+ORIGINAL QUESTION NAME: S01Q01A
+ 
+FIRST, WHEN WERE YOU BORN?
+ 
+1 THRU 12 ACTUAL MONTH
+ 
+UNIVERSE: All
+ 
+    1126           1
+     991           2
+    1028           3
+     970           4
+    1015           5
+    1053           6
+    1114           7
+    1223           8
+    1225           9
+    1010          10
+     954          11
+     977          12
+  -------
+   12686
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              1        Max:             12        Mean:                6.49
+ 
+Lead In: R00001.66[Default]
+Default Next Question: R00005.00
+--------------------------------------------------------------------------------
+R00005.00    [Q1-3_A~Y]                                     Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             DATE OF BIRTH - YEAR
+ 
+ORIGINAL QUESTION NAME: S01Q01A
+ 
+SEE R(3.)
+ 
+ACTUAL YEAR
+ 
+UNIVERSE: All
+ 
+    1680          57
+    1677          58
+    1722          59
+    1662          60
+    1530          61
+    1600          62
+    1550          63
+    1265          64
+  -------
+   12686
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:             57        Max:             64        Mean:               60.34
+ 
+Lead In: R00003.00[Default]
+Default Next Question: R00006.00
+--------------------------------------------------------------------------------
+R00007.00    [FAM-2A]                                       Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             COUNTRY OF BIRTH
+ 
+ORIGINAL QUESTION NAME: S01Q02A
+ 
+IN WHAT COUNTRY WERE YOU BORN?
+ 
+UNIVERSE: All
+ 
+   11812       1 IN THE US
+     873       2 IN OTHER COUNTRY
+  -------
+   12685
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       1
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Lead In: R00006.00[Default]
+Default Next Question: R00011.00
+--------------------------------------------------------------------------------
+R00018.00    [FAM-6]                                        Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             AREA OF RESIDENCE AT AGE 14 URBAN/RURAL?
+ 
+ORIGINAL QUESTION NAME: S01Q06
+ 
+(HAND CARD A.) WHICH OF THE CATEGORIES ON THIS CARD BEST DESCRIBES WHERE YOU 
+(ARE/WERE) LIVING (WHEN YOU WERE 14 YEARS OLD)?
+ 
+UNIVERSE: All
+ 
+    9970       1 IN TOWN OR CITY
+    2016       2 IN COUNTRY-NOT FARM
+     660       3 ON FARM OR RANCH
+  -------
+   12646
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)      40
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Lead In: R00014.00[Default] R00016.10[Default]
+Default Next Question: R00019.00
+--------------------------------------------------------------------------------
+R00019.00    [FAM-7]                                        Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             WITH WHOM DID R LIVE AT AGE 14?
+ 
+ORIGINAL QUESTION NAME: S01Q07
+ 
+(HAND CARD B.) PLEASE TAKE A LOOK AT THIS CARD AND TELL ME WITH WHOM YOU 
+(ARE/WERE) LIVING (WHEN YOU WERE 14 YEARS OLD). (CODE ONE CATEGORY FOR 'ADULT 
+WOMAN' AND ONE CATEGORY FOR 'ADULT MAN'. PROBE IF NECESSARY: AND WHICH LETTER IN
+BOX (1 OR 2) BEST DESCRIBES WHO YOU (ARE/WERE) LIVING WITH (THEN?)
+ 
+UNIVERSE: All
+ 
+    8570      11 FATHER-MOTHER
+     191      12 FATHER-STEPMOTHER
+      30      13 FATHER-OTHER WOMAN RELATIVE
+       9      14 FATHER-OTHER WOMAN
+     146      15 FATHER-NO WOMAN
+       6      19 FATHER-MISSING WOMAN
+     841      21 STEPFATHER-MOTHER
+      14      22 STEPFATHER-STEPMOTHER
+       2      23 STEPFATHER-WOMAN RELATIVE
+       2      24 STEPFATHER-OTHER WOMAN
+       2      25 STEPFATHER-NO WOMAN
+     102      31 MAN RELATIVE-MOTHER
+       2      32 MAN RELATIVE-STEPMOTHER
+     235      33 MAN RELATIVE-WOMAN RELATIVE
+       1      34 MAN RELATIVE-OTHER WOMAN
+      17      35 MAN RELATIVE-NO WOMAN
+      54      41 OTHER MAN-MOTHER
+       1      42 OTHER MAN-STEPMOTHER
+       9      43 OTHER MAN-WOMAN RELATIVE
+      57      44 OTHER MAN-OTHER WOMAN
+       6      45 OTHER MAN-NO WOMAN
+    2124      51 NO MAN-MOTHER
+       1      52 NO MAN-STEPMOTHER
+     138      53 NO MAN-WOMAN RELATIVE
+      18      54 NO MAN-OTHER WOMAN
+       3      55 NO MAN-NO WOMAN
+      22      80 OTHER ARRANGEMENT
+       3      90 ON MY OWN
+      60      91 MISSING MAN-MOTHER
+       1      93 MISSING MAN-WOMAN RELATIVE
+  -------
+   12667
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)      19
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Lead In: R00018.00[Default]
+Default Next Question: R00020.00
+--------------------------------------------------------------------------------
+R00065.00    [HGC-MOTHER]                                   Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             HIGHEST GRADE COMPLETED BY R'S MOTHER
+ 
+ORIGINAL QUESTION NAME: S01Q16
+ 
+WHAT IS THE HIGHEST GRADE OR YEAR OF REGULAR SCHOOL THAT YOUR MOTHER EVER 
+COMPLETED?
+ 
+UNIVERSE: R with mother/mother figure
+ 
+     132       0 NONE
+      24       1 1ST GRADE
+      87       2 2ND GRADE
+     183       3 3RD GRADE
+     173       4 4TH GRADE
+     198       5 5TH GRADE
+     421       6 6TH GRADE
+     260       7 7TH GRADE
+     801       8 8TH GRADE
+     698       9 9TH GRADE
+     999      10 10TH GRADE
+    1107      11 11TH GRADE
+    4817      12 12TH GRADE
+     364      13 1ST YR COL
+     561      14 2ND YR COL
+     178      15 3RD YR COL
+     647      16 4TH YR COL
+     101      17 5TH YR COL
+      92      18 6TH YR COL
+      14      19 7TH YR COL
+      21      20 8TH YR COL OR MORE
+       0      95 UNGRADED
+  -------
+   11878
+ 
+Refusal(-1)            3
+Don't Know(-2)       527
+Invalid Skip(-3)     251
+TOTAL =========>   12659   VALID SKIP(-4)      27     NON-INTERVIEW(-5)       0
+ 
+Lead In: R00061.00[Default]
+Default Next Question: R00066.00
+--------------------------------------------------------------------------------
+R00079.00    [HGC-FATHER]                                   Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             HIGHEST GRADE COMPLETED BY R'S FATHER
+ 
+ORIGINAL QUESTION NAME: S01Q23
+ 
+LET'S GO BACK TO YOUR FATHER NOW. WHAT IS THE HIGHEST GRADE OR YEAR OF REGULAR 
+SCHOOL THAT YOUR FATHER EVER COMPLETED?
+ 
+UNIVERSE: R with father/father figure
+ 
+     199       0 NONE
+      48       1 1ST GRADE
+     102       2 2ND GRADE
+     215       3 3RD GRADE
+     208       4 4TH GRADE
+     190       5 5TH GRADE
+     499       6 6TH GRADE
+     306       7 7TH GRADE
+     950       8 8TH GRADE
+     568       9 9TH GRADE
+     754      10 10TH GRADE
+     616      11 11TH GRADE
+    3694      12 12TH GRADE
+     286      13 1ST YR COL
+     558      14 2ND YR COL
+     162      15 3RD YR COL
+     899      16 4TH YR COL
+     151      17 5TH YR COL
+     209      18 6TH YR COL
+      56      19 7TH YR COL
+     210      20 8TH YR COL OR MORE
+       0      95 UNGRADED
+  -------
+   10880
+ 
+Refusal(-1)            3
+Don't Know(-2)      1150
+Invalid Skip(-3)     423
+TOTAL =========>   12456   VALID SKIP(-4)     230     NON-INTERVIEW(-5)       0
+ 
+Lead In: R00077.00[Default]
+Default Next Question: R00080.00
+--------------------------------------------------------------------------------
+R01530.00    [ROTTER-1A]                                    Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             ROTTER SCALE 79 INT - PAIR ONE, STATEMENT A
+ 
+ORIGINAL QUESTION NAME: S19Q01A
+ 
+WE WOULD LIKE TO FIND OUT WHETHER PEOPLE'S OUTLOOK ON LIFE HAS ANY EFFECT ON THE
+KIND OF JOBS THEY HAVE, THE WAY THEY LOOK FOR WORK, HOW MUCH THEY WORK, AND 
+MATTERS OF THAT KIND. ON EACH OF THESE CARDS IS A PAIR OF STATEMENTS NUMBERED 1 
+AND 2.
+(HAND RESPONDENT CARD BOOKLET 2.) FOR EACH PAIR, PLEASE SELECT ONE STATEMENT 
+WHICH IS CLOSER TO YOUR OPINION. IN ADDITION, TELL ME WHETHER THE STATEMENT YOU 
+SELECT IS MUCH CLOSER TO YOUR OPINION OR SLIGHTLY CLOSER. WHAT HAPPENS TO ME IS 
+MY OWN DOING...SOMETIMES I FEEL THAT I DON'T HAVE ENOUGH CONTROL OVER THE 
+DIRECTION MY LIFE IS TAKING...
+ 
+UNIVERSE: All
+ 
+    8691       1 IN CONTROL
+    3943       2 NOT IN CONTROL
+  -------
+   12634
+ 
+Refusal(-1)            1
+Don't Know(-2)        19
+Invalid Skip(-3)      32
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Lead In: R01529.00[Default]
+Default Next Question: R01531.00
+--------------------------------------------------------------------------------
+R01531.00    [ROTTER-1B]                                    Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             ROTTER SCALE 79 INT - PAIR ONE, STATEMENT B
+ 
+ORIGINAL QUESTION NAME: S19Q01B
+ 
+SEE R(1530.) IS THIS STATEMENT MUCH CLOSER OR SLIGHTLY CLOSER TO YOUR OPINION?
+ 
+UNIVERSE: All
+ 
+    6566       1 MUCH CLOSER
+    6064       2 SLIGHTLY CLOSER
+  -------
+   12630
+ 
+Refusal(-1)            1
+Don't Know(-2)        22
+Invalid Skip(-3)      33
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Lead In: R01530.00[Default]
+Default Next Question: R01532.00
+--------------------------------------------------------------------------------
+R01532.00    [ROTTER-2A]                                    Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             ROTTER SCALE 79 INT - PAIR TWO, STATEMENT A
+ 
+ORIGINAL QUESTION NAME: S19Q02A
+ 
+SEE R(1530.) WHEN I MAKE PLANS, I AM ALMOST CERTAIN THAT I CAN MAKE
+THEM WORK...OR IT IS NOT ALWAYS WISE TO PLAN TOO FAR AHEAD, BECAUSE MANY THINGS 
+TURN OUT TO BE A MATTER OF GOOD OR BAD FORTUNE ANYHOW...
+ 
+UNIVERSE: All
+ 
+    6080       1 R'S PLANS WORK
+    6557       2 MATTER OF LUCK
+  -------
+   12637
+ 
+Refusal(-1)            2
+Don't Know(-2)        18
+Invalid Skip(-3)      29
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Lead In: R01531.00[Default]
+Default Next Question: R01533.00
+--------------------------------------------------------------------------------
+R01533.00    [ROTTER-2B]                                    Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             ROTTER SCALE 79 INT - PAIR TWO, STATEMENT B
+ 
+ORIGINAL QUESTION NAME: S19Q02B
+ 
+SEE R(1532.) IS THIS STATEMENT MUCH CLOSER OR SLIGHTLY CLOSER
+TO YOUR OPINION?
+ 
+UNIVERSE: All
+ 
+    7258       1 MUCH CLOSER
+    5364       2 SLIGHTLY CLOSER
+  -------
+   12622
+ 
+Refusal(-1)            2
+Don't Know(-2)        22
+Invalid Skip(-3)      40
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Lead In: R01532.00[Default]
+Default Next Question: R01534.00
+--------------------------------------------------------------------------------
+R01534.00    [ROTTER-3A]                                    Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             ROTTER SCALE 79 INT - PAIR THREE, STATEMENT A
+ 
+ORIGINAL QUESTION NAME: S19Q03A
+ 
+SEE R(1530.) IN MY CASE, GETTING WHAT I WANT HAS LITTLE OR NOTHING
+TO DO WITH LUCK...MANY TIMES WE MIGHT JUST AS WELL DECIDE WHAT TO DO BY FLIPPING
+A COIN...
+ 
+UNIVERSE: All
+ 
+   10411       1 LUCK NOT FACTOR
+    2219       2 FLIP A COIN
+  -------
+   12630
+ 
+Refusal(-1)            1
+Don't Know(-2)        22
+Invalid Skip(-3)      33
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Lead In: R01533.00[Default]
+Default Next Question: R01535.00
+--------------------------------------------------------------------------------
+R01535.00    [ROTTER-3B]                                    Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             ROTTER SCALE 79 INT - PAIR THREE, STATEMENT B
+ 
+ORIGINAL QUESTION NAME: S19Q03B
+ 
+SEE R(1534.)
+ 
+UNIVERSE: All
+ 
+    6323       1 MUCH CLOSER
+    6287       2 SLIGHTLY CLOSER
+  -------
+   12610
+ 
+Refusal(-1)            1
+Don't Know(-2)        25
+Invalid Skip(-3)      50
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Lead In: R01534.00[Default]
+Default Next Question: R01536.00
+--------------------------------------------------------------------------------
+R01536.00    [ROTTER-4A]                                    Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             ROTTER SCALE 79 INT - PAIR FOUR, STATEMENT A
+ 
+ORIGINAL QUESTION NAME: S19Q04A
+ 
+SEE R(1530.) MANY TIMES I FEEL THAT I HAVE LITTLE INFLUENCE OVER THE
+THINGS THAT HAPPEN TO ME...OR IT IS IMPOSSIBLE FOR ME TO BELIEVE
+THAT CHANCE OR LUCK PLAYS AN IMPORTANT ROLE IN MY LIFE. . .
+ 
+UNIVERSE: All
+ 
+    5702       1 LUCK BIG ROLE
+    6895       2 LUCK NO ROLE
+  -------
+   12597
+ 
+Refusal(-1)            2
+Don't Know(-2)        33
+Invalid Skip(-3)      54
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Lead In: R01535.00[Default]
+Default Next Question: R01537.00
+--------------------------------------------------------------------------------
+R01537.00    [ROTTER-4B]                                    Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             ROTTER SCALE 79 INT - PAIR FOUR, STATEMENT B
+ 
+ORIGINAL QUESTION NAME: S19Q04B
+ 
+SEE R(1536.)
+ 
+UNIVERSE: All
+ 
+    5052       1 MUCH CLOSER
+    7538       2 SLIGHTLY CLOSER
+  -------
+   12590
+ 
+Refusal(-1)            2
+Don't Know(-2)        32
+Invalid Skip(-3)      62
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Lead In: R01536.00[Default]
+Default Next Question: R01537.10
+--------------------------------------------------------------------------------
+R01537.10    [ROTTER_SCORE]                                 Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             ROTTER SCALE SCORE
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+ROTTER - LOCUS OF CONTROL
+ 
+UNIVERSE: All
+ 
+     580           1 TO 4
+    7320           5 TO 9
+    4551          10 TO 14
+      90          15 TO 19
+  -------
+   12541
+ 
+Refusal(-1)            1
+Don't Know(-2)        14
+Invalid Skip(-3)     130
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              4        Max:             16        Mean:                8.66
+ 
+Lead In: R01537.00[Default]
+Default Next Question: R01538.00
+--------------------------------------------------------------------------------
+R01736.00    [SAMPLE_ID]                                    Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             SAMPLE IDENTIFICATION CODE
+ 
+ORIGINAL QUESTION NAME: S24Q01
+ 
+UNIVERSE: Entire Sample
+ 
+    2236       1 CROSS MALE WHITE
+     203       2 CROSS MALE WH. POOR
+     346       3 CROSS MALE BLACK
+     218       4 CROSS MALE HISPANIC
+    2279       5 CROSS FEMALE WHITE
+     198       6 CROSS FEMALE WH POOR
+     405       7 CROSS FEMALE BLACK
+     226       8 CROSS FEMALE HISPANIC
+     742       9 SUP MALE WH POOR
+    1105      10 SUP MALE BLACK
+     729      11 SUP MALE HISPANIC
+     901      12 SUP FEM WH POOR
+    1067      13 SUP FEMALE BLACK
+     751      14 SUP FEMALE HISPANIC
+     609      15 MIL MALE WHITE
+     162      16 MIL MALE BLACK
+      53      17 MIL MALE HISPANIC
+     342      18 MIL FEMALE WHITE
+      89      19 MIL FEMALE BLACK
+      25      20 MIL FEMALE HISPANIC
+  -------
+   12686
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+MARCH 1, 1986  NORC
+ 
+SEX CODE CHANGED ON 42 CASES
+ 
+Lead In: R01735.18[Default] R01735.19[Default] R01735.14[Default] 
+         R01735.16[Default] R01735.17[Default] R01735.15[Default] 
+         R01735.00[Default]
+Default Next Question: R01737.00
+--------------------------------------------------------------------------------
+R02147.00    [SAMPLE_RACE]                                  Survey Year: 78SCRN
+  PRIMARY VARIABLE
+
+ 
+             R'S RACIAL/ETHNIC COHORT FROM SCREENER
+ 
+UNIVERSE: Entire Sample
+ 
+    2002       1 HISPANIC
+    3174       2 BLACK
+    7510       3 NON-BLACK, NON-HISPANIC
+  -------
+   12686
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+AUGUST 26, 1980  DENNIS GREY
+ 
+DESCRIPTION:
+COHORT=3;
+IF R(1736.)=4 ! R(1736.)=8 ! R(1736.)=11 ! R(1736.)=14 THEN COHORT=1;
+IF R(1736.)=17 ! R(1736.)=20 THEN COHORT=1;
+IF R(1736.)=3 ! R(1736.)=7 ! R(1736.)=10 ! R(1736.)=13 THEN COHORT=2;
+IF R(1736.)=16 ! R(1736.)=19 THEN COHORT=2;
+R(2147.)=COHORT;
+ 
+Lead In: R02146.00[Default]
+Default Next Question: R02148.00
+--------------------------------------------------------------------------------
+R02148.00    [SAMPLE_SEX]                                   Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             SEX OF R
+ 
+UNIVERSE: Entire sample
+ 
+    6403       1 MALE
+    6283       2 FEMALE
+  -------
+   12686
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+AUGUST 26, 1980  DENNIS GREY
+MARCH 1, 1986  NORC
+ 
+DESCRIPTION:
+IF (R(1736.)>0 & R(1736.)<=4) ! (R(1736.)>=9 & R(1736.)<=11) THEN SEX=1;
+IF R(1736.)>=15 & R(1736.)<=17 THEN SEX=1;
+IF (R(1736.)>=5 & R(1736.)<=8) ! (R(1736.)>=12 & R(1736.)<=14) THEN SEX=
+IF R(1736.)>=18 & R(1736.)<=20 THEN SEX=2;
+R(2148.)=SEX;
+SEX CODE CHANGED ON 42 CASES
+ 
+Lead In: R02147.00[Default]
+Default Next Question: R02149.00
+--------------------------------------------------------------------------------
+R02161.00    [SAMPWEIGHT]                                   Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+SEE R(1376.)
+ 
+1 THRU 9999999 SAMPLING WEIGHT (2 IMPLIED DECIMAL PLACES)
+ 
+UNIVERSE: Entire Sample
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:           4100        Max:        1058864        Mean:           264539.71
+ 
+Lead In: R02160.20[Default]
+Default Next Question: R02161.01
+--------------------------------------------------------------------------------
+R02164.00    [REGION]                                       Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+UNIVERSE: All except those with no records
+ 
+    2550       1 NORTHEAST
+    2934       2 NORTH CENTRAL
+    4568       3 SOUTH
+    2395       4 WEST
+  -------
+   12447
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12447   VALID SKIP(-4)     239     NON-INTERVIEW(-5)       0
+ 
+AUGUST 26, 1980  DENNIS GREY
+ 
+DESCRIPTION:
+REGION=-4;
+S=R(1740.);
+IF S=09 ! S=23 ! S=25 ! S=33 ! S=34 ! S=36 ! S=42 ! S=44 ! S=50
+                                                       THEN REGION=1;
+IF S=01 ! S=05 ! S=10 ! S=11 ! S=12 ! S=13 ! S=21 ! S=22 ! S=24 ! S=28 !
+   S=37 ! S=40 ! S=45 ! S=47 ! S=48 ! S=51 ! S=54      THEN REGION=3;
+IF S=17 ! S=18 ! S=19 ! S=20 ! S=26 ! S=27 ! S=29 ! S=31 ! S=39 !
+   S=46 ! S=38 ! S=55                                  THEN REGION=2;
+IF S=02 ! S=04 ! S=06 ! S=08 ! S=15 ! S=16 ! S=30 ! S=32 ! S=35 !
+   S=41 ! S=49 ! S=53 ! S=56                           THEN REGION=4;
+R(2164.)=REGION;
+ 
+Lead In: R02161.01[Default]
+Default Next Question: R02165.00
+--------------------------------------------------------------------------------
+R02175.02    [FAMSIZE]                                      Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             FAMILY SIZE
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+NOTE: VARIABLE CREATION PROCEDURE IS COMPARABLE TO COMPUTATION OF "FAMILY SIZE" 
+USED TO DETERMINE "FAMILY POVERY STATUS". SEE APPENDIX 2: TOTAL NET FAMILY 
+INCOME.
+ 
+ACTUAL NUMBER
+ 
+UNIVERSE: Entire Sample
+ 
+    1843           1
+    1194           2
+    1901           3
+    2233           4
+    2117           5
+    1466           6
+     845           7
+     477           8
+     249           9
+     200          10
+      98          11
+      19          12
+      17          13
+       6          14
+      21          15
+  -------
+   12686
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              1        Max:             15        Mean:                4.27
+ 
+Lead In: R02175.01[Default]
+Default Next Question: R02179.00
+--------------------------------------------------------------------------------
+R02179.00    [TNFI_TRUNC]                                   Survey Year: 1979
+  PRIMARY VARIABLE
+
+ 
+             TOTAL NET FAMILY INCOME IN PAST CALENDAR YEAR *KEY* (TRUNCATED)
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+NOTE: FOR VARIABLE CREATION, SEE APPENDIX 2: TOTAL NET FAMILY INCOME
+ 
+ACTUAL NUMBER
+ 
+UNIVERSE: All
+ 
+      49           0
+     113           1 TO 999
+     207        1000 TO 1999
+     362        2000 TO 2999
+     509        3000 TO 3999
+     548        4000 TO 4999
+     794        5000 TO 5999
+     755        6000 TO 6999
+     517        7000 TO 7999
+     456        8000 TO 8999
+     394        9000 TO 9999
+    1552       10000 TO 14999
+    1108       15000 TO 19999
+     978       20000 TO 24999
+    1595       25000 TO 49999
+     258       50000 TO 9999999: 50000+
+  -------
+   10195
+ 
+Refusal(-1)          585
+Don't Know(-2)      1194
+Invalid Skip(-3)     712
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:          75001        Mean:            14706.87
+ 
+Lead In: R02175.02[Default]
+Default Next Question: R02179.10
+--------------------------------------------------------------------------------
+R04052.00    [SAMPWEIGHT]                                   Survey Year: 1980
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+SEE R(2854.)
+ 
+1 THRU 9999999 SAMPLING WEIGHT (2 IMPLIED DECIMAL PLACES)
+ 
+UNIVERSE: All
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1106772        Mean:           264604.33
+ 
+Lead In: R04051.00[Default]
+Default Next Question: R04052.01
+--------------------------------------------------------------------------------
+R04057.00    [REGION]                                       Survey Year: 1980
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+UNIVERSE: All
+ 
+    2401       1 NORTHEAST
+    2874       2 NORTH CENTRAL
+    4516       3 SOUTH
+    2314       4 WEST
+  -------
+   12105
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)      36
+TOTAL =========>   12141   VALID SKIP(-4)       0     NON-INTERVIEW(-5)     545
+ 
+Lead In: R04056.01[Default]
+Default Next Question: R04060.10
+--------------------------------------------------------------------------------
+R04063.10    [RNI]                                          Survey Year: 1980
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+UNIVERSE: All
+ 
+      48      60 PARENT REFUSAL/BREAKOFF
+     162      61 YOUTH REFUSAL/BREAKOFF
+      43      62 PARENT AND YOUTH REFUSAL/BREAKOFF
+      25      63 UNABLE TO LOCATE FAMILY UNIT AND YOUTH
+     192      64 UNABLE TO LOCATE YOUTH
+       9      65 DECEASED
+      66      66 OTHER
+  -------
+     545
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>     545   VALID SKIP(-4)   12141     NON-INTERVIEW(-5)       0
+ 
+Lead In: R04063.01[Default]
+Default Next Question: R04064.00
+--------------------------------------------------------------------------------
+R06028.10    [REGION]                                       Survey Year: 1981
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+UNIVERSE: All
+ 
+    2345       1 NORTHEAST
+    2882       2 NORTH CENTRAL
+    4554       3 SOUTH
+    2348       4 WEST
+  -------
+   12129
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       4
+TOTAL =========>   12133   VALID SKIP(-4)      62     NON-INTERVIEW(-5)     491
+ 
+Lead In: R06025.00[Default]
+Default Next Question: R06029.00
+--------------------------------------------------------------------------------
+R06146.00    [SAMPWEIGHT]                                   Survey Year: 1981
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+SEE R(4461.)
+ 
+1 THRU 9999999 SAMPLING WEIGHT (2 IMPLIED DECIMAL PLACES)
+ 
+UNIVERSE: All
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1103482        Mean:           264561.86
+ 
+Lead In: R06145.00[Default]
+Default Next Question: R06146.01
+--------------------------------------------------------------------------------
+R06182.00    [AFQT-1]                                       Survey Year: 1981
+  PRIMARY VARIABLE
+
+ 
+             PROFILES, ARMED FORCES QUALIFICATION TEST (AFQT) PERCENTILE SCORE -
+             1980
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+SEE ATTACHMENT 106 ADDENDUM FOR DEFINITIONS
+NOTE: AFQT PERCENTILE SCORES ARE GIVEN FOR THE TOTAL NUMBER OF
+RESPONDENTS PARTICIPATING IN THE PROFILES STUDY, NOT INCLUDING THOSE
+RESPONDENTS WITH ALTERED TESTING PROCEDURES (CODE 67 ON R( 6148.)).
+HOWEVER, THE CONSTRUCTION OF THE AFQT PERCENTILE SCORE IS BASED UPON
+THOSE RESPONDENTS BORN PRIOR TO 1963 ON R( 5.)
+ 
+ACTUAL PERCENTAGE
+ 
+UNIVERSE: All
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)      36
+TOTAL =========>   11914   VALID SKIP(-4)     772     NON-INTERVIEW(-5)       0
+ 
+Min:              1        Max:             99        Mean:               40.91
+ 
+Lead In: R06181.00[Default]
+Default Next Question: R06183.00
+--------------------------------------------------------------------------------
+R06183.00    [AFQT-2]                                       Survey Year: 1981
+  PRIMARY VARIABLE
+
+ 
+             PROFILES, ARMED FORCES QUALIFICATION TEST (AFQT) PERCENTILE SCORE -
+             REVISED 1989
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+SEE ATTACHMENT 106 ADDENDUM FOR DEFINITIONS
+NOTE: (SEE R( 6182.))
+ 
+ACTUAL PERCENTAGE
+ 
+UNIVERSE: All
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)      36
+TOTAL =========>   11914   VALID SKIP(-4)     772     NON-INTERVIEW(-5)       0
+ 
+Min:              1        Max:             99        Mean:               40.95
+ 
+Lead In: R06182.00[Default]
+Default Next Question: R06184.10
+--------------------------------------------------------------------------------
+R06183.01    [AFQT-3]                                       Survey Year: 1981
+  PRIMARY VARIABLE
+
+ 
+             PROFILES, ARMED FORCES QUALIFICATION TEST (AFQT) PERCENTILE SCORE -
+             REVISED 2006
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+SEE ATTACHMENT 106 ADDENDUM FOR DEFINITIONS
+NOTE: (SEE R( 6182.))  3 IMPLIED DECIMAL PLACES
+ 
+ACTUAL PERCENTAGE
+ 
+UNIVERSE: All
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   11914   VALID SKIP(-4)     281     NON-INTERVIEW(-5)     491
+ 
+Min:              0        Max:         100000        Mean:            42395.61
+ 
+Lead In: None.
+Default Next Question: R06184.10
+--------------------------------------------------------------------------------
+R06188.10    [RNI]                                          Survey Year: 1981
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+UNIVERSE: R did not take interview
+ 
+      26      60 PARENT REFUSAL/BREAKOFF
+     164      61 YOUTH REFUSAL/BREAKOFF
+      30      62 PARENT AND YOUTH REFUSAL/BREAKOFF
+      30      63 UNABLE TO LOCATE FAMILY UNIT AND YOUTH
+      84      64 UNABLE TO LOCATE YOUTH
+      29      65 DECEASED
+     128      66 OTHER
+  -------
+     491
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>     491   VALID SKIP(-4)   12195     NON-INTERVIEW(-5)       0
+ 
+Lead In: R06188.01[Default]
+Default Next Question: R06189.00
+--------------------------------------------------------------------------------
+R08967.00    [SAMPWEIGHT]                                   Survey Year: 1982
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+1 THRU 9999999 SAMPLING WEIGHT (2 IMPLIED DECIMAL PLACES)
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1125442        Mean:           264539.59
+ 
+Lead In: R08937.00[Default]
+Default Next Question: R08967.01
+--------------------------------------------------------------------------------
+R08979.10    [REGION]                                       Survey Year: 1982
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+    2278       1 NORTHEAST
+    2820       2 NORTH CENTRAL
+    4593       3 SOUTH
+    2357       4 WEST
+  -------
+   12048
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12048   VALID SKIP(-4)      75     NON-INTERVIEW(-5)     563
+ 
+Lead In: R08979.00[Default]
+Default Next Question: R08982.00
+--------------------------------------------------------------------------------
+R08985.10    [RNI]                                          Survey Year: 1982
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+UNIVERSE: All
+ 
+      10      60 PARENT REFUSAL/BREAKOFF
+     138      61 YOUTH REFUSAL/BREAKOFF
+      29      62 PARENT & YOUTH REFUSAL/BREAKOFF
+      58      63 UNABLE TO LOCATE FAMILY UNIT & YOUTH
+     151      64 UNABLE TO LOCATE YOUTH
+      44      65 DECEASED
+      50      66 OTHER
+      83      67 DO NOT REFIELD (VERY DIFFICULT CASES)
+  -------
+     563
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>     563   VALID SKIP(-4)   12123     NON-INTERVIEW(-5)       0
+ 
+Lead In: R08985.01[Default]
+Default Next Question: R08986.00
+--------------------------------------------------------------------------------
+R09010.00    [FAM-2C]                                       Survey Year: 1983
+  PRIMARY VARIABLE
+
+ 
+             YEAR FIRST ENTERED UNITED STATES - FOREIGN RESIDENCE AT BIRTH
+ 
+ORIGINAL QUESTION NAME: Q0136
+ 
+WHEN DID YOU FIRST ENTER THE UNITED STATES, IN WHAT YEAR?
+ 
+ACTUAL YEAR
+ 
+UNIVERSE: R not born in US
+ 
+      17           0 TO 58: < 59
+      22          59
+      32          60
+      34          61
+      33          62
+      35          63
+      33          64
+      33          65
+      37          66
+      45          67
+      35          68
+      54          69
+      61          70
+      37          71
+      43          72
+      44          73
+      47          74
+     208          75 TO 99999: 75+
+  -------
+     850
+ 
+Refusal(-1)            0
+Don't Know(-2)         2
+Invalid Skip(-3)      46
+TOTAL =========>     898   VALID SKIP(-4)   11323     NON-INTERVIEW(-5)     465
+ 
+Min:             57        Max:             79        Mean:               69.39
+ 
+Lead In: R09009.00[Default]
+Default Next Question: R09011.00
+--------------------------------------------------------------------------------
+R11444.00    [SAMPWEIGHT]                                   Survey Year: 1983
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+1 THRU 9999999 SAMPLING WEIGHT (2 IMPLIED DECIMAL PLACES)
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1106991        Mean:            264519.3
+ 
+Lead In: R11443.00[Default]
+Default Next Question: R11444.01
+--------------------------------------------------------------------------------
+R11447.10    [RNI]                                          Survey Year: 1983
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+       6      60 PARENT REFUSAL/BREAKOFF
+     186      61 YOUTH REFUSAL/BREAKOFF
+      28      62 PARENT & YOUTH REFUSAL/BREAKOFF
+      17      63 UNABLE TO LOCATE FAMILY UNIT & YOUTH
+     107      64 UNABLE TO LOCATE YOUTH
+      57      65 DECEASED
+      37      66 OTHER
+      27      67 DO NOT REFIELD (VERY DIFFICULT CASES)
+  -------
+     465
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>     465   VALID SKIP(-4)   12221     NON-INTERVIEW(-5)       0
+ 
+Lead In: R11447.01[Default]
+Default Next Question: R11448.00
+--------------------------------------------------------------------------------
+R11448.00    [REGION]                                       Survey Year: 1983
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+    2326       1 NORTHEAST
+    2782       2 NORTH CENTRAL
+    4619       3 SOUTH
+    2418       4 WEST
+  -------
+   12145
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12145   VALID SKIP(-4)      76     NON-INTERVIEW(-5)     465
+ 
+Lead In: R11447.10[Default]
+Default Next Question: R11449.00
+--------------------------------------------------------------------------------
+R15196.00    [SAMPWEIGHT]                                   Survey Year: 1984
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+1 THRU 9999999 SAMPLING WEIGHT (2 IMPLIED DECIMAL PLACES)
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1110190        Mean:           264516.11
+ 
+Lead In: R15195.00[Default]
+Default Next Question: R15196.01
+--------------------------------------------------------------------------------
+R15199.10    [RNI]                                          Survey Year: 1984
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+       0      60 PARENT REFUSAL/BREAKOFF
+     374      61 YOUTH REFUSAL/BREAKOFF
+       0      62 PARENT & YOUTH REFUSAL/BREAKOFF
+       0      63 UNABLE TO LOCATE FAMILY UNIT & YOUTH
+     151      64 UNABLE TO LOCATE YOUTH
+      67      65 DECEASED
+      25      66 OTHER
+       0      67 DO NOT REFIELD (VERY DIFFICULT CASES)
+  -------
+     617
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>     617   VALID SKIP(-4)   12069     NON-INTERVIEW(-5)       0
+ 
+Lead In: R15199.01[Default]
+Default Next Question: R15200.00
+--------------------------------------------------------------------------------
+R15200.00    [REGION]                                       Survey Year: 1984
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+    2263       1 NORTHEAST
+    2690       2 NORTH CENTRAL
+    4487       3 SOUTH
+    2444       4 WEST
+  -------
+   11884
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)     158
+TOTAL =========>   12042   VALID SKIP(-4)      27     NON-INTERVIEW(-5)     617
+ 
+Lead In: R15199.10[Default]
+Default Next Question: R15201.00
+--------------------------------------------------------------------------------
+R18902.00    [SAMPWEIGHT]                                   Survey Year: 1985
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+1 THRU 9999999 SAMPLING WEIGHT (2 IMPLIED DECIMAL PLACES)
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1122044        Mean:           264533.18
+ 
+Lead In: R18901.00[Default]
+Default Next Question: R18902.01
+--------------------------------------------------------------------------------
+R18903.00    [RNI]                                          Survey Year: 1985
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+       0      60 PARENT REFUSAL/BREAKOFF
+     331      61 YOUTH REFUSAL/BREAKOFF
+       0      62 PARENT & YOUTH REFUSAL/BREAKOFF
+       0      63 UNABLE TO LOCATE FAMILY UNIT & YOUTH
+     152      64 UNABLE TO LOCATE YOUTH
+      79      65 DECEASED
+      26      66 OTHER
+     125      67 DO NOT REFIELD (VERY DIFFICULT CASES)
+    1079      68 MILITARY SAMPLE DROPPED
+  -------
+    1792
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    1792   VALID SKIP(-4)   10894     NON-INTERVIEW(-5)       0
+ 
+Lead In: R18902.10[Default]
+Default Next Question: R18904.00
+--------------------------------------------------------------------------------
+R18907.00    [REGION]                                       Survey Year: 1985
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+    2054       1 NORTHEAST
+    2460       2 NORTH CENTRAL
+    4143       3 SOUTH
+    2152       4 WEST
+  -------
+   10809
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)      13
+TOTAL =========>   10822   VALID SKIP(-4)      72     NON-INTERVIEW(-5)    1792
+ 
+Lead In: R18906.01[Default]
+Default Next Question: R18908.00
+--------------------------------------------------------------------------------
+R22573.00    [SAMPWEIGHT]                                   Survey Year: 1986
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+1 THRU 9999999 SAMPLING WEIGHT (2 IMPLIED DECIMAL PLACES)
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1134267        Mean:           264531.78
+ 
+Lead In: R22571.00[Default]
+Default Next Question: R22573.01
+--------------------------------------------------------------------------------
+R22574.00    [RNI]                                          Survey Year: 1986
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+       0      60 PARENT REFUSAL/BREAKOFF
+     524      61 YOUTH REFUSAL/BREAKOFF
+       0      62 PARENT & YOUTH REFUSAL/BREAKOFF
+       0      63 UNABLE TO LOCATE FAMILY UNIT & YOUTH
+     200      64 UNABLE TO LOCATE YOUTH
+      95      65 DECEASED
+      36      66 OTHER
+      97      67 DO NOT REFIELD (VERY DIFFICULT CASES)
+    1079      68 MILITARY SAMPLE DROPPED
+  -------
+    2031
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    2031   VALID SKIP(-4)   10655     NON-INTERVIEW(-5)       0
+ 
+Lead In: R22573.01[Default]
+Default Next Question: R22574.10
+--------------------------------------------------------------------------------
+R22578.00    [REGION]                                       Survey Year: 1986
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+    1993       1 NORTHEAST
+    2403       2 NORTH CENTRAL
+    4086       3 SOUTH
+    2091       4 WEST
+  -------
+   10573
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   10573   VALID SKIP(-4)      82     NON-INTERVIEW(-5)    2031
+ 
+Lead In: R22577.01[Default]
+Default Next Question: R22579.00
+--------------------------------------------------------------------------------
+R24445.00    [SAMPWEIGHT]                                   Survey Year: 1987
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+1 THRU 9999999 SAMPLING WEIGHT (2 IMPLIED DECIMAL PLACES)
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1158567        Mean:           264538.74
+ 
+Lead In: R24440.00[Default]
+Default Next Question: R24445.01
+--------------------------------------------------------------------------------
+R24446.00    [RNI]                                          Survey Year: 1987
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+       0      60 PARENT REFUSAL/BREAKOFF
+     508      61 YOUTH REFUSAL/BREAKOFF
+       0      62 PARENT & YOUTH REFUSAL/BREAKOFF
+       0      63 UNABLE TO LOCATE FAMILY UNIT & YOUTH
+     293      64 UNABLE TO LOCATE YOUTH
+     110      65 DECEASED
+      68      66 OTHER
+     143      67 DO NOT REFIELD (VERY DIFFICULT CASES)
+    1079      68 MILITARY SAMPLE DROPPED
+  -------
+    2201
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    2201   VALID SKIP(-4)   10485     NON-INTERVIEW(-5)       0
+ 
+Lead In: R24445.01[Default]
+Default Next Question: R24446.10
+--------------------------------------------------------------------------------
+R24452.00    [REGION]                                       Survey Year: 1987
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+    1952       1 NORTHEAST
+    2378       2 NORTH CENTRAL
+    4022       3 SOUTH
+    2067       4 WEST
+  -------
+   10419
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   10419   VALID SKIP(-4)      66     NON-INTERVIEW(-5)    2201
+ 
+Lead In: R24451.01[Default]
+Default Next Question: R24453.00
+--------------------------------------------------------------------------------
+R28700.00    [SAMPWEIGHT]                                   Survey Year: 1988
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+1 THRU 9999999 SAMPLING WEIGHT (2 IMPLIED DECIMAL PLACES)
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1186108        Mean:           264542.99
+ 
+Lead In: R28690.00[Default]
+Default Next Question: R28700.01
+--------------------------------------------------------------------------------
+R28701.00    [RNI]                                          Survey Year: 1988
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+       0      60 PARENT REFUSAL/BREAKOFF
+     587      61 YOUTH REFUSAL/BREAKOFF
+       0      62 PARENT & YOUTH REFUSAL/BREAKOFF
+       0      63 UNABLE TO LOCATE FAMILY UNIT & YOUTH
+     248      64 UNABLE TO LOCATE YOUTH
+     127      65 DECEASED
+      83      66 OTHER
+      97      67 DO NOT REFIELD (VERY DIFFICULT CASES)
+    1079      68 MILITARY SAMPLE DROPPED
+  -------
+    2221
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    2221   VALID SKIP(-4)   10465     NON-INTERVIEW(-5)       0
+ 
+Lead In: R28700.01[Default]
+Default Next Question: R28701.10
+--------------------------------------------------------------------------------
+R28708.00    [REGION]                                       Survey Year: 1988
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+    1933       1 NORTHEAST
+    2416       2 NORTH CENTRAL
+    4013       3 SOUTH
+    2041       4 WEST
+  -------
+   10403
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   10403   VALID SKIP(-4)      62     NON-INTERVIEW(-5)    2221
+ 
+Lead In: R28707.00[Default]
+Default Next Question: R28709.00
+--------------------------------------------------------------------------------
+R30738.00    [SAMPWEIGHT]                                   Survey Year: 1989
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+1 THRU 9999999 SAMPLING WEIGHT (2 IMPLIED DECIMAL PLACES)
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1122723        Mean:           264538.24
+ 
+Lead In: R30729.00[Default]
+Default Next Question: R30738.01
+--------------------------------------------------------------------------------
+R30739.00    [RNI]                                          Survey Year: 1989
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+       0      60 PARENT REFUSAL/BREAKOFF
+     525      61 YOUTH REFUSAL/BREAKOFF
+       0      62 PARENT & YOUTH REFUSAL/BREAKOFF
+       0      63 UNABLE TO LOCATE FAMILY UNIT & YOUTH
+     188      64 UNABLE TO LOCATE YOUTH
+     141      65 DECEASED
+      46      66 OTHER
+     102      67 DO NOT REFIELD (VERY DIFFICULT CASES)
+    1079      68 MILITARY SAMPLE DROPPED
+  -------
+    2081
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    2081   VALID SKIP(-4)   10605     NON-INTERVIEW(-5)       0
+ 
+Lead In: R30738.01[Default]
+Default Next Question: R30739.10
+--------------------------------------------------------------------------------
+R30745.00    [REGION]                                       Survey Year: 1989
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+NOTE: FOR VARIABLE CREATION SEE ATTACHMENT 104: GEOGRAPHIC REGIONS
+ 
+    1866       1 NORTHEAST
+    2405       2 NORTH CENTRAL
+    3957       3 SOUTH
+    2020       4 WEST
+  -------
+   10248
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   10248   VALID SKIP(-4)     357     NON-INTERVIEW(-5)    2081
+ 
+Lead In: R30744.00[Default]
+Default Next Question: R30746.00
+--------------------------------------------------------------------------------
+R34002.00    [SAMPWEIGHT]                                   Survey Year: 1990
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+1 THRU 9999999 SAMPLING WEIGHT (2 IMPLIED DECIMAL PLACES)
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1140721        Mean:           264539.23
+ 
+Lead In: R34001.00[Default]
+Default Next Question: R34002.01
+--------------------------------------------------------------------------------
+R34005.00    [RNI]                                          Survey Year: 1990
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+       0      60 PARENT REFUSAL/BREAKOFF
+     662      61 YOUTH REFUSAL/BREAKOFF
+       0      62 PARENT & YOUTH REFUSAL/BREAKOFF
+       0      63 UNABLE TO LOCATE FAMILY UNIT & YOUTH
+     246      64 UNABLE TO LOCATE YOUTH
+     152      65 DECEASED
+      52      66 OTHER
+      59      67 DO NOT REFIELD (VERY DIFFICULT CASES)
+    1079      68 MILITARY SAMPLE DROPPED
+  -------
+    2250
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    2250   VALID SKIP(-4)   10436     NON-INTERVIEW(-5)       0
+ 
+Lead In: R34004.00[Default]
+Default Next Question: R34006.00
+--------------------------------------------------------------------------------
+R34012.00    [REGION]                                       Survey Year: 1990
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+NOTE: FOR VARIABLE CREATION SEE ATTACHMENT 104: GEOGRAPHIC REGIONS
+ 
+    1843       1 NORTHEAST
+    2410       2 NORTH CENTRAL
+    3999       3 SOUTH
+    2040       4 WEST
+  -------
+   10292
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   10292   VALID SKIP(-4)     144     NON-INTERVIEW(-5)    2250
+ 
+Lead In: R34011.00[Default]
+Default Next Question: R34013.00
+--------------------------------------------------------------------------------
+R36558.00    [SAMPWEIGHT]                                   Survey Year: 1991
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+1 THRU 9999999 SAMPLING WEIGHT (2 IMPLIED DECIMAL PLACES)
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1201610        Mean:           264533.07
+ 
+Lead In: R36556.00[Default]
+Default Next Question: R36558.01
+--------------------------------------------------------------------------------
+R36559.00    [RNI]                                          Survey Year: 1991
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+       0      60 PARENT REFUSAL/BREAKOFF
+     507      61 YOUTH REFUSAL/BREAKOFF
+       0      62 PARENT & YOUTH REFUSAL/BREAKOFF
+       0      63 UNABLE TO LOCATE FAMILY UNIT & YOUTH
+     202      64 UNABLE TO LOCATE YOUTH
+     166      65 DECEASED
+      22      66 OTHER
+      71      67 DO NOT REFIELD (VERY DIFFICULT CASES)
+    1079      68 MILITARY SAMPLE DROPPED
+     731      69 SUPPLEMENTAL MALE POOR WHITE SAMPLE DROPPED
+     890      70 SUPPLEMENTAL FEMALE POOR WHITE SAMPLE DROPPED
+  -------
+    3668
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    3668   VALID SKIP(-4)    9018     NON-INTERVIEW(-5)       0
+ 
+Lead In: R36558.01[Default]
+Default Next Question: R36560.00
+--------------------------------------------------------------------------------
+R36566.00    [REGION]                                       Survey Year: 1991
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+NOTE: FOR VARIABLE CREATION SEE ATTACHMENT 104: GEOGRAPHIC REGIONS
+ 
+    1511       1 NORTHEAST
+    2087       2 NORTH CENTRAL
+    3439       3 SOUTH
+    1855       4 WEST
+  -------
+    8892
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    8892   VALID SKIP(-4)     126     NON-INTERVIEW(-5)    3668
+ 
+Lead In: R36565.00[Default]
+Default Next Question: R36567.00
+--------------------------------------------------------------------------------
+R40063.00    [SAMPWEIGHT]                                   Survey Year: 1992
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+1 THRU 9999999 SAMPLING WEIGHT (2 IMPLIED DECIMAL PLACES)
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1205949        Mean:           264541.07
+ 
+Lead In: R40062.00[Default]
+Default Next Question: R40063.01
+--------------------------------------------------------------------------------
+R40064.00    [RNI]                                          Survey Year: 1992
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+       0      60 PARENT REFUSAL/BREAKOFF
+     526      61 YOUTH REFUSAL/BREAKOFF
+       0      62 PARENT & YOUTH REFUSAL/BREAKOFF
+       0      63 UNABLE TO LOCATE FAMILY UNIT & YOUTH
+     158      64 UNABLE TO LOCATE YOUTH
+     178      65 DECEASED
+      28      66 OTHER
+      80      67 DO NOT REFIELD (VERY DIFFICULT CASES)
+    1079      68 MILITARY SAMPLE DROPPED
+     731      69 SUPPLEMENTAL MALE POOR WHITE SAMPLE DROPPED
+     890      70 SUPPLEMENTAL FEMALE POOR WHITE SAMPLE DROPPED
+  -------
+    3670
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    3670   VALID SKIP(-4)    9016     NON-INTERVIEW(-5)       0
+ 
+Lead In: R40063.01[Default]
+Default Next Question: R40065.00
+--------------------------------------------------------------------------------
+R40071.00    [REGION]                                       Survey Year: 1992
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+ORIGINAL QUESTION NAME: *CREATED
+ 
+NOTE: FOR VARIABLE CREATION SEE ATTACHMENT 104: GEOGRAPHIC REGIONS
+ 
+    1506       1 NORTHEAST
+    2071       2 NORTH CENTRAL
+    3460       3 SOUTH
+    1852       4 WEST
+  -------
+    8889
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       2
+TOTAL =========>    8891   VALID SKIP(-4)     125     NON-INTERVIEW(-5)    3670
+ 
+Lead In: R40070.00[Default]
+Default Next Question: R40072.00
+--------------------------------------------------------------------------------
+R44174.00    [SAMPWEIGHT]                                   Survey Year: 1993
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+ORIGINAL QUESTION NAME: SAMPWEIGHT
+ 
+1 THRU 9999999 SAMPLING WEIGHT (2 IMPLIED DECIMAL PLACES)
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)    3675
+ 
+Min:              0        Max:        1289369        Mean:           264535.01
+ 
+Lead In: R44485.00[Default]
+Default Next Question: R44174.01
+--------------------------------------------------------------------------------
+R44175.00    [RNI]                                          Survey Year: 1993
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+ORIGINAL QUESTION NAME: RNI
+ 
+COMMENT: Reason for Non-Interview
+ 
+       0      60 PARENT REFUSAL/BREAKOFF
+     540      61 YOUTH REFUSAL/BREAKOFF
+       0      62 PARENT & YOUTH REFUSAL/BREAKOFF
+       0      63 UNABLE TO LOCATE FAMILY UNIT & YOUTH
+     122      64 UNABLE TO LOCATE YOUTH
+     199      65 DECEASED
+      23      66 OTHER
+      91      67 DO NOT REFIELD (VERY DIFFICULT CASES)
+    1079      68 MILITARY SAMPLE DROPPED
+     731      69 SUPPLEMENTAL MALE POOR WHITE SAMPLE DROPPED
+     890      70 SUPPLEMENTAL FEMALE POOR WHITE SAMPLE DROPPED
+  -------
+    3675
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    3675   VALID SKIP(-4)    5336     NON-INTERVIEW(-5)    3675
+ 
+Lead In: R44174.01[Default]
+Default Next Question: R44176.00
+--------------------------------------------------------------------------------
+R44182.00    [REGION]                                       Survey Year: 1993
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+ORIGINAL QUESTION NAME: REGION
+ 
+COMMENT: REGION OF RESIDENCE
+ 
+    1492       1 NORTHEAST
+    2058       2 NORTH CENTRAL
+    3457       3 SOUTH
+    1781       4 WEST
+  -------
+    8788
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    8788   VALID SKIP(-4)     223     NON-INTERVIEW(-5)    3675
+ 
+Lead In: R44181.00[Default]
+Default Next Question: R44183.00
+--------------------------------------------------------------------------------
+R50804.00    [SAMPWEIGHT]                                   Survey Year: 1994
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+COMMENT: Sampling Weight
+1 THRU 9999999  SAMPLING WEIGHT  (2 IMPLIED DECIMALS)
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1289369        Mean:           264538.02
+ 
+Lead In: R51108.00[Default]
+Default Next Question: R50804.01
+--------------------------------------------------------------------------------
+R50805.00    [RNI]                                          Survey Year: 1994
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+COMMENT: Reason for Non-Interview
+ 
+       0          60: 60  PARENT REFUSAL/BREAKOFF
+     603          61: 61  YOUTH REFUSAL/BREAKOFF
+       0          62: 62  PARENT & YOUTH REFUSAL/BREAKOFF
+       0          63: 63  UNABLE TO LOCATE FAMILY UNIT & YOUTH
+     146          64: 64  UNABLE TO LOCATE YOUTH
+     226          65: 65  DECEASED
+      25          66: 66  OTHER
+      95          67: 67  DO NOT REFIELD (VERY DIFFICULT CASE)
+    1079          68: 68  MILITARY SAMPLE DROPPED
+     731          69: 69  SUPPLEMENTAL MALE POOR WHITE SAMPLE DROPPED
+     890          70: 70  SUPPLEMENTAL FEMALE POOR WHITE SAMPLE DROPPED
+  -------
+    3795
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    3795   VALID SKIP(-4)    8891     NON-INTERVIEW(-5)       0
+ 
+Min:             61        Max:             70        Mean:               67.18
+ 
+Lead In: R50804.01[Default]
+Default Next Question: R50806.00
+--------------------------------------------------------------------------------
+R50812.00    [REGION]                                       Survey Year: 1994
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+COMMENT: REGION OF RESIDENCE
+NOTE: FOR VARIABLE CREATION SEE ATTACHMENT 104: GEOGRAPHIC REGIONS
+ 
+    1443           1: 1  NORTHEAST
+    2040           2: 2  NORTH CENTRAL
+    3447           3: 3  SOUTH
+    1751           4: 4  WEST
+  -------
+    8681
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    8681   VALID SKIP(-4)     210     NON-INTERVIEW(-5)    3795
+ 
+Min:              1        Max:              4        Mean:                2.63
+ 
+Lead In: R50811.00[Default]
+Default Next Question: R50813.00
+--------------------------------------------------------------------------------
+R51657.00    [SAMPWEIGHT]                                   Survey Year: 1996
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+COMMENT: Sampling Weight
+1 THRU 9999999 SAMPLING WEIGHT (2 IMPLIED DECIMALS)
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1329005        Mean:           264527.67
+ 
+Lead In: R57585.00[Default]
+Default Next Question: R51657.01
+--------------------------------------------------------------------------------
+R51658.00    [RNI]                                          Survey Year: 1996
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+COMMENT: Reason for Non-Interview
+ 
+       0          60: PARENT REFUSAL/BREAKOFF
+     708          61: YOUTH REFUSAL/BREAKOFF
+       0          62: PARENT & YOUTH REFUSAL/BREAKOFF
+       0          63: UNABLE TO LOCATE FAMILY UNIT & YOUTH
+     184          64: UNABLE TO LOCATE YOUTH
+     265          65: DECEASED
+      46          66: OTHER
+     147          67: DO NOT REFIELD (VERY DIFFICULT CASE)
+    1079          68: MILITARY SAMPLE DROPPED
+     731          69: SUPPLEMENTAL MALE POOR WHITE SAMPLE DROPPED
+     890          70: SUPPLEMENTAL FEMALE POOR WHITE SAMPLE DROPPED
+  -------
+    4050
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    4050   VALID SKIP(-4)    8636     NON-INTERVIEW(-5)       0
+ 
+Min:             61        Max:             70        Mean:               66.96
+ 
+Lead In: R51657.01[Default]
+Default Next Question: R51659.00
+--------------------------------------------------------------------------------
+R51665.00    [REGION]                                       Survey Year: 1996
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+COMMENT: REGION OF RESIDENCE
+NOTE: FOR VARIABLE CREATION SEE ATTACHMENT 104: GEOGRAPHIC REGIONS
+ 
+    1374           1: NORTHEAST
+    2002           2: NORTH CENTRAL
+    3454           3: SOUTH
+    1694           4: WEST
+  -------
+    8524
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       1
+TOTAL =========>    8525   VALID SKIP(-4)     111     NON-INTERVIEW(-5)    4050
+ 
+Min:              1        Max:              4        Mean:                2.64
+ 
+Lead In: R51664.00[Default]
+Default Next Question: R51666.00
+--------------------------------------------------------------------------------
+R64663.00    [SAMPWEIGHT]                                   Survey Year: 1998
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+COMMENT: Sampling Weight
+1 THRU 9999999  SAMPLING WEIGHT (2 IMPLIED DECIMALS)
+ 
+    4287           0
+       0           1 TO 49999
+     640       50000 TO 99999
+    1413      100000 TO 149999
+    1005      150000 TO 199999
+     598      200000 TO 249999
+     257      250000 TO 299999
+     239      300000 TO 399999
+     518      400000 TO 499999
+    1579      500000 TO 599999
+    1144      600000 TO 699999
+     593      700000 TO 799999
+     262      800000 TO 899999
+      95      900000 TO 999999
+      56     1000000 TO 1999999
+       0     2000000 TO 3000000
+       0     3000000 TO 3999999
+       0     4000000 TO 4999999
+       0     5000000 TO 5999999
+       0     6000000 TO 6999999
+       0     7000000 TO 7999999
+       0     8000000 TO 8999999
+       0     9000000 TO 9999999
+       0    10000000 TO 99999999: 10000000+
+  -------
+   12686
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1470169        Mean:           264537.84
+ 
+Lead In: R65040.00[Default] R65041.00[Default]
+Default Next Question: R64663.01
+--------------------------------------------------------------------------------
+R64785.00    [RNI]                                          Survey Year: 1998
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+COMMENT: Reason for Non-Interview
+ 
+       0          60: 60  PARENT REFUSAL/BREAKOFF
+     731          61: 61  YOUTH REFUSAL/BREAKOFF
+       0          62: 62  PARENT & YOUTH REFUSAL/BREAKOFF
+       0          63: 63  UNABLE TO LOCATE FAMILY UNIT & YOUTH
+     272          64: 64  UNABLE TO LOCATE YOUTH
+     297          65: 65  DECEASED
+     134          66: 66  OTHER
+     153          67: 67  DO NOT REFIELD (VERY DIFFICULT CASE)
+    1079          68: 68  MILITARY SAMPLE DROPPED
+     731          69: 69  SUPPLEMENTAL MALE POOR WHITE SAMPLE DROPPED
+     890          70: 70  SUPPLEMENTAL FEMALE POOR WHITE SAMPLE DROPPED
+  -------
+    4287
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    4287   VALID SKIP(-4)    8399     NON-INTERVIEW(-5)       0
+ 
+Min:             61        Max:             70        Mean:               66.83
+ 
+Lead In: R64663.01[Default]
+Default Next Question: R64786.00
+--------------------------------------------------------------------------------
+R64791.00    [REGION]                                       Survey Year: 1998
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+COMMENT: REGION OF RESIDENCE
+NOTE: FOR VARIABLE CREATION SEE ATTACHMENT 104: GEOGRAPHIC REGIONS
+ 
+    1289           1: 1  NORTHEAST
+    1931           2: 2  NORTH CENTRAL
+    3326           3: 3  SOUTH
+    1653           4: 4  WEST
+  -------
+    8199
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)      25
+TOTAL =========>    8224   VALID SKIP(-4)     175     NON-INTERVIEW(-5)    4287
+ 
+Min:              1        Max:              4        Mean:                2.65
+ 
+Lead In: R64790.00[Default]
+Default Next Question: R64792.00
+--------------------------------------------------------------------------------
+R70062.00    [SAMPWEIGHT]                                   Survey Year: 2000
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+COMMENT: Sampling Weight
+1 THRU 9999999  SAMPLING WEIGHT (2 IMPLIED DECIMALS)
+ 
+    4654           0
+       0           1 TO 49999
+     446       50000 TO 99999
+    1387      100000 TO 149999
+     943      150000 TO 199999
+     649      200000 TO 249999
+     274      250000 TO 299999
+     243      300000 TO 399999
+     259      400000 TO 499999
+    1337      500000 TO 599999
+    1228      600000 TO 699999
+     770      700000 TO 799999
+     294      800000 TO 899999
+     130      900000 TO 999999
+      72     1000000 TO 1999999
+       0     2000000 TO 3000000
+       0     3000000 TO 3999999
+       0     4000000 TO 4999999
+       0     5000000 TO 5999999
+       0     6000000 TO 6999999
+       0     7000000 TO 7999999
+       0     8000000 TO 8999999
+       0     9000000 TO 9999999
+       0    10000000 TO 99999999: 10000000+
+  -------
+   12686
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1515292        Mean:           264539.71
+ 
+Lead In: None.
+Default Next Question: R70062.01
+--------------------------------------------------------------------------------
+R70063.00    [RNI]                                          Survey Year: 2000
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+COMMENT: Reason for Non-Interview
+ 
+       0          60: PARENT REFUSAL/BREAKOFF
+    1037          61: YOUTH REFUSAL/BREAKOFF
+       0          62: PARENT & YOUTH REFUSAL/BREAKOFF
+       0          63: UNABLE TO LOCATE FAMILY UNIT & YOUTH
+     353          64: UNABLE TO LOCATE YOUTH
+     335          65: DECEASED
+     124          66: OTHER
+       4          67: DO NOT REFIELD (VERY DIFFICULT CASE)
+    1079          68: MILITARY SAMPLE DROPPED
+     731          69: SUPPLEMENTAL MALE POOR WHITE SAMPLE DROPPED
+     890          70: SUPPLEMENTAL FEMALE POOR WHITE SAMPLE DROPPED
+     101          71: YOUTH REFUSAL - VERY DIFFICULT CASE
+  -------
+    4654
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    4654   VALID SKIP(-4)    8032     NON-INTERVIEW(-5)       0
+ 
+Min:             61        Max:             71        Mean:               66.47
+ 
+Lead In: R70062.01[Default]
+Default Next Question: R70064.00
+--------------------------------------------------------------------------------
+R70068.00    [REGION]                                       Survey Year: 2000
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+COMMENT: REGION OF RESIDENCE
+NOTE: FOR VARIABLE CREATION SEE ATTACHMENT 104: GEOGRAPHIC REGIONS
+ 
+    1244           1: 1  NORTHEAST
+    1856           2: 2  NORTH CENTRAL
+    3293           3: 3  SOUTH
+    1579           4: 4  WEST
+  -------
+    7972
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       2
+TOTAL =========>    7974   VALID SKIP(-4)      59     NON-INTERVIEW(-5)    4653
+ 
+Min:              1        Max:              4        Mean:                2.65
+ 
+Lead In: R70066.00[Default]
+Default Next Question: R70069.00
+--------------------------------------------------------------------------------
+R77034.00    [SAMPWEIGHT]                                   Survey Year: 2002
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+COMMENT: Sampling Weight
+1 THRU 9999999  SAMPLING WEIGHT (2 IMPLIED DECIMALS)
+ 
+    4962           0
+       0           1 TO 49999
+     343       50000 TO 99999
+    1235      100000 TO 149999
+     969      150000 TO 199999
+     646      200000 TO 249999
+     299      250000 TO 299999
+     264      300000 TO 399999
+     211      400000 TO 499999
+    1037      500000 TO 599999
+    1257      600000 TO 699999
+     788      700000 TO 799999
+     407      800000 TO 899999
+     159      900000 TO 999999
+     109     1000000 TO 1999999
+       0     2000000 TO 2999999: 2000000-3000000
+       0     3000000 TO 3999999
+       0     4000000 TO 4999999
+       0     5000000 TO 5999999
+       0     6000000 TO 6999999
+       0     7000000 TO 7999999
+       0     8000000 TO 8999999
+       0     9000000 TO 9999999
+       0    10000000 TO 99999999: 10000000+
+  -------
+   12686
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1377311        Mean:           264539.71
+ 
+Lead In: R77328.00[Default]
+Default Next Question: R77034.01
+--------------------------------------------------------------------------------
+R77035.00    [RNI]                                          Survey Year: 2002
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+COMMENT: Reason for Non-Interview
+ 
+       0          60: 60  PARENT REFUSAL/BREAKOFF
+    1092          61: 61  YOUTH REFUSAL/BREAKOFF
+       0          62: 62  PARENT & YOUTH REFUSAL/BREAKOFF
+       0          63: 63  UNABLE TO LOCATE FAMILY UNIT & YOUTH
+     410          64: 64  UNABLE TO LOCATE YOUTH
+     368          65: 65  DECEASED
+     135          66: 66  OTHER
+      18          67: 67  DO NOT REFIELD (VERY DIFFICULT CASE)
+    1079          68: 68  MILITARY SAMPLE DROPPED
+     731          69: 69  SUPPLEMENTAL MALE POOR WHITE SAMPLE DROPPED
+     890          70: 70  SUPPLEMENTAL FEMALE POOR WHITE SAMPLE DROPPED
+       0          71: 71  YOUTH REFUSAL - VERY DIFFICULT CASE
+     239          72: 72  NOT FIELDED IN CURRENT SURVEY YEAR - VERY DIFFICULT 
+                          CASE
+  -------
+    4962
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    4962   VALID SKIP(-4)    7724     NON-INTERVIEW(-5)       0
+ 
+Min:             61        Max:             72        Mean:               66.55
+ 
+Lead In: R77034.01[Default]
+Default Next Question: R77036.00
+--------------------------------------------------------------------------------
+R77041.00    [REGION]                                       Survey Year: 2002
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+COMMENT: REGION OF RESIDENCE
+NOTE: FOR VARIABLE CREATION SEE ATTACHMENT 104: GEOGRAPHIC REGIONS
+ 
+    1190           1: 1  NORTHEAST
+    1814           2: 2  NORTH CENTRAL
+    3189           3: 3  SOUTH
+    1473           4: 4  WEST
+  -------
+    7666
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    7666   VALID SKIP(-4)      58     NON-INTERVIEW(-5)    4962
+ 
+Min:              1        Max:              4        Mean:                2.65
+ 
+Lead In: R77039.00[Default]
+Default Next Question: R77042.00
+--------------------------------------------------------------------------------
+R84957.00    [SAMPWEIGHT]                                   Survey Year: 2004
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+COMMENT: Sampling Weight
+1 THRU 9999999  SAMPLING WEIGHT (2 IMPLIED DECIMALS)
+ 
+    5025           0
+       0           1 TO 49999
+     352       50000 TO 99999
+    1238      100000 TO 149999
+    1005      150000 TO 199999
+     584      200000 TO 249999
+     305      250000 TO 299999
+     247      300000 TO 399999
+     185      400000 TO 499999
+     937      500000 TO 599999
+    1262      600000 TO 699999
+     827      700000 TO 799999
+     399      800000 TO 899999
+     187      900000 TO 999999
+     133     1000000 TO 1999999
+       0     2000000 TO 2999999
+       0     3000000 TO 3999999
+       0     4000000 TO 4999999
+       0     5000000 TO 5999999
+       0     6000000 TO 6999999
+       0     7000000 TO 7999999
+       0     8000000 TO 8999999
+       0     9000000 TO 9999999
+       0    10000000 TO 9999999999: 10000000+
+  -------
+   12686
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1664345        Mean:            264539.7
+ 
+Lead In: R85387.00[Default] R85388.00[Default]
+Default Next Question: R84958.00
+--------------------------------------------------------------------------------
+R84959.00    [RNI]                                          Survey Year: 2004
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+COMMENT: Reason for Non-Interview
+ 
+       0          60: 60  PARENT REFUSAL/BREAKOFF
+    1134          61: 61  YOUTH REFUSAL/BREAKOFF
+       0          62: 62  PARENT & YOUTH REFUSAL/BREAKOFF
+       0          63: 63  UNABLE TO LOCATE FAMILY UNIT & YOUTH
+     452          64: 64  UNABLE TO LOCATE YOUTH
+     421          65: 65  DECEASED
+     202          66: 66  OTHER
+      20          67: 67  DO NOT REFIELD (VERY DIFFICULT CASE)
+    1079          68: 68  MILITARY SAMPLE DROPPED
+     731          69: 69  SUPPLEMENTAL MALE POOR WHITE SAMPLE DROPPED
+     890          70: 70  SUPPLEMENTAL FEMALE POOR WHITE SAMPLE DROPPED
+       0          71: 71  YOUTH REFUSAL - VERY DIFFICULT CASE
+       0          72: 72  NOT FIELDED IN CURRENT SURVEY YEAR - VERY DIFFICULT 
+                          CASE
+      80          73: 73  NOT INTERVIEWED - INCARCERATED
+      16          74: 74  NOT INTERVIEWED - IN MILITARY
+  -------
+    5025
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    5025   VALID SKIP(-4)    7661     NON-INTERVIEW(-5)       0
+ 
+Min:             61        Max:             74        Mean:               66.32
+ 
+Lead In: R84958.00[Default]
+Default Next Question: R84960.00
+--------------------------------------------------------------------------------
+R84965.00    [REGION]                                       Survey Year: 2004
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+COMMENT: REGION OF RESIDENCE
+NOTE: FOR VARIABLE CREATION SEE ATTACHMENT 104: GEOGRAPHIC REGIONS
+ 
+    1169           1: 1  NORTHEAST
+    1803           2: 2  NORTH CENTRAL
+    3155           3: 3  SOUTH
+    1474           4: 4  WEST
+  -------
+    7601
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       2
+TOTAL =========>    7603   VALID SKIP(-4)      58     NON-INTERVIEW(-5)    5025
+ 
+Min:              1        Max:              4        Mean:                2.65
+ 
+Lead In: R84963.00[Default]
+Default Next Question: R84966.00
+--------------------------------------------------------------------------------
+T09873.00    [SAMPWEIGHT]                                   Survey Year: 2006
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+COMMENT: Sampling Weight
+1 THRU 9999999  SAMPLING WEIGHT (2 IMPLIED DECIMALS)
+ 
+    5032           0
+       0           1 TO 49999
+     426       50000 TO 99999
+    1209      100000 TO 149999
+     997      150000 TO 199999
+     641      200000 TO 249999
+     308      250000 TO 299999
+     245      300000 TO 399999
+     143      400000 TO 499999
+     812      500000 TO 599999
+    1205      600000 TO 699999
+     840      700000 TO 799999
+     478      800000 TO 899999
+     204      900000 TO 999999
+     146     1000000 TO 1999999
+       0     2000000 TO 2999999
+       0     3000000 TO 3999999
+       0     4000000 TO 4999999
+       0     5000000 TO 5999999
+       0     6000000 TO 6999999
+       0     7000000 TO 7999999
+       0     8000000 TO 8999999
+       0     9000000 TO 9999999
+       0    10000000 TO 99999999999: 10000000+
+  -------
+   12686
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1385301        Mean:           264539.71
+ 
+Lead In: T10405.00[Default]
+Default Next Question: T09874.00
+--------------------------------------------------------------------------------
+T09875.00    [RNI]                                          Survey Year: 2006
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+COMMENT: Reason for Non-Interview
+ 
+       0          60: 60  PARENT REFUSAL/BREAKOFF
+    1392          61: 61  YOUTH REFUSAL/BREAKOFF
+       0          62: 62  PARENT & YOUTH REFUSAL/BREAKOFF
+       0          63: 63  UNABLE TO LOCATE FAMILY UNIT & YOUTH
+     313          64: 64  UNABLE TO LOCATE YOUTH
+     478          65: 65  DECEASED
+      56          66: 66  OTHER
+      29          67: 67  DO NOT REFIELD (VERY DIFFICULT CASE)
+    1079          68: 68  MILITARY SAMPLE DROPPED
+     731          69: 69  SUPPLEMENTAL MALE POOR WHITE SAMPLE DROPPED
+     890          70: 70  SUPPLEMENTAL FEMALE POOR WHITE SAMPLE DROPPED
+      13          71: 71  YOUTH REFUSAL - VERY DIFFICULT CASE
+       9          72: 72  NOT FIELDED IN CURRENT SURVEY YEAR - VERY DIFFICULT 
+                          CASE
+      36          73: 73  NOT INTERVIEWED - INCARCERATED
+       6          74: 74  NOT INTERVIEWED - IN MILITARY
+  -------
+    5032
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    5032   VALID SKIP(-4)    7654     NON-INTERVIEW(-5)       0
+ 
+Min:             61        Max:             74        Mean:               66.06
+ 
+Lead In: T09874.00[Default]
+Default Next Question: T09876.00
+--------------------------------------------------------------------------------
+T09883.00    [REGION]                                       Survey Year: 2006
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+COMMENT: REGION OF RESIDENCE
+NOTE: FOR VARIABLE CREATION SEE ATTACHMENT 104: GEOGRAPHIC REGIONS
+ 
+    1172           1: 1  NORTHEAST
+    1776           2: 2  NORTH CENTRAL
+    3152           3: 3  SOUTH
+    1477           4: 4  WEST
+  -------
+    7577
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       4
+TOTAL =========>    7581   VALID SKIP(-4)      73     NON-INTERVIEW(-5)    5032
+ 
+Min:              1        Max:              4        Mean:                2.65
+ 
+Lead In: T09882.00[Default]
+Default Next Question: T09884.00
+--------------------------------------------------------------------------------
+T22096.00    [SAMPWEIGHT]                                   Survey Year: 2008
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+COMMENT: Sampling Weight
+1 THRU 9999999  SAMPLING WEIGHT (2 IMPLIED DECIMALS)
+ 
+    4929           0
+     442       50000 TO 99999
+    1273      100000 TO 149999
+     996      150000 TO 199999
+     643      200000 TO 249999
+     277      250000 TO 299999
+     244      300000 TO 399999
+     144      400000 TO 499999
+     924      500000 TO 599999
+    1255      600000 TO 699999
+     829      700000 TO 799999
+     374      800000 TO 899999
+     222      900000 TO 999999
+     134     1000000 TO 1999999
+  -------
+   12686
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1441828        Mean:           264539.71
+ 
+Lead In: T22579.00[Default]
+Default Next Question: T22097.00
+--------------------------------------------------------------------------------
+T22098.00    [RNI]                                          Survey Year: 2008
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+COMMENT: Reason for Non-Interview
+ 
+    1139          61: 61  YOUTH REFUSAL/BREAKOFF
+     336          64: 64  UNABLE TO LOCATE YOUTH
+     525          65: 65  DECEASED
+     141          66: 66  OTHER
+      29          67: 67  DO NOT REFIELD (VERY DIFFICULT CASE)
+    1079          68: 68  MILITARY SAMPLE DROPPED
+     731          69: 69  SUPPLEMENTAL MALE POOR WHITE SAMPLE DROPPED
+     890          70: 70  SUPPLEMENTAL FEMALE POOR WHITE SAMPLE DROPPED
+      12          71: 71  YOUTH REFUSAL - VERY DIFFICULT CASE
+      16          72: 72  NOT FIELDED IN CURRENT SURVEY YEAR - VERY DIFFICULT 
+                          CASE
+      29          73: 73  NOT INTERVIEWED - INCARCERATED
+       2          74: 74  NOT INTERVIEWED - IN MILITARY
+  -------
+    4929
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    4929   VALID SKIP(-4)    7757     NON-INTERVIEW(-5)       0
+ 
+Min:             61        Max:             74        Mean:               66.29
+ 
+Lead In: T22097.00[Default]
+Default Next Question: T22099.00
+--------------------------------------------------------------------------------
+T22103.00    [REGION]                                       Survey Year: 2008
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+COMMENT: REGION OF RESIDENCE
+NOTE: FOR VARIABLE CREATION SEE ATTACHMENT 104: GEOGRAPHIC REGIONS
+ 
+REVISION NOTE: 551 VALUES WERE REVISED FOR THIS VARIABLE IN OCTOBER, 2011.  SEE 
+ERRATA LISTING FOR FURTHER INFORMATION.
+ 
+    1156           1: NORTHEAST
+    1786           2: NORTH CENTRAL
+    3241           3: SOUTH
+    1485           4: WEST
+  -------
+    7668
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)      31
+TOTAL =========>    7699   VALID SKIP(-4)      58     NON-INTERVIEW(-5)    4929
+ 
+Min:              1        Max:              4        Mean:                2.66
+ 
+Lead In: T22101.00[Default]
+Default Next Question: T22104.00
+--------------------------------------------------------------------------------
+T31074.00    [SAMPWEIGHT]                                   Survey Year: 2010
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+COMMENT: Sampling Weight
+1 THRU 9999999  SAMPLING WEIGHT (2 IMPLIED DECIMALS)
+ 
+    5121           0
+     358       50000 TO 99999
+    1195      100000 TO 149999
+     999      150000 TO 199999
+     643      200000 TO 249999
+     314      250000 TO 299999
+     236      300000 TO 399999
+     153      400000 TO 499999
+     754      500000 TO 599999
+    1220      600000 TO 699999
+     830      700000 TO 799999
+     452      800000 TO 899999
+     247      900000 TO 999999
+     164     1000000 TO 1999999
+  -------
+   12686
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1467661        Mean:           264539.71
+ 
+Lead In: T31921.00[Default]
+Default Next Question: T31075.00
+--------------------------------------------------------------------------------
+T31076.00    [RNI]                                          Survey Year: 2010
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+COMMENT: Reason for Non-Interview
+ 
+    1151          61: 61  YOUTH REFUSAL/BREAKOFF
+     370          64: 64  UNABLE TO LOCATE YOUTH
+     595          65: 65  DECEASED
+     141          66: 66  OTHER
+      29          67: 67  DO NOT REFIELD (VERY DIFFICULT CASE)
+    1079          68: 68  MILITARY SAMPLE DROPPED
+     731          69: 69  SUPPLEMENTAL MALE POOR WHITE SAMPLE DROPPED
+     890          70: 70  SUPPLEMENTAL FEMALE POOR WHITE SAMPLE DROPPED
+      33          71: 71  YOUTH REFUSAL - VERY DIFFICULT CASE
+      65          72: 72  NOT FIELDED IN CURRENT SURVEY YEAR - VERY DIFFICULT 
+                          CASE
+      35          73: 73  NOT INTERVIEWED - INCARCERATED
+       2          74: 74  NOT INTERVIEWED - IN MILITARY
+  -------
+    5121
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    5121   VALID SKIP(-4)    7565     NON-INTERVIEW(-5)       0
+ 
+Min:             61        Max:             74        Mean:               66.33
+ 
+Lead In: T31075.00[Default]
+Default Next Question: T31077.00
+--------------------------------------------------------------------------------
+T31082.00    [REGION]                                       Survey Year: 2010
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+COMMENT: REGION OF RESIDENCE
+NOTE: FOR VARIABLE CREATION SEE ATTACHMENT 104: GEOGRAPHIC REGIONS
+ 
+    1132           1: NORTHEAST
+    1738           2: NORTH CENTRAL
+    3159           3: SOUTH
+    1473           4: WEST
+  -------
+    7502
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       6
+TOTAL =========>    7508   VALID SKIP(-4)      57     NON-INTERVIEW(-5)    5121
+ 
+Min:              1        Max:              4        Mean:                2.66
+ 
+Lead In: T31080.00[Default]
+Default Next Question: T31083.00
+--------------------------------------------------------------------------------
+T41119.00    [SAMPWEIGHT]                                   Survey Year: 2012
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+COMMENT: Sampling Weight
+1 THRU 9999999  SAMPLING WEIGHT (2 IMPLIED DECIMALS)
+ 
+    5385           0
+       0           1 TO 49999
+     282       50000 TO 99999
+    1147      100000 TO 149999
+     963      150000 TO 199999
+     647      200000 TO 249999
+     324      250000 TO 299999
+     240      300000 TO 399999
+     142      400000 TO 499999
+     532      500000 TO 599999
+    1127      600000 TO 699999
+     905      700000 TO 799999
+     481      800000 TO 899999
+     256      900000 TO 999999
+     255     1000000 TO 1999999
+       0     2000000 TO 2999999
+       0     3000000 TO 3999999
+       0     4000000 TO 4999999
+       0     5000000 TO 5999999
+       0     6000000 TO 6999999
+       0     7000000 TO 7999999
+       0     8000000 TO 8999999
+       0     9000000 TO 9999999
+       0    10000000 TO 9999999999: 10000000+
+  -------
+   12686
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1548748        Mean:           264539.71
+ 
+Lead In: T41649.00[Default]
+Default Next Question: T41120.00
+--------------------------------------------------------------------------------
+T41121.00    [RNI]                                          Survey Year: 2012
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+COMMENT: Reason for Non-Interview
+ 
+       0          60: 60  PARENT REFUSAL/BREAKOFF
+     903          61: 61  YOUTH REFUSAL/BREAKOFF
+       0          62: 62  PARENT & YOUTH REFUSAL/BREAKOFF
+       0          63: 63  UNABLE TO LOCATE FAMILY UNIT & YOUTH
+     466          64: 64  UNABLE TO LOCATE YOUTH
+     711          65: 65  DECEASED
+     480          66: 66  OTHER
+      29          67: 67  DO NOT REFIELD (VERY DIFFICULT CASE)
+    1079          68: 68  MILITARY SAMPLE DROPPED
+     731          69: 69  SUPPLEMENTAL MALE POOR WHITE SAMPLE DROPPED
+     890          70: 70  SUPPLEMENTAL FEMALE POOR WHITE SAMPLE DROPPED
+       7          71: 71  YOUTH REFUSAL - VERY DIFFICULT CASE
+      65          72: 72  NOT FIELDED IN CURRENT SURVEY YEAR - VERY DIFFICULT 
+                          CASE
+      24          73: 73  NOT INTERVIEWED - INCARCERATED
+       0          74: 74  NOT INTERVIEWED - IN MILITARY
+  -------
+    5385
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    5385   VALID SKIP(-4)    7301     NON-INTERVIEW(-5)       0
+ 
+Min:             61        Max:             73        Mean:               66.44
+ 
+Lead In: T41120.00[Default]
+Default Next Question: T41122.00
+--------------------------------------------------------------------------------
+T41127.00    [REGION]                                       Survey Year: 2012
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+COMMENT: REGION OF RESIDENCE
+NOTE: FOR VARIABLE CREATION SEE ATTACHMENT 104: GEOGRAPHIC REGIONS
+ 
+    1081           1: NORTHEAST
+    1669           2: NORTH CENTRAL
+    3070           3: SOUTH
+    1421           4: WEST
+  -------
+    7241
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    7241   VALID SKIP(-4)      60     NON-INTERVIEW(-5)    5385
+ 
+Min:              1        Max:              4        Mean:                2.67
+ 
+Lead In: T41125.00[Default]
+Default Next Question: T41128.00
+--------------------------------------------------------------------------------
+T50221.00    [SAMPWEIGHT]                                   Survey Year: 2014
+  PRIMARY VARIABLE
+
+ 
+             SAMPLING WEIGHT
+ 
+COMMENT: Sampling Weight
+1 THRU 9999999  SAMPLING WEIGHT (2 IMPLIED DECIMALS)
+ 
+    5615           0
+     226       50000 TO 99999
+    1056      100000 TO 149999
+     984      150000 TO 199999
+     649      200000 TO 249999
+     324      250000 TO 299999
+     257      300000 TO 399999
+     129      400000 TO 499999
+     386      500000 TO 599999
+     957      600000 TO 699999
+     921      700000 TO 799999
+     580      800000 TO 899999
+     279      900000 TO 999999
+     323     1000000 TO 1999999
+  -------
+   12686
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>   12686   VALID SKIP(-4)       0     NON-INTERVIEW(-5)       0
+ 
+Min:              0        Max:        1603933        Mean:           264539.71
+ 
+Lead In: T50220.00[Default]
+Default Next Question: T50222.00
+--------------------------------------------------------------------------------
+T50223.00    [RNI]                                          Survey Year: 2014
+  PRIMARY VARIABLE
+
+ 
+             REASON FOR NONINTERVIEW
+ 
+COMMENT: Reason for Non-Interview
+ 
+    1121          61: 61  YOUTH REFUSAL/BREAKOFF
+     575          64: 64  UNABLE TO LOCATE YOUTH
+     812          65: 65  DECEASED
+     167          66: 66  OTHER
+      62          67: 67  DO NOT REFIELD (VERY DIFFICULT CASE)
+    1079          68: 68  MILITARY SAMPLE DROPPED
+     731          69: 69  SUPPLEMENTAL MALE POOR WHITE SAMPLE DROPPED
+     890          70: 70  SUPPLEMENTAL FEMALE POOR WHITE SAMPLE DROPPED
+      29          71: 71  YOUTH REFUSAL - VERY DIFFICULT CASE
+     116          72: 72  NOT FIELDED IN CURRENT SURVEY YEAR - VERY DIFFICULT 
+                          CASE
+      33          73: 73  NOT INTERVIEWED - INCARCERATED
+  -------
+    5615
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+TOTAL =========>    5615   VALID SKIP(-4)    7071     NON-INTERVIEW(-5)       0
+ 
+Min:             61        Max:             73        Mean:               66.26
+ 
+Lead In: T50222.00[Default]
+Default Next Question: T50225.00
+--------------------------------------------------------------------------------
+T50231.00    [REGION]                                       Survey Year: 2014
+  PRIMARY VARIABLE
+
+ 
+             REGION OF CURRENT RESIDENCE
+ 
+COMMENT: REGION OF RESIDENCE
+NOTE: FOR VARIABLE CREATION SEE ATTACHMENT 104: GEOGRAPHIC REGIONS
+ 
+    1029           1: NORTHEAST
+    1611           2: NORTH CENTRAL
+    2984           3: SOUTH
+    1380           4: WEST
+  -------
+    7004
+ 
+Refusal(-1)            0
+Don't Know(-2)         0
+Invalid Skip(-3)       5
+TOTAL =========>    7009   VALID SKIP(-4)      62     NON-INTERVIEW(-5)    5615
+ 
+Min:              1        Max:              4        Mean:                2.67
+ 
+Lead In: T50230.00[Default]
+Default Next Question: T50232.00

@@ -1,0 +1,16 @@
+Jared files changelog
+
+1) added time-invariant interview months for each survey round to lines 159-165 of y79_create_demographics.do
+2) changed the path to the AFQT data (since I changed this in my recent data work) on line 19 of y79_create_demographics.do
+3) added creation of "current wage" variables to lines 222-226 of y79_create_trim.do
+4) to accomplish (2), had to keep certain variables (wage_job_current, R?interviewDate, R??interviewDate)
+5) renamed wage_job_current to be wageJobCurrent
+6) added line 610 to y79_create_work.do to deflate wage_job_current by CPI
+
+Data append changelog
+1) added lines 118-123 to create "wageClean" variables that are only defined in interview month and exclude wages outside of ($2,$55)
+2) added a comment to lines 398-405 questioning which "bad" wages we should drop
+
+97:
+1) renamed wage vars to be consistent
+2) kept Highest_degree_ever

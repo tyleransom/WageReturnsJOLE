@@ -1,0 +1,14 @@
+Data/**/statasub*.*
+Data/Census/2010s/cc-est2017-alldata.csv
+Data/y97/*.dta
+Data/y97/*.dct
+Data/y97/RawData/*.dta
+Data/y97/RawData/*.dct
+Data/y97/Geocode/*.dta
+Data/y97/Geocode/*.dct
+Data/y79/*.dta
+Data/y79/*.dct
+Data/y79/Geocode/*.dta
+Data/y79/Geocode/*.dct
+nohup.out
+

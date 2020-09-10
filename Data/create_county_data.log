@@ -1,0 +1,903 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/jared/WageReturnsRepo/Data/create_county_data.log
+  log type:  text
+ opened on:  12 Mar 2019, 16:25:57
+
+. 
+. *============================================================================
+. * Create matrices and macros
+. *============================================================================
+. tempfile holder1 holder2 holder3 holder4
+
+. tempfile state1 state2 national1 national2
+
+. 
+. capture drop matrix _all
+
+. matrix input MM = ///
+> ( 901, 3  , 540, 0   \ ///
+>   903, 5  , 580, 560 \ /// 
+>   907, 15 , 790, 820 \ ///
+>   909, 19 , 515, 0   \ ///
+>   911, 31 , 680, 0   \ ///
+>   913, 35 , 640, 0   \ ///
+>   918, 53 , 570, 730 \ ///
+>   919, 59 , 600, 610 \ ///
+>   921, 69 , 840, 0   \ ///
+>   923, 81 , 595, 0   \ ///
+>   929, 89 , 690, 0   \ ///
+>   931, 95 , 830, 0   \ ///
+>   933, 121, 750, 0   \ ///
+>   939, 143, 590, 0   \ ///
+>   941, 149, 670, 0   \ ///
+>   942, 153, 683, 685 \ ///
+>   944, 775, 161, 0   \ ///
+>   945, 163, 530, 678 \ ///
+>   947, 165, 660, 0   \ ///
+>   949, 175, 620, 0   \ ///
+>   951, 177, 630, 0   \ ///
+>   953, 191, 520, 0   \ ///
+>   955, 195, 720, 0   \ ///
+>   958, 199, 735, 0   )
+
+. matrix list MM
+
+MM[24,4]
+      c1   c2   c3   c4
+ r1  901    3  540    0
+ r2  903    5  580  560
+ r3  907   15  790  820
+ r4  909   19  515    0
+ r5  911   31  680    0
+ r6  913   35  640    0
+ r7  918   53  570  730
+ r8  919   59  600  610
+ r9  921   69  840    0
+r10  923   81  595    0
+r11  929   89  690    0
+r12  931   95  830    0
+r13  933  121  750    0
+r14  939  143  590    0
+r15  941  149  670    0
+r16  942  153  683  685
+r17  944  775  161    0
+r18  945  163  530  678
+r19  947  165  660    0
+r20  949  175  620    0
+r21  951  177  630    0
+r22  953  191  520    0
+r23  955  195  720    0
+r24  958  199  735    0
+
+. 
+. *============================================================================
+. * BEA data  
+. *============================================================================
+. use fips_st fips_co AreaName popAllBEA year incPerCapita empTot if year>1969 
+> using BEA/BEAcountyFIPS.dta, clear
+
+. gen income = popAllBEA*incPerCapita
+(1,357 missing values generated)
+
+. 
+. *----------------------------------------------------------------------------
+. * Create state and national averages
+. *----------------------------------------------------------------------------
+. preserve
+
+.         collapse (sum) popAllBEA empTot income, by(year fips_st)
+
+.         gen fips_co  = -99
+
+.         gen AreaName = "State Wide"
+
+.         save `state1', replace
+(note: file /tmp/St32244.000005 not found)
+file /tmp/St32244.000005 saved
+
+.         collapse (sum) popAllBEA empTot income, by(year)
+
+.         gen fips_st  = -99
+
+.         gen fips_co  = -99
+
+.         gen AreaName = "National"
+
+.         save `national1', replace
+(note: file /tmp/St32244.000007 not found)
+file /tmp/St32244.000007 saved
+
+. restore
+
+. append using `state1' `national1'
+(note: variable popAllBEA was long, now double to accommodate using data's
+       values)
+(note: variable empTot was long, now double to accommodate using data's
+       values)
+(note: variable income was float, now double to accommodate using data's
+       values)
+(note: variable fips_co was int, now float to accommodate using data's
+       values)
+(note: variable fips_st was byte, now float to accommodate using data's
+       values)
+
+. sort  year fips_st fips_co
+
+. order year fips_st fips_co
+
+. replace incPerCapita = income/popAllBEA if fips_co==-99
+(2,444 real changes made)
+
+. 
+. *----------------------------------------------------------------------------
+. * "Breakout" the BEA data
+. *----------------------------------------------------------------------------
+. forvalues Y = 1/24 {
+  2.         expand 2                   if fips_st==51 & fips_co==MM[ `Y',1], g
+> en(counter)
+  3.         replace fips_co=MM[ `Y',2] if fips_st==51 & fips_co==MM[ `Y',1] & 
+> counter==0
+  4.         replace fips_co=MM[ `Y',3] if fips_st==51 & fips_co==MM[ `Y',1] & 
+> counter==1
+  5.         drop counter
+  6.         
+.         if MM[ `Y',4]~=0 {
+  7.                 expand 2                   if fips_st==51 & fips_co==MM[ `
+> Y',3], gen(counter)
+  8.                 replace fips_co=MM[ `Y',4] if fips_st==51 & fips_co==MM[ `
+> Y',3] & counter==1
+  9.                 drop counter
+ 10.         }
+ 11. }
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(0 observations created)
+(0 real changes made)
+(0 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+(47 observations created)
+(47 real changes made)
+(47 real changes made)
+
+. save `holder1', replace
+(note: file /tmp/St32244.000001 not found)
+file /tmp/St32244.000001 saved
+
+. 
+. *============================================================================
+. * Census data
+. *============================================================================
+. use Census/county_population.dta, clear
+
+. local varlist  popAllTotal popAllMale popAllFemale popWorkTotal popWorkMale p
+> opWorkFemale
+
+. 
+. *----------------------------------------------------------------------------
+. * Create state and national averages
+. *----------------------------------------------------------------------------
+. preserve
+
+.         collapse (sum) `varlist', by(year fips_st)
+
+.         gen fips_co  = -99
+
+.         gen AreaName = "State Wide"
+
+.         save `state1', replace
+file /tmp/St32244.000005 saved
+
+.         collapse (sum) `varlist', by(year)
+
+.         gen fips_st  = -99
+
+.         gen fips_co  = -99
+
+.         gen AreaName = "National"
+
+.         save `national1', replace
+file /tmp/St32244.000007 saved
+
+. restore
+
+. append using `state1' `national1'
+(note: variable popAllTotal was float, now double to accommodate using data's
+       values)
+(note: variable popAllMale was float, now double to accommodate using data's
+       values)
+(note: variable popAllFemale was float, now double to accommodate using
+       data's values)
+(note: variable popWorkTotal was float, now double to accommodate using
+       data's values)
+(note: variable popWorkMale was float, now double to accommodate using data's
+       values)
+(note: variable popWorkFemale was float, now double to accommodate using
+       data's values)
+(note: variable fips_co was int, now float to accommodate using data's
+       values)
+(note: variable fips_st was byte, now float to accommodate using data's
+       values)
+
+. sort  year fips_st fips_co
+
+. order year fips_st fips_co
+
+. 
+. *----------------------------------------------------------------------------
+. * Create better county values for Virginia
+. *----------------------------------------------------------------------------
+. forvalues Y =1/24 {
+  2.         foreach X in `varlist' {
+  3.                 if MM[ `Y',4]==0 {
+  4.                         bys year: egen `X'1  = total( `X') if fips_st==51 
+> & inlist(fips_co, MM[ `Y',2], MM[ `Y',3] )
+  5.                         qui replace `X'          = `X'1        if fips_st=
+> =51 & inlist(fips_co, MM[ `Y',2], MM[ `Y',3] )
+  6.                 }
+  7.                 else {
+  8.                         bys year: egen `X'1  = total( `X') if fips_st==51 
+> & inlist(fips_co, MM[ `Y',2], MM[ `Y',3], MM[ `Y',4] )
+  9.                         qui replace `X'          = `X'1        if fips_st=
+> =51 & inlist(fips_co, MM[ `Y',2], MM[ `Y',3], MM[ `Y',4] )
+ 10.                 }
+ 11.                 qui drop `X'1
+ 12.         }
+ 13.         disp "`Y'"
+ 14. }
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+1
+(153167 missing values generated)
+(153167 missing values generated)
+(153167 missing values generated)
+(153167 missing values generated)
+(153167 missing values generated)
+(153167 missing values generated)
+2
+(153149 missing values generated)
+(153149 missing values generated)
+(153149 missing values generated)
+(153149 missing values generated)
+(153149 missing values generated)
+(153149 missing values generated)
+3
+(153204 missing values generated)
+(153204 missing values generated)
+(153204 missing values generated)
+(153204 missing values generated)
+(153204 missing values generated)
+(153204 missing values generated)
+4
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+5
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+6
+(153149 missing values generated)
+(153149 missing values generated)
+(153149 missing values generated)
+(153149 missing values generated)
+(153149 missing values generated)
+(153149 missing values generated)
+7
+(153149 missing values generated)
+(153149 missing values generated)
+(153149 missing values generated)
+(153149 missing values generated)
+(153149 missing values generated)
+(153149 missing values generated)
+8
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+9
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+10
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+11
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+12
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+13
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+14
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+15
+(153169 missing values generated)
+(153169 missing values generated)
+(153169 missing values generated)
+(153169 missing values generated)
+(153169 missing values generated)
+(153169 missing values generated)
+16
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+17
+(153149 missing values generated)
+(153149 missing values generated)
+(153149 missing values generated)
+(153149 missing values generated)
+(153149 missing values generated)
+(153149 missing values generated)
+18
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+19
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+20
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+21
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+22
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+(153197 missing values generated)
+23
+(153207 missing values generated)
+(153207 missing values generated)
+(153207 missing values generated)
+(153207 missing values generated)
+(153207 missing values generated)
+(153207 missing values generated)
+24
+
+. save `holder2', replace
+(note: file /tmp/St32244.000002 not found)
+file /tmp/St32244.000002 saved
+
+. 
+. *============================================================================
+. * Bring in IPEDS county data
+. *============================================================================
+. use IPEDS/ipeds_final, clear
+(IPEDS Interim Data - UNITID Year)
+
+. * drop if fips_st==-99 | fips_co==-99
+. 
+. gen fips_st = floor(fips5/1000)
+
+. gen fips_co = mod(fips5,1000)
+
+. 
+. sort year fips_st fips_co 
+
+. keep year fips_st fips_co numBA numAA tuitionFlagship
+
+. 
+. * No values for fips_??=-99; these will be created post-merge
+. tempfile holderIPEDS
+
+. save `holder3', replace
+(note: file /tmp/St32244.000003 not found)
+file /tmp/St32244.000003 saved
+
+. 
+. *============================================================================
+. * Bring in MSA crosswalk
+. *============================================================================
+. insheet using Census/countyxwalk.csv, comma clear
+(12 vars, 3,143 obs)
+
+. gen fips_st = floor(county/1000)
+
+. gen fips_co = county-fips_st*1000
+
+. keep fips_st fips_co cbsa
+
+. 
+. save `holder4', replace
+(note: file /tmp/St32244.000004 not found)
+file /tmp/St32244.000004 saved
+
+. 
+. *============================================================================
+. * Merge BEA, Census, IPEDS and MSA crosswalk
+. *============================================================================
+. use `holder1', clear
+
+. merge 1:1 fips_st fips_co year using `holder2'    , gen(mergeCensus)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                         5,202
+        from master                     1,601  (mergeCensus==1)
+        from using                      3,601  (mergeCensus==2)
+
+    matched                           149,692  (mergeCensus==3)
+    -----------------------------------------
+
+. merge 1:1 fips_st fips_co year using `holder3', gen(mergeIPEDS)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                       108,536
+        from master                   107,850  (mergeIPEDS==1)
+        from using                        686  (mergeIPEDS==2)
+
+    matched                            47,044  (mergeIPEDS==3)
+    -----------------------------------------
+
+. * About 30 of the 1500 counties in IPEDS are not in BEA/Census (chgs year to 
+> year)
+. * Also, a few of the master only counties have no/incomplete data, and thus a
+> re ignored
+. *   These are mostly in Alaska; Alaska is weird in the BEA/Census data
+. * However, in 1988 & 2005, there are no matched obs that have missing popAllT
+> otal
+. isid fips_co fips_st year
+
+. merge m:1 fips_co fips_st using `holder4', gen(mergeMSA)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                         4,747
+        from master                     4,747  (mergeMSA==1)
+        from using                          0  (mergeMSA==2)
+
+    matched                           150,833  (mergeMSA==3)
+    -----------------------------------------
+
+. 
+. *============================================================================
+. * Last Data Edits
+. *============================================================================
+. * "weighted average" IPEDS data
+. bys year fips_st (fips_co): gen     numCounty = _N-1
+
+. bys year (fips_st fips_co): replace numCounty = _N-1-51 if fips_st==-99
+(48 real changes made)
+
+. 
+. foreach X in numBA numAA tuitionFlagship {
+  2.         gen tempWgt = `X'*popAllTotal if fips_co~=-99
+  3.         bys year fips_st (fips_co): egen tempWgt2 = total(tempWgt)
+  4.         bys year fips_st (fips_co): replace `X' = tempWgt2/popAllTotal if 
+> fips_co==-99
+  5. 
+.         bys year (fips_st fips_co): egen tempWgt3 = total(tempWgt)
+  6.         bys year (fips_st fips_co): replace `X' = tempWgt3/popAllTotal if 
+> fips_st==-99
+  7.         drop tempWgt*
+  8.         
+.         if "`X'"=="tuitionFlagship"  bys year fips_st (fips_co): replace `X' 
+> = `X'[1] if mi(`X') & fips_co~=-99 & year>=1987
+  9.         else {
+ 10.                 replace `X' = 0 if mi(`X') & fips_co~=-99 & year>=1987
+ 11.                 gen     `X'perCapita = `X'/popAllTotal             if fips
+> _co~=-99
+ 12.                 replace `X'perCapita = `X'/(popAllTotal/numCounty) if fips
+> _co==-99
+ 13.         }
+ 14.         assert ~mi(`X') if year>=1987
+ 15. }
+(108,549 missing values generated)
+(2,496 real changes made)
+(32 real changes made)
+(53,673 real changes made)
+(55,756 missing values generated)
+(2,496 real changes made)
+(108,549 missing values generated)
+(2,496 real changes made)
+(30 real changes made)
+(53,673 real changes made)
+(55,756 missing values generated)
+(2,496 real changes made)
+(112,684 missing values generated)
+(2,496 real changes made)
+(29 real changes made)
+(55,414 real changes made)
+
+. 
+. * Hand Edit
+. replace cbsa = 26820 if fips_st==16 & fips_co==23
+(48 real changes made)
+
+. 
+. * Switch to CBSA based vs county based
+. * gen income = incPerCapita*popAllBEA
+. bys cbsa year: egen incomeMSA       = total(income)             if cbsa<50000
+(69715 missing values generated)
+
+. bys cbsa year: egen popAllBEA_MSA   = total(popAllBEA)          if cbsa<50000
+(69715 missing values generated)
+
+. bys cbsa year: egen popWorkTotalMSA = total(popWorkTotal)       if cbsa<50000
+(69715 missing values generated)
+
+. bys cbsa year: egen empTotMSA       = total(empTot      )       if cbsa<50000
+(69715 missing values generated)
+
+. bys cbsa year: gen  incPerCapitaMSA = incomeMSA / popAllBEA_MSA if cbsa<50000
+(71,562 missing values generated)
+
+. 
+. gen     incPerCapitaFinal = incPerCapita              if cbsa>=50000
+(88,276 missing values generated)
+
+. replace incPerCapitaFinal = incPerCapitaMSA           if cbsa< 50000
+(84,018 real changes made)
+
+. gen     empPct            = empTot/popWorkTotal
+(5,888 missing values generated)
+
+. gen     empPctFinal       = empTot/popWorkTotal       if cbsa>=50000
+(89,787 missing values generated)
+
+. replace empPctFinal       = empTotMSA/popWorkTotalMSA if cbsa< 50000
+(85,855 real changes made)
+
+. 
+. * 95% match. Main problems are:
+. *  Alaska (2) and Virginia(51)
+. *   could be an error in the coding?? 
+. 
+. *============================================================================
+. * Deflate incPerCapita (Note: In current 1,000's of $ -> 1982-1984 1,000's of
+>  $
+. *============================================================================
+. do BLS/cpi.do
+
+. * CPI data - https://www.bls.gov/regions/new-england/data/consumerpriceindex_
+> us_table.htm
+. 
+. gen         cpi= 14.100 if year==1938
+(155,580 missing values generated)
+
+. qui replace cpi= 13.900 if year==1939
+
+. qui replace cpi= 14.000 if year==1940
+
+. qui replace cpi= 14.700 if year==1941
+
+. qui replace cpi= 16.300 if year==1942
+
+. qui replace cpi= 17.300 if year==1943
+
+. qui replace cpi= 17.600 if year==1944
+
+. qui replace cpi= 18.000 if year==1945
+
+. qui replace cpi= 19.500 if year==1946
+
+. qui replace cpi= 22.300 if year==1947
+
+. qui replace cpi= 24.100 if year==1948
+
+. qui replace cpi= 23.800 if year==1949
+
+. qui replace cpi= 24.100 if year==1950
+
+. qui replace cpi= 26.000 if year==1951
+
+. qui replace cpi= 26.500 if year==1952
+
+. qui replace cpi= 26.700 if year==1953
+
+. qui replace cpi= 26.900 if year==1954
+
+. qui replace cpi= 26.800 if year==1955
+
+. qui replace cpi= 27.200 if year==1956
+
+. qui replace cpi= 28.100 if year==1957
+
+. qui replace cpi= 28.900 if year==1958
+
+. qui replace cpi= 29.100 if year==1959
+
+. qui replace cpi= 29.600 if year==1960
+
+. qui replace cpi= 29.900 if year==1961
+
+. qui replace cpi= 30.200 if year==1962
+
+. qui replace cpi= 30.600 if year==1963
+
+. qui replace cpi= 31.000 if year==1964
+
+. qui replace cpi= 31.500 if year==1965
+
+. qui replace cpi= 32.400 if year==1966
+
+. qui replace cpi= 33.400 if year==1967
+
+. qui replace cpi= 34.800 if year==1968
+
+. qui replace cpi= 36.700 if year==1969
+
+. qui replace cpi= 38.800 if year==1970
+
+. qui replace cpi= 40.500 if year==1971
+
+. qui replace cpi= 41.800 if year==1972
+
+. qui replace cpi= 44.400 if year==1973
+
+. qui replace cpi= 49.300 if year==1974
+
+. qui replace cpi= 53.800 if year==1975
+
+. qui replace cpi= 56.900 if year==1976
+
+. qui replace cpi= 60.600 if year==1977
+
+. qui replace cpi= 65.200 if year==1978
+
+. qui replace cpi= 72.600 if year==1979
+
+. qui replace cpi= 82.400 if year==1980
+
+. qui replace cpi= 90.900 if year==1981
+
+. qui replace cpi= 96.500 if year==1982
+
+. qui replace cpi= 99.600 if year==1983
+
+. qui replace cpi=103.900 if year==1984
+
+. qui replace cpi=107.600 if year==1985
+
+. qui replace cpi=109.600 if year==1986
+
+. qui replace cpi=113.600 if year==1987
+
+. qui replace cpi=118.300 if year==1988
+
+. qui replace cpi=124.000 if year==1989
+
+. qui replace cpi=130.700 if year==1990
+
+. qui replace cpi=136.200 if year==1991
+
+. qui replace cpi=140.300 if year==1992
+
+. qui replace cpi=144.500 if year==1993
+
+. qui replace cpi=148.200 if year==1994
+
+. qui replace cpi=152.400 if year==1995
+
+. qui replace cpi=156.900 if year==1996
+
+. qui replace cpi=160.500 if year==1997
+
+. qui replace cpi=163.000 if year==1998
+
+. qui replace cpi=166.600 if year==1999
+
+. qui replace cpi=172.200 if year==2000
+
+. qui replace cpi=177.100 if year==2001
+
+. qui replace cpi=179.900 if year==2002
+
+. qui replace cpi=184.000 if year==2003
+
+. qui replace cpi=188.900 if year==2004
+
+. qui replace cpi=195.300 if year==2005
+
+. qui replace cpi=201.600 if year==2006
+
+. qui replace cpi=207.342 if year==2007
+
+. qui replace cpi=215.303 if year==2008
+
+. qui replace cpi=214.537 if year==2009
+
+. qui replace cpi=218.056 if year==2010
+
+. qui replace cpi=224.939 if year==2011
+
+. qui replace cpi=229.594 if year==2012
+
+. qui replace cpi=232.957 if year==2013
+
+. qui replace cpi=236.736 if year==2014
+
+. qui replace cpi=237.017 if year==2015
+
+. qui replace cpi=240.007 if year==2016
+
+. qui replace cpi=245.120 if year==2017
+
+. 
+. qui replace cpi=cpi/100
+
+. 
+. lab var cpi "CPI-Urban/100 (1982-84)"
+
+. 
+end of do-file
+
+. 
+. replace incPerCapita      = incPerCapita/cpi
+(149,936 real changes made)
+
+. replace incPerCapitaFinal = incPerCapitaFinal/cpi
+(150,009 real changes made)
+
+. replace incPerCapitaMSA   = incPerCapitaMSA/cpi
+(84,018 real changes made)
+
+. 
+. keep  year fips_st fips_co AreaName cbsa incPerCapitaFinal empPctFinal incPer
+> Capita incPerCapitaMSA empPct empTot empTotMSA popAllTotal popWorkTotal popWo
+> rkTotalMSA numBA numAA numBAperCapita numAAperCapita tuitionFlagship
+
+. order year fips_st fips_co AreaName cbsa incPerCapitaFinal empPctFinal incPer
+> Capita incPerCapitaMSA empPct empTot empTotMSA popAllTotal popWorkTotal popWo
+> rkTotalMSA numBA numAA numBAperCapita numAAperCapita tuitionFlagship
+
+. sort  year fips_st fips_co
+
+. 
+. drop if year>2016
+(3,194 observations deleted)
+
+. compress
+  variable fips_st was float now byte
+  variable fips_co was float now int
+  variable empTot was double now long
+  variable popAllTotal was double now long
+  variable popWorkTotal was double now long
+  (2,590,562 bytes saved)
+
+. save county_data.dta, replace
+file county_data.dta saved
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/jared/WageReturnsRepo/Data/create_county_data.log
+  log type:  text
+ closed on:  12 Mar 2019, 16:28:05
+-------------------------------------------------------------------------------

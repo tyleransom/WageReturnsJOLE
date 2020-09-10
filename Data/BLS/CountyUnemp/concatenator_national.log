@@ -1,0 +1,72 @@
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/data/ransom/WageReturnsRepo/Data/BLS/CountyUnemp/concatenator_national.log
+  log type:  text
+ opened on:  16 Oct 2018, 14:06:34
+
+. 
+. insheet using national_unemp_monthly.txt, clear
+(13 vars, 25 obs)
+
+. 
+. ren jan national_urate1
+
+. ren feb national_urate2
+
+. ren mar national_urate3
+
+. ren apr national_urate4
+
+. ren may national_urate5
+
+. ren jun national_urate6
+
+. ren jul national_urate7
+
+. ren aug national_urate8
+
+. ren sep national_urate9
+
+. ren oct national_urate10
+
+. ren nov national_urate11
+
+. ren dec national_urate12
+
+. 
+. reshape long national_urate, i(year) j(month)
+(note: j = 1 2 3 4 5 6 7 8 9 10 11 12)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                       25   ->     300
+Number of variables                  13   ->       3
+j variable (12 values)                    ->   month
+xij variables:
+national_urate1 national_urate2 ... national_urate12->national_urate
+-----------------------------------------------------------------------------
+
+. 
+. gen mdate = mofd(mdy(month,1,year))
+
+. format mdate %tm
+
+. 
+. drop if mi(national_urate)
+(9 observations deleted)
+
+. 
+. compress
+  variable mdate was float now int
+  (582 bytes saved)
+
+. save national_unemp_monthly, replace
+file national_unemp_monthly.dta saved
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/data/ransom/WageReturnsRepo/Data/BLS/CountyUnemp/concatenator_national.log
+  log type:  text
+ closed on:  16 Oct 2018, 14:06:34
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,1779 @@
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /afs/econ.duke.edu/data/vjh3/WageReturns/Data/BEA/BEA_create_MSA.log
+  log type:  text
+ opened on:   4 Apr 2013, 11:21:14
+
+. 
+. local states    MSA muSA
+
+. local statesNot     muSA
+
+. 
+. foreach state in `states' {
+  2.         tempfile IncEmp`state'
+  3.         tempfile SectorEmpOld`state'
+  4.         tempfile SectorEmpNew`state'
+  5.         tempfile SectorIncOld`state'
+  6.         tempfile SectorIncNew`state'
+  7. }       
+
+. 
+. foreach state in `states' {
+  2.         * Get per-captia income and total employment by county
+.         insheet using CA04_`state'.csv, comma case clear
+  3.         ren v8  yr1969
+  4.         ren v9  yr1970
+  5.         ren v10 yr1971
+  6.         ren v11 yr1972
+  7.         ren v12 yr1973
+  8.         ren v13 yr1974
+  9.         ren v14 yr1975
+ 10.         ren v15 yr1976
+ 11.         ren v16 yr1977
+ 12.         ren v17 yr1978
+ 13.         ren v18 yr1979
+ 14.         ren v19 yr1980
+ 15.         ren v20 yr1981
+ 16.         ren v21 yr1982
+ 17.         ren v22 yr1983
+ 18.         ren v23 yr1984
+ 19.         ren v24 yr1985
+ 20.         ren v25 yr1986
+ 21.         ren v26 yr1987
+ 22.         ren v27 yr1988
+ 23.         ren v28 yr1989
+ 24.         ren v29 yr1990
+ 25.         ren v30 yr1991
+ 26.         ren v31 yr1992
+ 27.         ren v32 yr1993
+ 28.         ren v33 yr1994
+ 29.         ren v34 yr1995
+ 30.         ren v35 yr1996
+ 31.         ren v36 yr1997
+ 32.         ren v37 yr1998
+ 33.         ren v38 yr1999
+ 34.         ren v39 yr2000
+ 35.         ren v40 yr2001
+ 36.         ren v41 yr2002
+ 37.         ren v42 yr2003
+ 38.         ren v43 yr2004
+ 39.         ren v44 yr2005
+ 40.         ren v45 yr2006
+ 41.         ren v46 yr2007
+ 42.         ren v47 yr2008
+ 43.         ren v48 yr2009
+ 44.         ren v49 yr2010
+ 45.         ren v50 yr2011
+ 46.         keep if inlist(Linecode,20,30,7010) // Linecode 20 is population; 30 is per-capita income for each county; 7010 is total employment for each county
+ 47.         keep FIPS Linecode AreaName yr* // this keeps the FIPS code, the Linecode and the year
+ 48.         tostring yr*, replace
+ 49.         reshape long yr, i(FIPS Linecode) j(year)
+ 50.         ren yr value
+ 51.         reshape wide value, i(FIPS year) j(Linecode)
+ 52.         replace value20   = "" if value20=="(D)"   | value20=="(N)"   | value20=="(L)"
+ 53.         replace value30   = "" if value30=="(D)"   | value30=="(N)"   | value30=="(L)"
+ 54.         replace value7010 = "" if value7010=="(D)" | value7010=="(N)" | value7010=="(L)"
+ 55.         destring value20,   gen (popAllBEA) force
+ 56.         destring value30,   gen (incPerCapita) force
+ 57.         destring value7010, gen (empTot) force
+ 58.         destring FIPS, replace force
+ 59.         drop value*
+ 60.         save `IncEmp`state''
+ 61.         disp _newline(5) "About to list name of temp file"
+ 62.         disp "`IncEmp`state''" _newline(5) 
+ 63.         
+.         * Get sector-specific employment by county (NAICS classificaiton -- 2001-09)
+.         insheet using CA25N_`state'.csv, comma case clear
+ 64.         ren v8  yr2001
+ 65.         ren v9  yr2002
+ 66.         ren v10 yr2003
+ 67.         ren v11 yr2004
+ 68.         ren v12 yr2005
+ 69.         ren v13 yr2006
+ 70.         ren v14 yr2007
+ 71.         ren v15 yr2008
+ 72.         ren v16 yr2009
+ 73.         ren v17 yr2010
+ 74.         ren v18 yr2011
+ 75.         keep if inlist(Linecode,70,100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000) // 400 is Manufacturing sector; 800 is s
+> ervice sector
+ 76.         keep FIPS Linecode yr*
+ 77.         tostring yr*, replace
+ 78.         reshape long yr, i(FIPS Linecode) j(year)
+ 79.         ren yr value
+ 80.         reshape wide value, i(FIPS year) j(Linecode)
+ 81.         foreach x of numlist 70 100(100)2000 {
+ 82.                 replace value`x' = "" if inlist(value`x',"(D)","(N)","(L)")
+ 83.         }
+ 84.         ** BEA categories
+.         * Forestry, fishing, and related activities
+.         * Mining
+.         * Utilities
+.         * Construction
+.         * Manufacturing
+.         * Wholesale trade
+.         * Retail trade
+.         * Transportation and warehousing
+.         * Information
+.         * Finance and insurance
+.         * Real estate and rental and leasing
+.         * Professional, scientific, and technical services
+.         * Management of companies and enterprises
+.         * Administrative and waste services
+.         * Educational services
+.         * Health care and social assistance
+.         * Arts, entertainment, and recreation
+.         * Accommodation and food services
+.         * Other services, except public administration
+.         * Government and government enterprises
+. 
+.         ** My categories
+.         * 1. AGRICULTURE, FORESTRY, FISHING, MINING, UTILITIES, CONSTRUCTION
+.         * 2. MANUFACTURING 
+.         * 3. WHOLESALE & RETAIL TRADE
+.         * 4. TRANSPORTATION, WAREHOUSING, INFORMATION AND COMMUNICATION
+.         * 5. FIRE
+.         * 6. PROFESSIONAL AND RELATED SERVICES
+.         * 7. EDUCATIONAL, HEALTH, AND SOCIAL SERVICES
+.         * 8. ENTERTAINMENT, ACCOMODATIONS, AND FOOD & OTHER SERVICES
+.         * 9. PUBLIC ADMINISTRATION, MILITARY & SPECIAL CODES
+.   
+. 
+.         destring value70  , gen (empFarm) force
+ 85.         destring value100 , gen (agriEmp) force
+ 86.         destring value200 , gen (miningEmp) force
+ 87.         destring value300 , gen (utilEmp) force
+ 88.         destring value400 , gen (constrEmp) force
+ 89.         destring value500 , gen (manufEmp) force
+ 90.         destring value600 , gen (wtEmp) force
+ 91.         destring value700 , gen (rtEmp) force
+ 92.         destring value800 , gen (transEmp) force
+ 93.         destring value900 , gen (infoEmp) force
+ 94.         destring value1000, gen (fiEmp) force
+ 95.         destring value1100, gen (reEmp) force
+ 96.         destring value1200, gen (proSvcEmp) force
+ 97.         destring value1300, gen (mgmtEmp) force
+ 98.         destring value1400, gen (adminEmp) force
+ 99.         destring value1500, gen (educEmp) force
+100.         destring value1600, gen (healthEmp) force
+101.         destring value1700, gen (artrecEmp) force
+102.         destring value1800, gen (hospfoodEmp) force
+103.         destring value1900, gen (othsvcEmp) force
+104.         destring value2000, gen (pubEmp) force
+105.         recode   agriEmp     (. = 0)
+106.         recode   miningEmp   (. = 0)
+107.         recode   utilEmp     (. = 0)
+108.         recode   constrEmp   (. = 0)
+109.         recode   manufEmp    (. = 0)
+110.         recode   wtEmp       (. = 0)
+111.         recode   rtEmp       (. = 0)
+112.         recode   transEmp    (. = 0)
+113.         recode   infoEmp     (. = 0)
+114.         recode   fiEmp       (. = 0)
+115.         recode   reEmp       (. = 0)
+116.         recode   proSvcEmp   (. = 0)
+117.         recode   mgmtEmp     (. = 0)
+118.         recode   adminEmp    (. = 0)
+119.         recode   educEmp     (. = 0)
+120.         recode   healthEmp   (. = 0)
+121.         recode   artrecEmp   (. = 0)
+122.         recode   hospfoodEmp (. = 0)
+123.         recode   othsvcEmp   (. = 0)
+124.         recode   pubEmp      (. = 0)
+125.         
+.         generate ind1Emp = agriEmp+miningEmp+utilEmp+constrEmp
+126.         generate ind2Emp = manufEmp
+127.         generate ind3Emp = wtEmp+rtEmp
+128.         generate ind4Emp = transEmp+infoEmp
+129.         generate ind5Emp = fiEmp+reEmp
+130.         generate ind6Emp = proSvcEmp+mgmtEmp+adminEmp
+131.         generate ind7Emp = artrecEmp+educEmp+healthEmp
+132.         generate ind8Emp = hospfoodEmp+othsvcEmp
+133.         generate ind9Emp = pubEmp
+134.         
+.         destring FIPS, replace force
+135.         drop value*
+136.         save `SectorEmpNew`state''
+137.         
+.         * Get sector-specific employment by county (SIC classification --- 1969 - 2000)
+.         insheet using CA25_`state'.csv, comma case clear
+138.         ren v8  yr1969
+139.         ren v9  yr1970
+140.         ren v10 yr1971
+141.         ren v11 yr1972
+142.         ren v12 yr1973
+143.         ren v13 yr1974
+144.         ren v14 yr1975
+145.         ren v15 yr1976
+146.         ren v16 yr1977
+147.         ren v17 yr1978
+148.         ren v18 yr1979
+149.         ren v19 yr1980
+150.         ren v20 yr1981
+151.         ren v21 yr1982
+152.         ren v22 yr1983
+153.         ren v23 yr1984
+154.         ren v24 yr1985
+155.         ren v25 yr1986
+156.         ren v26 yr1987
+157.         ren v27 yr1988
+158.         ren v28 yr1989
+159.         ren v29 yr1990
+160.         ren v30 yr1991
+161.         ren v31 yr1992
+162.         ren v32 yr1993
+163.         ren v33 yr1994
+164.         ren v34 yr1995
+165.         ren v35 yr1996
+166.         ren v36 yr1997
+167.         ren v37 yr1998
+168.         ren v38 yr1999
+169.         ren v39 yr2000
+170.         keep if inlist(Linecode,70,100,200,300,400,500,610,620,700,800,900) // 400 is Manufacturing sector; 800 is service sector
+171.         keep FIPS Linecode yr*
+172.         tostring yr*, replace
+173.         reshape long yr, i(FIPS Linecode) j(year)
+174.         ren yr value
+175.         reshape wide value, i(FIPS year) j(Linecode)
+176.         foreach x of numlist 70 100 200 300 400 500 610 620 700 800 900 {
+177.                 replace value`x' = "" if inlist(value`x',"(D)","(N)","(L)")
+178.         }
+179.         destring value70 , gen (empFarm) force
+180.         destring value100, gen (agriEmp) force
+181.         destring value200, gen (miningEmp) force
+182.         destring value300, gen (constrEmp) force
+183.         destring value400, gen (manufEmp) force
+184.         destring value500, gen (transEmp) force
+185.         destring value610, gen (wtEmp) force
+186.         destring value620, gen (rtEmp) force
+187.         destring value700, gen (fireEmp) force
+188.         destring value800, gen (serviceEmp) force
+189.         destring value900, gen (pubEmp) force
+190.         
+.         destring FIPS, replace force
+191.         drop value*
+192.         save `SectorEmpOld`state''
+193.         
+.         * Get sector-specific income per worker by county
+.         insheet using CA05_`state'.csv, comma case clear
+194.         ren v8  yr1969
+195.         ren v9  yr1970
+196.         ren v10 yr1971
+197.         ren v11 yr1972
+198.         ren v12 yr1973
+199.         ren v13 yr1974
+200.         ren v14 yr1975
+201.         ren v15 yr1976
+202.         ren v16 yr1977
+203.         ren v17 yr1978
+204.         ren v18 yr1979
+205.         ren v19 yr1980
+206.         ren v20 yr1981
+207.         ren v21 yr1982
+208.         ren v22 yr1983
+209.         ren v23 yr1984
+210.         ren v24 yr1985
+211.         ren v25 yr1986
+212.         ren v26 yr1987
+213.         ren v27 yr1988
+214.         ren v28 yr1989
+215.         ren v29 yr1990
+216.         ren v30 yr1991
+217.         ren v31 yr1992
+218.         ren v32 yr1993
+219.         ren v33 yr1994
+220.         ren v34 yr1995
+221.         ren v35 yr1996
+222.         ren v36 yr1997
+223.         ren v37 yr1998
+224.         ren v38 yr1999
+225.         ren v39 yr2000
+226.         keep if Linecode==400 | Linecode==800 // 400 is Manufacturing sector; 800 is service sector
+227.         keep FIPS Linecode yr*
+228.         tostring yr*, replace
+229.         reshape long yr, i(FIPS Linecode) j(year)
+230.         ren yr value
+231.         reshape wide value, i(FIPS year) j(Linecode)
+232.         replace value400 = "" if value400=="(D)" | value400=="(N)" | value400=="(L)"
+233.         replace value800 = "" if value800=="(D)" | value800=="(N)" | value800=="(L)"
+234.         destring value800, gen (serviceInc) force
+235.         destring value400, gen (manufInc) force
+236.         destring FIPS, replace force
+237.         drop value*
+238.         save `SectorIncOld`state''
+239. 
+.         * Get sector-specific income per worker by county
+.         insheet using CA05N_`state'.csv, comma case clear
+240.         ren v8  yr2001
+241.         ren v9  yr2002
+242.         ren v10 yr2003
+243.         ren v11 yr2004
+244.         ren v12 yr2005
+245.         ren v13 yr2006
+246.         ren v14 yr2007
+247.         ren v15 yr2008
+248.         ren v16 yr2009
+249.         ren v17 yr2010
+250.         ren v18 yr2011
+251.         keep if inlist(Linecode,100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000) // 400 is Manufacturing sector; 800 is serv
+> ice sector
+252.         keep FIPS Linecode yr*
+253.         tostring yr*, replace
+254.         reshape long yr, i(FIPS Linecode) j(year)
+255.         ren yr value
+256.         reshape wide value, i(FIPS year) j(Linecode)
+257.         foreach x of numlist 100(100)2000 {
+258.                 replace value`x' = "" if inlist(value`x',"(D)","(N)","(L)")
+259.         }
+260.         destring value100 , gen (agriInc) force
+261.         destring value200 , gen (miningInc) force
+262.         destring value300 , gen (utilInc) force
+263.         destring value400 , gen (constrInc) force
+264.         destring value500 , gen (manufInc) force
+265.         destring value600 , gen (wtInc) force
+266.         destring value700 , gen (rtInc) force
+267.         destring value800 , gen (transInc) force
+268.         destring value900 , gen (infoInc) force
+269.         destring value1000, gen (fiInc) force
+270.         destring value1100, gen (reInc) force
+271.         destring value1200, gen (proSvcInc) force
+272.         destring value1300, gen (mgmtInc) force
+273.         destring value1400, gen (adminInc) force
+274.         destring value1500, gen (educInc) force
+275.         destring value1600, gen (healthInc) force
+276.         destring value1700, gen (artrecInc) force
+277.         destring value1800, gen (hospfoodInc) force
+278.         destring value1900, gen (othsvcInc) force
+279.         destring value2000, gen (pubInc) force
+280.         recode   agriInc     (. = 0)
+281.         recode   miningInc   (. = 0)
+282.         recode   utilInc     (. = 0)
+283.         recode   constrInc   (. = 0)
+284.         recode   manufInc    (. = 0)
+285.         recode   wtInc       (. = 0)
+286.         recode   rtInc       (. = 0)
+287.         recode   transInc    (. = 0)
+288.         recode   infoInc     (. = 0)
+289.         recode   fiInc       (. = 0)
+290.         recode   reInc       (. = 0)
+291.         recode   proSvcInc   (. = 0)
+292.         recode   mgmtInc     (. = 0)
+293.         recode   adminInc    (. = 0)
+294.         recode   educInc     (. = 0)
+295.         recode   healthInc   (. = 0)
+296.         recode   artrecInc   (. = 0)
+297.         recode   hospfoodInc (. = 0)
+298.         recode   othsvcInc   (. = 0)
+299.         recode   pubInc      (. = 0)
+300.         
+.         generate ind1Inc = agriInc+miningInc+utilInc+constrInc
+301.         generate ind2Inc = manufInc
+302.         generate ind3Inc = wtInc+rtInc
+303.         generate ind4Inc = transInc+infoInc
+304.         generate ind5Inc = fiInc+reInc
+305.         generate ind6Inc = proSvcInc+mgmtInc+adminInc
+306.         generate ind7Inc = artrecInc+educInc+healthInc
+307.         generate ind8Inc = hospfoodInc+othsvcInc
+308.         generate ind9Inc = pubInc
+309.         destring FIPS, replace force
+310.         drop value*
+311.         save `SectorIncNew`state''
+312. }
+(50 vars, 8420 obs)
+(7322 observations deleted)
+yr1969 was long now str8
+yr1970 was long now str8
+yr1971 was long now str8
+yr1972 was long now str8
+yr1973 was long now str8
+yr1974 was long now str8
+yr1975 was long now str8
+yr1976 was long now str8
+yr1977 was long now str8
+yr1978 was long now str8
+yr1979 was long now str8
+yr1980 was long now str8
+yr1981 was long now str8
+yr1982 was long now str8
+yr1983 was long now str8
+yr1984 was long now str8
+yr1985 was long now str8
+yr1986 was long now str8
+yr1987 was long now str8
+yr1988 was long now str8
+yr1989 was long now str8
+yr1990 was long now str8
+yr1991 was long now str8
+yr1992 was long now str8
+yr1993 was long now str8
+yr1994 was long now str8
+yr1995 was long now str8
+yr1996 was long now str8
+yr1997 was long now str8
+yr1998 was long now str8
+yr1999 was long now str8
+yr2000 was long now str8
+yr2001 was long now str8
+yr2002 was long now str8
+yr2003 was long now str8
+yr2004 was long now str8
+yr2005 was long now str8
+yr2006 was long now str8
+yr2007 was long now str8
+yr2008 was long now str8
+yr2009 was long now str8
+yr2010 was long now str8
+yr2011 was long now str8
+(note: j = 1969 1970 1971 1972 1973 1974 1975 1976 1977 1978 1979 1980 1981 1982 1983 1984 1985 1986 1987 1988 1989 1990 1991 1992 1993 1994 1995 1996 1997 1998 1999 2000 2
+> 001 2002 2003 2004 2005 2006 2007 2008 2009 2010 2011)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                     1098   ->   47214
+Number of variables                  46   ->       5
+j variable (43 values)                    ->   year
+xij variables:
+               yr1969 yr1970 ... yr2011   ->   yr
+-----------------------------------------------------------------------------
+(note: j = 20 30 7010)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                    47214   ->   15738
+Number of variables                   5   ->       6
+j variable (3 values)          Linecode   ->   (dropped)
+xij variables:
+                                  value   ->   value20 value30 value7010
+-----------------------------------------------------------------------------
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+value20 contains nonnumeric characters; popAllBEA generated as long
+value30 contains nonnumeric characters; incPerCapita generated as long
+value7010 contains nonnumeric characters; empTot generated as long
+FIPS contains nonnumeric characters; replaced as long
+file /tmp/St11237.000004 saved
+
+
+
+
+
+About to list name of temp file
+/tmp/St11237.000004
+
+
+
+
+
+(18 vars, 12080 obs)
+(4394 observations deleted)
+yr2001 already string; no replace
+yr2002 already string; no replace
+yr2003 already string; no replace
+yr2004 already string; no replace
+yr2005 already string; no replace
+yr2006 already string; no replace
+yr2007 already string; no replace
+yr2008 already string; no replace
+yr2009 already string; no replace
+yr2010 already string; no replace
+yr2011 already string; no replace
+(note: j = 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 2011)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                     7686   ->   84546
+Number of variables                  13   ->       4
+j variable (11 values)                    ->   year
+xij variables:
+               yr2001 yr2002 ... yr2011   ->   yr
+-----------------------------------------------------------------------------
+(note: j = 70 100 200 300 400 500 600 700 800 900 1000 1100 1200 1300 1400 1500 1600 1700 1800 1900 2000)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                    84546   ->    4026
+Number of variables                   4   ->      23
+j variable (21 values)         Linecode   ->   (dropped)
+xij variables:
+                                  value   ->   value70 value100 ... value2000
+-----------------------------------------------------------------------------
+(0 real changes made)
+(2512 real changes made)
+(2061 real changes made)
+(1686 real changes made)
+(176 real changes made)
+(48 real changes made)
+(482 real changes made)
+(1 real change made)
+(1160 real changes made)
+(124 real changes made)
+(18 real changes made)
+(26 real changes made)
+(377 real changes made)
+(622 real changes made)
+(210 real changes made)
+(444 real changes made)
+(364 real changes made)
+(160 real changes made)
+(97 real changes made)
+(74 real changes made)
+(0 real changes made)
+value70 contains nonnumeric characters; empFarm generated as int
+value100 contains nonnumeric characters; agriEmp generated as int
+(2611 missing values generated)
+value200 contains nonnumeric characters; miningEmp generated as long
+(2391 missing values generated)
+value300 contains nonnumeric characters; utilEmp generated as int
+(2227 missing values generated)
+value400 contains nonnumeric characters; constrEmp generated as long
+(409 missing values generated)
+value500 contains nonnumeric characters; manufEmp generated as long
+(274 missing values generated)
+value600 contains nonnumeric characters; wtEmp generated as long
+(1219 missing values generated)
+value700 contains nonnumeric characters; rtEmp generated as long
+(75 missing values generated)
+value800 contains nonnumeric characters; transEmp generated as long
+(1785 missing values generated)
+value900 contains nonnumeric characters; infoEmp generated as long
+(753 missing values generated)
+value1000 contains nonnumeric characters; fiEmp generated as long
+(406 missing values generated)
+value1100 contains nonnumeric characters; reEmp generated as long
+(433 missing values generated)
+value1200 contains nonnumeric characters; proSvcEmp generated as long
+(1212 missing values generated)
+value1300 contains nonnumeric characters; mgmtEmp generated as long
+(1698 missing values generated)
+value1400 contains nonnumeric characters; adminEmp generated as long
+(1180 missing values generated)
+value1500 contains nonnumeric characters; educEmp generated as long
+(1425 missing values generated)
+value1600 contains nonnumeric characters; healthEmp generated as long
+(1445 missing values generated)
+value1700 contains nonnumeric characters; artrecEmp generated as long
+(813 missing values generated)
+value1800 contains nonnumeric characters; hospfoodEmp generated as long
+(788 missing values generated)
+value1900 contains nonnumeric characters; othsvcEmp generated as long
+(342 missing values generated)
+value2000 contains nonnumeric characters; pubEmp generated as long
+(agriEmp: 2611 changes made)
+(miningEmp: 2391 changes made)
+(utilEmp: 2227 changes made)
+(constrEmp: 409 changes made)
+(manufEmp: 274 changes made)
+(wtEmp: 1219 changes made)
+(rtEmp: 75 changes made)
+(transEmp: 1785 changes made)
+(infoEmp: 753 changes made)
+(fiEmp: 406 changes made)
+(reEmp: 433 changes made)
+(proSvcEmp: 1212 changes made)
+(mgmtEmp: 1698 changes made)
+(adminEmp: 1180 changes made)
+(educEmp: 1425 changes made)
+(healthEmp: 1445 changes made)
+(artrecEmp: 813 changes made)
+(hospfoodEmp: 788 changes made)
+(othsvcEmp: 342 changes made)
+(pubEmp: 0 changes made)
+FIPS contains nonnumeric characters; replaced as long
+file /tmp/St11237.000006 saved
+(39 vars, 8420 obs)
+(4394 observations deleted)
+yr1969 already string; no replace
+yr1970 already string; no replace
+yr1971 already string; no replace
+yr1972 already string; no replace
+yr1973 already string; no replace
+yr1974 already string; no replace
+yr1975 already string; no replace
+yr1976 already string; no replace
+yr1977 already string; no replace
+yr1978 already string; no replace
+yr1979 already string; no replace
+yr1980 already string; no replace
+yr1981 already string; no replace
+yr1982 already string; no replace
+yr1983 already string; no replace
+yr1984 already string; no replace
+yr1985 already string; no replace
+yr1986 already string; no replace
+yr1987 already string; no replace
+yr1988 already string; no replace
+yr1989 already string; no replace
+yr1990 already string; no replace
+yr1991 already string; no replace
+yr1992 already string; no replace
+yr1993 already string; no replace
+yr1994 already string; no replace
+yr1995 already string; no replace
+yr1996 already string; no replace
+yr1997 already string; no replace
+yr1998 already string; no replace
+yr1999 already string; no replace
+yr2000 already string; no replace
+(note: j = 1969 1970 1971 1972 1973 1974 1975 1976 1977 1978 1979 1980 1981 1982 1983 1984 1985 1986 1987 1988 1989 1990 1991 1992 1993 1994 1995 1996 1997 1998 1999 2000)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                     4026   ->  128832
+Number of variables                  34   ->       4
+j variable (32 values)                    ->   year
+xij variables:
+               yr1969 yr1970 ... yr2000   ->   yr
+-----------------------------------------------------------------------------
+(note: j = 70 100 200 300 400 500 610 620 700 800 900)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                   128832   ->   11712
+Number of variables                   4   ->      13
+j variable (11 values)         Linecode   ->   (dropped)
+xij variables:
+                                  value   ->   value70 value100 ... value900
+-----------------------------------------------------------------------------
+(0 real changes made)
+(1384 real changes made)
+(2108 real changes made)
+(127 real changes made)
+(21 real changes made)
+(337 real changes made)
+(152 real changes made)
+(10 real changes made)
+(66 real changes made)
+(122 real changes made)
+(0 real changes made)
+value70 contains nonnumeric characters; empFarm generated as long
+value100 contains nonnumeric characters; agriEmp generated as long
+(1949 missing values generated)
+value200 contains nonnumeric characters; miningEmp generated as long
+(2857 missing values generated)
+value300 contains nonnumeric characters; constrEmp generated as long
+(379 missing values generated)
+value400 contains nonnumeric characters; manufEmp generated as long
+(181 missing values generated)
+value500 contains nonnumeric characters; transEmp generated as long
+(1159 missing values generated)
+value610 contains nonnumeric characters; wtEmp generated as long
+(958 missing values generated)
+value620 contains nonnumeric characters; rtEmp generated as long
+(50 missing values generated)
+value700 contains nonnumeric characters; fireEmp generated as long
+(491 missing values generated)
+value800 contains nonnumeric characters; serviceEmp generated as long
+(623 missing values generated)
+value900 contains nonnumeric characters; pubEmp generated as long
+FIPS contains nonnumeric characters; replaced as long
+file /tmp/St11237.000005 saved
+(39 vars, 41360 obs)
+(40628 observations deleted)
+yr1969 already string; no replace
+yr1970 already string; no replace
+yr1971 already string; no replace
+yr1972 already string; no replace
+yr1973 already string; no replace
+yr1974 already string; no replace
+yr1975 already string; no replace
+yr1976 already string; no replace
+yr1977 already string; no replace
+yr1978 already string; no replace
+yr1979 already string; no replace
+yr1980 already string; no replace
+yr1981 already string; no replace
+yr1982 already string; no replace
+yr1983 already string; no replace
+yr1984 already string; no replace
+yr1985 already string; no replace
+yr1986 already string; no replace
+yr1987 already string; no replace
+yr1988 already string; no replace
+yr1989 already string; no replace
+yr1990 already string; no replace
+yr1991 already string; no replace
+yr1992 already string; no replace
+yr1993 already string; no replace
+yr1994 already string; no replace
+yr1995 already string; no replace
+yr1996 already string; no replace
+yr1997 already string; no replace
+yr1998 already string; no replace
+yr1999 already string; no replace
+yr2000 already string; no replace
+(note: j = 1969 1970 1971 1972 1973 1974 1975 1976 1977 1978 1979 1980 1981 1982 1983 1984 1985 1986 1987 1988 1989 1990 1991 1992 1993 1994 1995 1996 1997 1998 1999 2000)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                      732   ->   23424
+Number of variables                  34   ->       4
+j variable (32 values)                    ->   year
+xij variables:
+               yr1969 yr1970 ... yr2000   ->   yr
+-----------------------------------------------------------------------------
+(note: j = 400 800)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                    23424   ->   11712
+Number of variables                   4   ->       4
+j variable (2 values)          Linecode   ->   (dropped)
+xij variables:
+                                  value   ->   value400 value800
+-----------------------------------------------------------------------------
+(21 real changes made)
+(114 real changes made)
+value800 contains nonnumeric characters; serviceInc generated as long
+(623 missing values generated)
+value400 contains nonnumeric characters; manufInc generated as long
+(181 missing values generated)
+FIPS contains nonnumeric characters; replaced as long
+file /tmp/St11237.000007 saved
+(18 vars, 47948 obs)
+(40628 observations deleted)
+yr2001 already string; no replace
+yr2002 already string; no replace
+yr2003 already string; no replace
+yr2004 already string; no replace
+yr2005 already string; no replace
+yr2006 already string; no replace
+yr2007 already string; no replace
+yr2008 already string; no replace
+yr2009 already string; no replace
+yr2010 already string; no replace
+yr2011 already string; no replace
+(note: j = 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 2011)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                     7320   ->   80520
+Number of variables                  13   ->       4
+j variable (11 values)                    ->   year
+xij variables:
+               yr2001 yr2002 ... yr2011   ->   yr
+-----------------------------------------------------------------------------
+(note: j = 100 200 300 400 500 600 700 800 900 1000 1100 1200 1300 1400 1500 1600 1700 1800 1900 2000)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                    80520   ->    4026
+Number of variables                   4   ->      22
+j variable (20 values)         Linecode   ->   (dropped)
+xij variables:
+                                  value   ->   value100 value200 ... value2000
+-----------------------------------------------------------------------------
+(2442 real changes made)
+(1940 real changes made)
+(1643 real changes made)
+(158 real changes made)
+(51 real changes made)
+(456 real changes made)
+(1 real change made)
+(1112 real changes made)
+(113 real changes made)
+(21 real changes made)
+(20 real changes made)
+(302 real changes made)
+(537 real changes made)
+(148 real changes made)
+(365 real changes made)
+(216 real changes made)
+(120 real changes made)
+(90 real changes made)
+(75 real changes made)
+(0 real changes made)
+value100 contains nonnumeric characters; agriInc generated as long
+(2611 missing values generated)
+value200 contains nonnumeric characters; miningInc generated as long
+(2394 missing values generated)
+value300 contains nonnumeric characters; utilInc generated as long
+(2227 missing values generated)
+value400 contains nonnumeric characters; constrInc generated as long
+(409 missing values generated)
+value500 contains nonnumeric characters; manufInc generated as long
+(274 missing values generated)
+value600 contains nonnumeric characters; wtInc generated as long
+(1219 missing values generated)
+value700 contains nonnumeric characters; rtInc generated as long
+(75 missing values generated)
+value800 contains nonnumeric characters; transInc generated as long
+(1785 missing values generated)
+value900 contains nonnumeric characters; infoInc generated as long
+(753 missing values generated)
+value1000 contains nonnumeric characters; fiInc generated as long
+(406 missing values generated)
+value1100 contains nonnumeric characters; reInc generated as long
+(433 missing values generated)
+value1200 contains nonnumeric characters; proSvcInc generated as long
+(1212 missing values generated)
+value1300 contains nonnumeric characters; mgmtInc generated as long
+(1696 missing values generated)
+value1400 contains nonnumeric characters; adminInc generated as long
+(1180 missing values generated)
+value1500 contains nonnumeric characters; educInc generated as long
+(1425 missing values generated)
+value1600 contains nonnumeric characters; healthInc generated as long
+(1445 missing values generated)
+value1700 contains nonnumeric characters; artrecInc generated as long
+(813 missing values generated)
+value1800 contains nonnumeric characters; hospfoodInc generated as long
+(788 missing values generated)
+value1900 contains nonnumeric characters; othsvcInc generated as long
+(342 missing values generated)
+value2000 contains nonnumeric characters; pubInc generated as long
+(agriInc: 2611 changes made)
+(miningInc: 2394 changes made)
+(utilInc: 2227 changes made)
+(constrInc: 409 changes made)
+(manufInc: 274 changes made)
+(wtInc: 1219 changes made)
+(rtInc: 75 changes made)
+(transInc: 1785 changes made)
+(infoInc: 753 changes made)
+(fiInc: 406 changes made)
+(reInc: 433 changes made)
+(proSvcInc: 1212 changes made)
+(mgmtInc: 1696 changes made)
+(adminInc: 1180 changes made)
+(educInc: 1425 changes made)
+(healthInc: 1445 changes made)
+(artrecInc: 813 changes made)
+(hospfoodInc: 788 changes made)
+(othsvcInc: 342 changes made)
+(pubInc: 0 changes made)
+FIPS contains nonnumeric characters; replaced as long
+file /tmp/St11237.000008 saved
+(50 vars, 13250 obs)
+(11522 observations deleted)
+yr1969 already string; no replace
+yr1970 already string; no replace
+yr1971 already string; no replace
+yr1972 already string; no replace
+yr1973 already string; no replace
+yr1974 already string; no replace
+yr1975 already string; no replace
+yr1976 already string; no replace
+yr1977 already string; no replace
+yr1978 already string; no replace
+yr1979 already string; no replace
+yr1980 already string; no replace
+yr1981 already string; no replace
+yr1982 was long now str6
+yr1983 was long now str6
+yr1984 was long now str6
+yr1985 was long now str6
+yr1986 was long now str6
+yr1987 was long now str6
+yr1988 was long now str6
+yr1989 was long now str6
+yr1990 was long now str6
+yr1991 was long now str6
+yr1992 was long now str6
+yr1993 was long now str6
+yr1994 was long now str6
+yr1995 was long now str6
+yr1996 was long now str6
+yr1997 was long now str6
+yr1998 was long now str6
+yr1999 was long now str6
+yr2000 was long now str6
+yr2001 was long now str6
+yr2002 was long now str6
+yr2003 was long now str6
+yr2004 was long now str6
+yr2005 was long now str6
+yr2006 was long now str6
+yr2007 was long now str6
+yr2008 was long now str6
+yr2009 was long now str6
+yr2010 was long now str6
+yr2011 was long now str6
+(note: j = 1969 1970 1971 1972 1973 1974 1975 1976 1977 1978 1979 1980 1981 1982 1983 1984 1985 1986 1987 1988 1989 1990 1991 1992 1993 1994 1995 1996 1997 1998 1999 2000 2
+> 001 2002 2003 2004 2005 2006 2007 2008 2009 2010 2011)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                     1728   ->   74304
+Number of variables                  46   ->       5
+j variable (43 values)                    ->   year
+xij variables:
+               yr1969 yr1970 ... yr2011   ->   yr
+-----------------------------------------------------------------------------
+(note: j = 20 30 7010)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                    74304   ->   24768
+Number of variables                   5   ->       6
+j variable (3 values)          Linecode   ->   (dropped)
+xij variables:
+                                  value   ->   value20 value30 value7010
+-----------------------------------------------------------------------------
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+value20 contains nonnumeric characters; popAllBEA generated as long
+(13 missing values generated)
+value30 contains nonnumeric characters; incPerCapita generated as long
+(13 missing values generated)
+value7010 contains nonnumeric characters; empTot generated as long
+(13 missing values generated)
+FIPS contains nonnumeric characters; replaced as long
+file /tmp/St11237.000009 saved
+
+
+
+
+
+About to list name of temp file
+/tmp/St11237.000009
+
+
+
+
+
+(18 vars, 19010 obs)
+(6914 observations deleted)
+yr2001 already string; no replace
+yr2002 already string; no replace
+yr2003 already string; no replace
+yr2004 already string; no replace
+yr2005 already string; no replace
+yr2006 already string; no replace
+yr2007 already string; no replace
+yr2008 already string; no replace
+yr2009 already string; no replace
+yr2010 already string; no replace
+yr2011 already string; no replace
+(note: j = 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 2011)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                    12096   ->  133056
+Number of variables                  13   ->       4
+j variable (11 values)                    ->   year
+xij variables:
+               yr2001 yr2002 ... yr2011   ->   yr
+-----------------------------------------------------------------------------
+(note: j = 70 100 200 300 400 500 600 700 800 900 1000 1100 1200 1300 1400 1500 1600 1700 1800 1900 2000)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                   133056   ->    6336
+Number of variables                   4   ->      23
+j variable (21 values)         Linecode   ->   (dropped)
+xij variables:
+                                  value   ->   value70 value100 ... value2000
+-----------------------------------------------------------------------------
+(0 real changes made)
+(3757 real changes made)
+(3239 real changes made)
+(2764 real changes made)
+(290 real changes made)
+(138 real changes made)
+(945 real changes made)
+(9 real changes made)
+(1860 real changes made)
+(297 real changes made)
+(213 real changes made)
+(200 real changes made)
+(1967 real changes made)
+(2958 real changes made)
+(1300 real changes made)
+(2277 real changes made)
+(2223 real changes made)
+(547 real changes made)
+(362 real changes made)
+(158 real changes made)
+(0 real changes made)
+value70 contains nonnumeric characters; empFarm generated as int
+value100 contains nonnumeric characters; agriEmp generated as int
+(3777 missing values generated)
+value200 contains nonnumeric characters; miningEmp generated as int
+(3327 missing values generated)
+value300 contains nonnumeric characters; utilEmp generated as int
+(2874 missing values generated)
+value400 contains nonnumeric characters; constrEmp generated as int
+(422 missing values generated)
+value500 contains nonnumeric characters; manufEmp generated as int
+(280 missing values generated)
+value600 contains nonnumeric characters; wtEmp generated as int
+(1123 missing values generated)
+value700 contains nonnumeric characters; rtEmp generated as int
+(92 missing values generated)
+value800 contains nonnumeric characters; transEmp generated as int
+(1986 missing values generated)
+value900 contains nonnumeric characters; infoEmp generated as int
+(622 missing values generated)
+value1000 contains nonnumeric characters; fiEmp generated as int
+(446 missing values generated)
+value1100 contains nonnumeric characters; reEmp generated as int
+(431 missing values generated)
+value1200 contains nonnumeric characters; proSvcEmp generated as int
+(2140 missing values generated)
+value1300 contains nonnumeric characters; mgmtEmp generated as int
+(3151 missing values generated)
+value1400 contains nonnumeric characters; adminEmp generated as int
+(1584 missing values generated)
+value1500 contains nonnumeric characters; educEmp generated as int
+(2410 missing values generated)
+value1600 contains nonnumeric characters; healthEmp generated as int
+(2437 missing values generated)
+value1700 contains nonnumeric characters; artrecEmp generated as int
+(751 missing values generated)
+value1800 contains nonnumeric characters; hospfoodEmp generated as int
+(708 missing values generated)
+value1900 contains nonnumeric characters; othsvcEmp generated as int
+(271 missing values generated)
+value2000 contains nonnumeric characters; pubEmp generated as int
+(agriEmp: 3777 changes made)
+(miningEmp: 3327 changes made)
+(utilEmp: 2874 changes made)
+(constrEmp: 422 changes made)
+(manufEmp: 280 changes made)
+(wtEmp: 1123 changes made)
+(rtEmp: 92 changes made)
+(transEmp: 1986 changes made)
+(infoEmp: 622 changes made)
+(fiEmp: 446 changes made)
+(reEmp: 431 changes made)
+(proSvcEmp: 2140 changes made)
+(mgmtEmp: 3151 changes made)
+(adminEmp: 1584 changes made)
+(educEmp: 2410 changes made)
+(healthEmp: 2437 changes made)
+(artrecEmp: 751 changes made)
+(hospfoodEmp: 708 changes made)
+(othsvcEmp: 271 changes made)
+(pubEmp: 0 changes made)
+FIPS contains nonnumeric characters; replaced as long
+file /tmp/St11237.00000b saved
+(39 vars, 13250 obs)
+(6914 observations deleted)
+yr1969 already string; no replace
+yr1970 already string; no replace
+yr1971 already string; no replace
+yr1972 already string; no replace
+yr1973 already string; no replace
+yr1974 already string; no replace
+yr1975 already string; no replace
+yr1976 already string; no replace
+yr1977 already string; no replace
+yr1978 already string; no replace
+yr1979 already string; no replace
+yr1980 already string; no replace
+yr1981 already string; no replace
+yr1982 already string; no replace
+yr1983 already string; no replace
+yr1984 already string; no replace
+yr1985 already string; no replace
+yr1986 already string; no replace
+yr1987 already string; no replace
+yr1988 already string; no replace
+yr1989 already string; no replace
+yr1990 already string; no replace
+yr1991 already string; no replace
+yr1992 already string; no replace
+yr1993 already string; no replace
+yr1994 already string; no replace
+yr1995 already string; no replace
+yr1996 already string; no replace
+yr1997 already string; no replace
+yr1998 already string; no replace
+yr1999 already string; no replace
+yr2000 already string; no replace
+(note: j = 1969 1970 1971 1972 1973 1974 1975 1976 1977 1978 1979 1980 1981 1982 1983 1984 1985 1986 1987 1988 1989 1990 1991 1992 1993 1994 1995 1996 1997 1998 1999 2000)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                     6336   ->  202752
+Number of variables                  34   ->       4
+j variable (32 values)                    ->   year
+xij variables:
+               yr1969 yr1970 ... yr2000   ->   yr
+-----------------------------------------------------------------------------
+(note: j = 70 100 200 300 400 500 610 620 700 800 900)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                   202752   ->   18432
+Number of variables                   4   ->      13
+j variable (11 values)         Linecode   ->   (dropped)
+xij variables:
+                                  value   ->   value70 value100 ... value900
+-----------------------------------------------------------------------------
+(0 real changes made)
+(2257 real changes made)
+(4841 real changes made)
+(316 real changes made)
+(76 real changes made)
+(356 real changes made)
+(399 real changes made)
+(21 real changes made)
+(222 real changes made)
+(335 real changes made)
+(0 real changes made)
+value70 contains nonnumeric characters; empFarm generated as int
+(13 missing values generated)
+value100 contains nonnumeric characters; agriEmp generated as int
+(2352 missing values generated)
+value200 contains nonnumeric characters; miningEmp generated as int
+(5050 missing values generated)
+value300 contains nonnumeric characters; constrEmp generated as int
+(444 missing values generated)
+value400 contains nonnumeric characters; manufEmp generated as int
+(219 missing values generated)
+value500 contains nonnumeric characters; transEmp generated as int
+(561 missing values generated)
+value610 contains nonnumeric characters; wtEmp generated as int
+(675 missing values generated)
+value620 contains nonnumeric characters; rtEmp generated as int
+(49 missing values generated)
+value700 contains nonnumeric characters; fireEmp generated as int
+(430 missing values generated)
+value800 contains nonnumeric characters; serviceEmp generated as long
+(434 missing values generated)
+value900 contains nonnumeric characters; pubEmp generated as long
+(13 missing values generated)
+FIPS contains nonnumeric characters; replaced as long
+file /tmp/St11237.00000a saved
+(39 vars, 65090 obs)
+(63938 observations deleted)
+yr1969 already string; no replace
+yr1970 already string; no replace
+yr1971 already string; no replace
+yr1972 already string; no replace
+yr1973 already string; no replace
+yr1974 already string; no replace
+yr1975 already string; no replace
+yr1976 already string; no replace
+yr1977 already string; no replace
+yr1978 already string; no replace
+yr1979 already string; no replace
+yr1980 already string; no replace
+yr1981 already string; no replace
+yr1982 already string; no replace
+yr1983 already string; no replace
+yr1984 already string; no replace
+yr1985 already string; no replace
+yr1986 already string; no replace
+yr1987 already string; no replace
+yr1988 already string; no replace
+yr1989 already string; no replace
+yr1990 already string; no replace
+yr1991 already string; no replace
+yr1992 already string; no replace
+yr1993 already string; no replace
+yr1994 already string; no replace
+yr1995 already string; no replace
+yr1996 already string; no replace
+yr1997 already string; no replace
+yr1998 already string; no replace
+yr1999 already string; no replace
+yr2000 already string; no replace
+(note: j = 1969 1970 1971 1972 1973 1974 1975 1976 1977 1978 1979 1980 1981 1982 1983 1984 1985 1986 1987 1988 1989 1990 1991 1992 1993 1994 1995 1996 1997 1998 1999 2000)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                     1152   ->   36864
+Number of variables                  34   ->       4
+j variable (32 values)                    ->   year
+xij variables:
+               yr1969 yr1970 ... yr2000   ->   yr
+-----------------------------------------------------------------------------
+(note: j = 400 800)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                    36864   ->   18432
+Number of variables                   4   ->       4
+j variable (2 values)          Linecode   ->   (dropped)
+xij variables:
+                                  value   ->   value400 value800
+-----------------------------------------------------------------------------
+(73 real changes made)
+(316 real changes made)
+value800 contains nonnumeric characters; serviceInc generated as long
+(434 missing values generated)
+value400 contains nonnumeric characters; manufInc generated as long
+(226 missing values generated)
+FIPS contains nonnumeric characters; replaced as long
+file /tmp/St11237.00000c saved
+(18 vars, 75458 obs)
+(63938 observations deleted)
+yr2001 already string; no replace
+yr2002 already string; no replace
+yr2003 already string; no replace
+yr2004 already string; no replace
+yr2005 already string; no replace
+yr2006 already string; no replace
+yr2007 already string; no replace
+yr2008 already string; no replace
+yr2009 already string; no replace
+yr2010 already string; no replace
+yr2011 already string; no replace
+(note: j = 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 2011)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                    11520   ->  126720
+Number of variables                  13   ->       4
+j variable (11 values)                    ->   year
+xij variables:
+               yr2001 yr2002 ... yr2011   ->   yr
+-----------------------------------------------------------------------------
+(note: j = 100 200 300 400 500 600 700 800 900 1000 1100 1200 1300 1400 1500 1600 1700 1800 1900 2000)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                   126720   ->    6336
+Number of variables                   4   ->      22
+j variable (20 values)         Linecode   ->   (dropped)
+xij variables:
+                                  value   ->   value100 value200 ... value2000
+-----------------------------------------------------------------------------
+(3743 real changes made)
+(3251 real changes made)
+(2716 real changes made)
+(246 real changes made)
+(136 real changes made)
+(931 real changes made)
+(8 real changes made)
+(1816 real changes made)
+(216 real changes made)
+(152 real changes made)
+(149 real changes made)
+(1908 real changes made)
+(2945 real changes made)
+(1218 real changes made)
+(2254 real changes made)
+(2133 real changes made)
+(494 real changes made)
+(334 real changes made)
+(139 real changes made)
+(0 real changes made)
+value100 contains nonnumeric characters; agriInc generated as long
+(3786 missing values generated)
+value200 contains nonnumeric characters; miningInc generated as long
+(3375 missing values generated)
+value300 contains nonnumeric characters; utilInc generated as long
+(2834 missing values generated)
+value400 contains nonnumeric characters; constrInc generated as long
+(422 missing values generated)
+value500 contains nonnumeric characters; manufInc generated as long
+(280 missing values generated)
+value600 contains nonnumeric characters; wtInc generated as long
+(1123 missing values generated)
+value700 contains nonnumeric characters; rtInc generated as long
+(92 missing values generated)
+value800 contains nonnumeric characters; transInc generated as long
+(1986 missing values generated)
+value900 contains nonnumeric characters; infoInc generated as long
+(621 missing values generated)
+value1000 contains nonnumeric characters; fiInc generated as long
+(446 missing values generated)
+value1100 contains nonnumeric characters; reInc generated as long
+(431 missing values generated)
+value1200 contains nonnumeric characters; proSvcInc generated as long
+(2140 missing values generated)
+value1300 contains nonnumeric characters; mgmtInc generated as long
+(3123 missing values generated)
+value1400 contains nonnumeric characters; adminInc generated as long
+(1584 missing values generated)
+value1500 contains nonnumeric characters; educInc generated as long
+(2413 missing values generated)
+value1600 contains nonnumeric characters; healthInc generated as long
+(2437 missing values generated)
+value1700 contains nonnumeric characters; artrecInc generated as long
+(754 missing values generated)
+value1800 contains nonnumeric characters; hospfoodInc generated as long
+(708 missing values generated)
+value1900 contains nonnumeric characters; othsvcInc generated as long
+(271 missing values generated)
+value2000 contains nonnumeric characters; pubInc generated as long
+(agriInc: 3786 changes made)
+(miningInc: 3375 changes made)
+(utilInc: 2834 changes made)
+(constrInc: 422 changes made)
+(manufInc: 280 changes made)
+(wtInc: 1123 changes made)
+(rtInc: 92 changes made)
+(transInc: 1986 changes made)
+(infoInc: 621 changes made)
+(fiInc: 446 changes made)
+(reInc: 431 changes made)
+(proSvcInc: 2140 changes made)
+(mgmtInc: 3123 changes made)
+(adminInc: 1584 changes made)
+(educInc: 2413 changes made)
+(healthInc: 2437 changes made)
+(artrecInc: 754 changes made)
+(hospfoodInc: 708 changes made)
+(othsvcInc: 271 changes made)
+(pubInc: 0 changes made)
+FIPS contains nonnumeric characters; replaced as long
+file /tmp/St11237.00000d saved
+
+. 
+. tempfile IncEmpFIPS
+
+. tempfile SectorEmpFIPS
+
+. tempfile SectorIncFIPS
+
+. 
+. clear
+
+. use `IncEmpMSA'
+
+. foreach state in `statesNot' {
+  2.         append using `IncEmp`state''
+  3. }
+
+. sort FIPS year
+
+. xtset FIPS year
+       panel variable:  FIPS (strongly balanced)
+        time variable:  year, 1969 to 2011
+                delta:  1 unit
+
+. save `IncEmpFIPS'
+file /tmp/St11237.00002i saved
+
+. 
+. clear
+
+. use `SectorEmpOldMSA'
+
+. append using `SectorEmpNewMSA'
+
+. foreach state in `statesNot' {
+  2.         append using `SectorEmpOld`state''
+  3.         append using `SectorEmpNew`state''
+  4. }
+
+. sort FIPS year
+
+. xtset FIPS year
+       panel variable:  FIPS (strongly balanced)
+        time variable:  year, 1969 to 2011
+                delta:  1 unit
+
+. save `SectorEmpFIPS'
+file /tmp/St11237.00002j saved
+
+. 
+. clear
+
+. use `SectorIncOldMSA'
+
+. append using `SectorIncNewMSA'
+
+. foreach state in `statesNot' {
+  2.         append using `SectorIncOld`state''
+  3.         append using `SectorIncNew`state''
+  4. }
+
+. sort FIPS year
+
+. xtset FIPS year
+       panel variable:  FIPS (strongly balanced)
+        time variable:  year, 1969 to 2011
+                delta:  1 unit
+
+. save `SectorIncFIPS'
+file /tmp/St11237.00002k saved
+
+. 
+. clear
+
+. use `IncEmpFIPS'
+
+. merge 1:1 FIPS year using `SectorEmpFIPS', nogen
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                            40,506  
+    -----------------------------------------
+
+. merge 1:1 FIPS year using `SectorIncFIPS', nogen
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                            40,506  
+    -----------------------------------------
+
+. 
+. * aggregate service and manufacturing for years 2001 -
+. replace manufEmp   = ind2Emp                 if year>2000
+(0 real changes made)
+
+. replace serviceEmp = ind6Emp+ind7Emp+ind8Emp if year>2000
+(10362 real changes made)
+
+. replace manufInc   = ind2Inc                 if year>2000
+(46 real changes made)
+
+. replace serviceInc = ind6Inc+ind7Inc+ind8Inc if year>2000
+(10362 real changes made)
+
+. 
+. * get sector-specific employment shares and per-worker income
+. gen farmShare           = (100)*empFarm/empTot
+(13 missing values generated)
+
+. gen manufShare          = (100)*manufEmp/empTot
+(400 missing values generated)
+
+. gen serviceShare        = (100)*serviceEmp/empTot
+(1057 missing values generated)
+
+. gen manufIncPerCapita   = manufInc/manufEmp
+(961 missing values generated)
+
+. gen serviceIncPerCapita = serviceInc/serviceEmp
+(1193 missing values generated)
+
+. foreach x of numlist 1/9 {
+  2.         gen ind`x'Share        = (100)*ind`x'Emp/empTot
+  3.         gen ind`x'IncPerCapita = (100)*ind`x'Inc/ind`x'Emp
+  4. }
+(30144 missing values generated)
+(30710 missing values generated)
+(30144 missing values generated)
+(30698 missing values generated)
+(30144 missing values generated)
+(30250 missing values generated)
+(30144 missing values generated)
+(31069 missing values generated)
+(30144 missing values generated)
+(30871 missing values generated)
+(30144 missing values generated)
+(31121 missing values generated)
+(30144 missing values generated)
+(31219 missing values generated)
+(30144 missing values generated)
+(30531 missing values generated)
+(30144 missing values generated)
+(30144 missing values generated)
+
+. * divide income variables by 1000
+. replace incPerCapita        = incPerCapita/1000
+incPerCapita was long now double
+(40493 real changes made)
+
+. * replace manufIncPerCapita   = manufIncPerCapita/1000    // these are already in 1000s of dollars
+. * replace serviceIncPerCapita = serviceIncPerCapita/1000  // these are already in 1000s of dollars
+. 
+. * get growth rates in sector-specific employment
+. bys FIPS (year): gen growthEmp     = (100)*(empTot[_n]-empTot[_n-1])/empTot[_n-1]
+(955 missing values generated)
+
+. bys FIPS (year): gen growthManuf   = manufShare[_n-1]*((manufEmp[_n]-manufEmp[_n-1])/manufEmp[_n-1])
+(1951 missing values generated)
+
+. bys FIPS (year): gen growthService = serviceShare[_n-1]*((serviceEmp[_n]-serviceEmp[_n-1])/serviceEmp[_n-1])
+(2235 missing values generated)
+
+. foreach x of numlist 1/9 {
+  2.         bys FIPS (year): gen growthInd`x' = ind`x'Share[_n-1]*((ind`x'Emp[_n]-ind`x'Emp[_n-1])/ind`x'Emp[_n-1])
+  3. }
+(31598 missing values generated)
+(31581 missing values generated)
+(31180 missing values generated)
+(31928 missing values generated)
+(31746 missing values generated)
+(31987 missing values generated)
+(32058 missing values generated)
+(31438 missing values generated)
+(31086 missing values generated)
+
+. 
+. generat m_empTot              = (empTot             >=.)
+
+. generat m_incPerCapita        = (incPerCapita       >=.)
+
+. generat m_manufEmp            = (manufEmp           >=.)
+
+. generat m_serviceEmp          = (serviceEmp         >=.)
+
+. generat m_manufInc            = (manufInc           >=.)
+
+. generat m_serviceInc          = (serviceInc         >=.)
+
+. generat m_manufShare          = (manufShare         >=.)
+
+. generat m_serviceShare        = (serviceShare       >=.)
+
+. generat m_manufIncPerCapita   = (manufIncPerCapita  >=.)
+
+. generat m_serviceIncPerCapita = (serviceIncPerCapita>=.)
+
+. generat m_growthEmp           = (growthEmp          >=.)
+
+. generat m_growthManuf         = (growthManuf        >=.)
+
+. generat m_growthService       = (growthService      >=.)
+
+. 
+. foreach x of numlist 1/9 {
+  2.         generat m_ind`x'Emp           = (ind`x'Emp         >=.)
+  3.         generat m_ind`x'Inc           = (ind`x'Inc         >=.)
+  4.         generat m_ind`x'IncPerCapita  = (ind`x'IncPerCapita>=.)
+  5.         generat m_ind`x'Share         = (ind`x'Share       >=.)
+  6.         generat m_growthInd`x'        = (growthInd`x'      >=.)
+  7. }
+
+. 
+. replace empTot              = 0 if m_empTot              == 1
+(13 real changes made)
+
+. replace incPerCapita        = 0 if m_incPerCapita        == 1
+(13 real changes made)
+
+. replace manufEmp            = 0 if m_manufEmp            == 1
+(400 real changes made)
+
+. replace serviceEmp          = 0 if m_serviceEmp          == 1
+(1057 real changes made)
+
+. replace manufInc            = 0 if m_manufInc            == 1
+(407 real changes made)
+
+. replace serviceInc          = 0 if m_serviceInc          == 1
+(1057 real changes made)
+
+. replace manufShare          = 0 if m_manufShare          == 1
+(400 real changes made)
+
+. replace serviceShare        = 0 if m_serviceShare        == 1
+(1057 real changes made)
+
+. replace manufIncPerCapita   = 0 if m_manufIncPerCapita   == 1
+(961 real changes made)
+
+. replace serviceIncPerCapita = 0 if m_serviceIncPerCapita == 1
+(1193 real changes made)
+
+. replace growthEmp           = 0 if m_growthEmp           == 1
+(955 real changes made)
+
+. replace growthManuf         = 0 if m_growthManuf         == 1
+(1951 real changes made)
+
+. replace growthService       = 0 if m_growthService       == 1
+(2235 real changes made)
+
+. 
+. foreach x of numlist 1/9 {
+  2.         replace ind`x'Emp           = 0 if m_ind`x'Emp         ==1
+  3.         replace ind`x'Inc           = 0 if m_ind`x'Inc         ==1
+  4.         replace ind`x'IncPerCapita  = 0 if m_ind`x'IncPerCapita==1
+  5.         replace ind`x'Share         = 0 if m_ind`x'Share       ==1
+  6.         replace growthInd`x'        = 0 if m_growthInd`x'      ==1
+  7. }
+(30144 real changes made)
+(30144 real changes made)
+(30710 real changes made)
+(30144 real changes made)
+(31598 real changes made)
+(30144 real changes made)
+(30144 real changes made)
+(30698 real changes made)
+(30144 real changes made)
+(31581 real changes made)
+(30144 real changes made)
+(30144 real changes made)
+(30250 real changes made)
+(30144 real changes made)
+(31180 real changes made)
+(30144 real changes made)
+(30144 real changes made)
+(31069 real changes made)
+(30144 real changes made)
+(31928 real changes made)
+(30144 real changes made)
+(30144 real changes made)
+(30871 real changes made)
+(30144 real changes made)
+(31746 real changes made)
+(30144 real changes made)
+(30144 real changes made)
+(31121 real changes made)
+(30144 real changes made)
+(31987 real changes made)
+(30144 real changes made)
+(30144 real changes made)
+(31219 real changes made)
+(30144 real changes made)
+(32058 real changes made)
+(30144 real changes made)
+(30144 real changes made)
+(30531 real changes made)
+(30144 real changes made)
+(31438 real changes made)
+(30144 real changes made)
+(30144 real changes made)
+(30144 real changes made)
+(30144 real changes made)
+(31086 real changes made)
+
+. 
+. // fix coding of Susanville, CA muSA (listed as 45000 by Census but 45010 here)
+. recode FIPS (45010 = 45000)
+(FIPS: 43 changes made)
+
+. 
+. ren FIPS cbsa_code
+
+. ren AreaName cbsaname
+
+. xtset cbsa_code year
+       panel variable:  cbsa_code (strongly balanced)
+        time variable:  year, 1969 to 2011
+                delta:  1 unit
+
+. 
+. order cbsa_code year cbsaname popAllBEA growthEmp growthManuf growthService growthInd? ind?IncPerCapita ind?Emp ind?Inc empTot ind?Share farmShare incPerCapita manufIncPe
+> rCapita serviceIncPerCapita m_growthEmp m_growthManuf m_growthService m_incPerCapita m_manufIncPerCapita m_serviceIncPerCapita m_growthInd? m_ind?IncPerCapita m_ind?Share
+>  m_ind?Emp m_empTot
+
+. keep  cbsa_code year cbsaname popAllBEA growthEmp growthManuf growthService growthInd? ind?IncPerCapita ind?Emp ind?Inc empTot ind?Share farmShare incPerCapita manufIncPe
+> rCapita serviceIncPerCapita m_growthEmp m_growthManuf m_growthService m_incPerCapita m_manufIncPerCapita m_serviceIncPerCapita m_growthInd? m_ind?IncPerCapita m_ind?Share
+>  m_ind?Emp m_empTot
+
+. sort  cbsa_code year
+
+. 
+. save BEA_MSA.dta, replace
+file BEA_MSA.dta saved
+
+. 
+. reshape wide popAllBEA growthEmp growthManuf growthService growthInd? ind?IncPerCapita ind?Emp ind?Inc empTot farmShare ind?Share incPerCapita manufIncPerCapita serviceIn
+> cPerCapita m_growthEmp m_growthManuf m_growthService m_incPerCapita m_manufIncPerCapita m_serviceIncPerCapita m_growthInd? m_ind?IncPerCapita m_ind?Share m_ind?Emp m_empT
+> ot, i(cbsa_code cbsaname) j(year)
+(note: j = 1969 1970 1971 1972 1973 1974 1975 1976 1977 1978 1979 1980 1981 1982 1983 1984 1985 1986 1987 1988 1989 1990 1991 1992 1993 1994 1995 1996 1997 1998 1999 2000 2
+> 001 2002 2003 2004 2005 2006 2007 2008 2009 2010 2011)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                    40506   ->     942
+Number of variables                 100   ->    4173
+j variable (43 values)             year   ->   (dropped)
+xij variables:
+                              popAllBEA   ->   popAllBEA1969 popAllBEA1970 ... popAllBEA2011
+                              growthEmp   ->   growthEmp1969 growthEmp1970 ... growthEmp2011
+                            growthManuf   ->   growthManuf1969 growthManuf1970 ... growthManuf2011
+                          growthService   ->   growthService1969 growthService1970 ... growthService2011
+                             growthInd1   ->   growthInd11969 growthInd11970 ... growthInd12011
+                             growthInd2   ->   growthInd21969 growthInd21970 ... growthInd22011
+                             growthInd3   ->   growthInd31969 growthInd31970 ... growthInd32011
+                             growthInd4   ->   growthInd41969 growthInd41970 ... growthInd42011
+                             growthInd5   ->   growthInd51969 growthInd51970 ... growthInd52011
+                             growthInd6   ->   growthInd61969 growthInd61970 ... growthInd62011
+                             growthInd7   ->   growthInd71969 growthInd71970 ... growthInd72011
+                             growthInd8   ->   growthInd81969 growthInd81970 ... growthInd82011
+                             growthInd9   ->   growthInd91969 growthInd91970 ... growthInd92011
+                       ind1IncPerCapita   ->   ind1IncPerCapita1969 ind1IncPerCapita1970 ... ind1IncPerCapita2011
+                       ind2IncPerCapita   ->   ind2IncPerCapita1969 ind2IncPerCapita1970 ... ind2IncPerCapita2011
+                       ind3IncPerCapita   ->   ind3IncPerCapita1969 ind3IncPerCapita1970 ... ind3IncPerCapita2011
+                       ind4IncPerCapita   ->   ind4IncPerCapita1969 ind4IncPerCapita1970 ... ind4IncPerCapita2011
+                       ind5IncPerCapita   ->   ind5IncPerCapita1969 ind5IncPerCapita1970 ... ind5IncPerCapita2011
+                       ind6IncPerCapita   ->   ind6IncPerCapita1969 ind6IncPerCapita1970 ... ind6IncPerCapita2011
+                       ind7IncPerCapita   ->   ind7IncPerCapita1969 ind7IncPerCapita1970 ... ind7IncPerCapita2011
+                       ind8IncPerCapita   ->   ind8IncPerCapita1969 ind8IncPerCapita1970 ... ind8IncPerCapita2011
+                       ind9IncPerCapita   ->   ind9IncPerCapita1969 ind9IncPerCapita1970 ... ind9IncPerCapita2011
+                                ind1Emp   ->   ind1Emp1969 ind1Emp1970 ... ind1Emp2011
+                                ind2Emp   ->   ind2Emp1969 ind2Emp1970 ... ind2Emp2011
+                                ind3Emp   ->   ind3Emp1969 ind3Emp1970 ... ind3Emp2011
+                                ind4Emp   ->   ind4Emp1969 ind4Emp1970 ... ind4Emp2011
+                                ind5Emp   ->   ind5Emp1969 ind5Emp1970 ... ind5Emp2011
+                                ind6Emp   ->   ind6Emp1969 ind6Emp1970 ... ind6Emp2011
+                                ind7Emp   ->   ind7Emp1969 ind7Emp1970 ... ind7Emp2011
+                                ind8Emp   ->   ind8Emp1969 ind8Emp1970 ... ind8Emp2011
+                                ind9Emp   ->   ind9Emp1969 ind9Emp1970 ... ind9Emp2011
+                                ind1Inc   ->   ind1Inc1969 ind1Inc1970 ... ind1Inc2011
+                                ind2Inc   ->   ind2Inc1969 ind2Inc1970 ... ind2Inc2011
+                                ind3Inc   ->   ind3Inc1969 ind3Inc1970 ... ind3Inc2011
+                                ind4Inc   ->   ind4Inc1969 ind4Inc1970 ... ind4Inc2011
+                                ind5Inc   ->   ind5Inc1969 ind5Inc1970 ... ind5Inc2011
+                                ind6Inc   ->   ind6Inc1969 ind6Inc1970 ... ind6Inc2011
+                                ind7Inc   ->   ind7Inc1969 ind7Inc1970 ... ind7Inc2011
+                                ind8Inc   ->   ind8Inc1969 ind8Inc1970 ... ind8Inc2011
+                                ind9Inc   ->   ind9Inc1969 ind9Inc1970 ... ind9Inc2011
+                                 empTot   ->   empTot1969 empTot1970 ... empTot2011
+                              farmShare   ->   farmShare1969 farmShare1970 ... farmShare2011
+                              ind1Share   ->   ind1Share1969 ind1Share1970 ... ind1Share2011
+                              ind2Share   ->   ind2Share1969 ind2Share1970 ... ind2Share2011
+                              ind3Share   ->   ind3Share1969 ind3Share1970 ... ind3Share2011
+                              ind4Share   ->   ind4Share1969 ind4Share1970 ... ind4Share2011
+                              ind5Share   ->   ind5Share1969 ind5Share1970 ... ind5Share2011
+                              ind6Share   ->   ind6Share1969 ind6Share1970 ... ind6Share2011
+                              ind7Share   ->   ind7Share1969 ind7Share1970 ... ind7Share2011
+                              ind8Share   ->   ind8Share1969 ind8Share1970 ... ind8Share2011
+                              ind9Share   ->   ind9Share1969 ind9Share1970 ... ind9Share2011
+                           incPerCapita   ->   incPerCapita1969 incPerCapita1970 ... incPerCapita2011
+                      manufIncPerCapita   ->   manufIncPerCapita1969 manufIncPerCapita1970 ... manufIncPerCapita2011
+                    serviceIncPerCapita   ->   serviceIncPerCapita1969 serviceIncPerCapita1970 ... serviceIncPerCapita2011
+                            m_growthEmp   ->   m_growthEmp1969 m_growthEmp1970 ... m_growthEmp2011
+                          m_growthManuf   ->   m_growthManuf1969 m_growthManuf1970 ... m_growthManuf2011
+                        m_growthService   ->   m_growthService1969 m_growthService1970 ... m_growthService2011
+                         m_incPerCapita   ->   m_incPerCapita1969 m_incPerCapita1970 ... m_incPerCapita2011
+                    m_manufIncPerCapita   ->   m_manufIncPerCapita1969 m_manufIncPerCapita1970 ... m_manufIncPerCapita2011
+                  m_serviceIncPerCapita   ->   m_serviceIncPerCapita1969 m_serviceIncPerCapita1970 ... m_serviceIncPerCapita2011
+                           m_growthInd1   ->   m_growthInd11969 m_growthInd11970 ... m_growthInd12011
+                           m_growthInd2   ->   m_growthInd21969 m_growthInd21970 ... m_growthInd22011
+                           m_growthInd3   ->   m_growthInd31969 m_growthInd31970 ... m_growthInd32011
+                           m_growthInd4   ->   m_growthInd41969 m_growthInd41970 ... m_growthInd42011
+                           m_growthInd5   ->   m_growthInd51969 m_growthInd51970 ... m_growthInd52011
+                           m_growthInd6   ->   m_growthInd61969 m_growthInd61970 ... m_growthInd62011
+                           m_growthInd7   ->   m_growthInd71969 m_growthInd71970 ... m_growthInd72011
+                           m_growthInd8   ->   m_growthInd81969 m_growthInd81970 ... m_growthInd82011
+                           m_growthInd9   ->   m_growthInd91969 m_growthInd91970 ... m_growthInd92011
+                     m_ind1IncPerCapita   ->   m_ind1IncPerCapita1969 m_ind1IncPerCapita1970 ... m_ind1IncPerCapita2011
+                     m_ind2IncPerCapita   ->   m_ind2IncPerCapita1969 m_ind2IncPerCapita1970 ... m_ind2IncPerCapita2011
+                     m_ind3IncPerCapita   ->   m_ind3IncPerCapita1969 m_ind3IncPerCapita1970 ... m_ind3IncPerCapita2011
+                     m_ind4IncPerCapita   ->   m_ind4IncPerCapita1969 m_ind4IncPerCapita1970 ... m_ind4IncPerCapita2011
+                     m_ind5IncPerCapita   ->   m_ind5IncPerCapita1969 m_ind5IncPerCapita1970 ... m_ind5IncPerCapita2011
+                     m_ind6IncPerCapita   ->   m_ind6IncPerCapita1969 m_ind6IncPerCapita1970 ... m_ind6IncPerCapita2011
+                     m_ind7IncPerCapita   ->   m_ind7IncPerCapita1969 m_ind7IncPerCapita1970 ... m_ind7IncPerCapita2011
+                     m_ind8IncPerCapita   ->   m_ind8IncPerCapita1969 m_ind8IncPerCapita1970 ... m_ind8IncPerCapita2011
+                     m_ind9IncPerCapita   ->   m_ind9IncPerCapita1969 m_ind9IncPerCapita1970 ... m_ind9IncPerCapita2011
+                            m_ind1Share   ->   m_ind1Share1969 m_ind1Share1970 ... m_ind1Share2011
+                            m_ind2Share   ->   m_ind2Share1969 m_ind2Share1970 ... m_ind2Share2011
+                            m_ind3Share   ->   m_ind3Share1969 m_ind3Share1970 ... m_ind3Share2011
+                            m_ind4Share   ->   m_ind4Share1969 m_ind4Share1970 ... m_ind4Share2011
+                            m_ind5Share   ->   m_ind5Share1969 m_ind5Share1970 ... m_ind5Share2011
+                            m_ind6Share   ->   m_ind6Share1969 m_ind6Share1970 ... m_ind6Share2011
+                            m_ind7Share   ->   m_ind7Share1969 m_ind7Share1970 ... m_ind7Share2011
+                            m_ind8Share   ->   m_ind8Share1969 m_ind8Share1970 ... m_ind8Share2011
+                            m_ind9Share   ->   m_ind9Share1969 m_ind9Share1970 ... m_ind9Share2011
+                              m_ind1Emp   ->   m_ind1Emp1969 m_ind1Emp1970 ... m_ind1Emp2011
+                              m_ind2Emp   ->   m_ind2Emp1969 m_ind2Emp1970 ... m_ind2Emp2011
+                              m_ind3Emp   ->   m_ind3Emp1969 m_ind3Emp1970 ... m_ind3Emp2011
+                              m_ind4Emp   ->   m_ind4Emp1969 m_ind4Emp1970 ... m_ind4Emp2011
+                              m_ind5Emp   ->   m_ind5Emp1969 m_ind5Emp1970 ... m_ind5Emp2011
+                              m_ind6Emp   ->   m_ind6Emp1969 m_ind6Emp1970 ... m_ind6Emp2011
+                              m_ind7Emp   ->   m_ind7Emp1969 m_ind7Emp1970 ... m_ind7Emp2011
+                              m_ind8Emp   ->   m_ind8Emp1969 m_ind8Emp1970 ... m_ind8Emp2011
+                              m_ind9Emp   ->   m_ind9Emp1969 m_ind9Emp1970 ... m_ind9Emp2011
+                               m_empTot   ->   m_empTot1969 m_empTot1970 ... m_empTot2011
+-----------------------------------------------------------------------------
+
+. 
+. keep cbsa_code *2001 *2002 *2003 *2004 *2005 *2006 *2007 *2008 *2009
+
+. save BEA_MSA_wide.dta, replace
+file BEA_MSA_wide.dta saved
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /afs/econ.duke.edu/data/vjh3/WageReturns/Data/BEA/BEA_create_MSA.log
+  log type:  text
+ closed on:   4 Apr 2013, 11:21:52
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------

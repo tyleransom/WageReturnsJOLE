@@ -1,0 +1,165 @@
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  [REDACTED]Descriptives/getRawPremia.log
+  log type:  text
+ opened on:   3 Mar 2020, 16:27:25
+
+. 
+. **********************************************************************
+. * Mincerian and other wage specifications for comparison purposes
+. **********************************************************************
+. 
+. if "`c(username)'"=="jared"  global secretdir [REDACTED]
+
+. if "`c(username)'"=="ransom" global secretdir [REDACTED]
+
+. 
+. use if ~female & inlist(activity,2,3,4,12,13,14,22,23,24) using ${secretdir}/yCombined_scaled_t0_16.dta, clear
+
+. drop if inlist(birthYear,1957,1958)
+(149,054 observations deleted)
+
+. 
+. drop lnWage
+
+. rena lnWageNoSelf lnWage
+
+. recode lnWage (-999 = .)
+(lnWage: 263044 changes made)
+
+. 
+. gen inSchWork  = inlist(activity,2,12,22)
+
+. gen PTwork     = inlist(activity,3,13,23)
+
+. * local Pvars79O black hispanic born1957 born1958 born1959          foreignBorn
+. * local Pvars79Y black hispanic born1961 born1962 born1963          foreignBorn
+. local Pvars79  black hispanic born1959 born1960 born1961 born1962 born1963 foreignBorn
+
+. local Pvars97  black hispanic born1980 born1981 born1982 born1983          foreignBorn
+
+. local Mvars    empPct incPerCapita
+
+. 
+. local Svars1   c.anySchoolt##c.anySchoolt
+
+. local Svars2   c.anySchoolt##c.anySchoolt##c.anySchoolt
+
+. 
+. local Zvars1   c.workK12t##c.workK12t                                                 c.workColleget##c.workColleget
+
+. local Zvars1A  c.workK12t  c.workK12t#(c.workK12t c.anySchoolt)                       c.workColleget  c.workColleget#(c.workColleget c.anySchoolt c.workK12t)
+
+. local Zvars1B  c.workK12t  c.workK12t#(c.workK12t c.anySchoolt)                       c.workColleget  c.workColleget#(c.workColleget c.anySchoolt           )
+
+. local Zvars2   c.workK12t##c.workK12t##c.workK12t                                     c.workColleget##c.workColleget##c.workColleget
+
+. local Zvars2A  c.workK12t  c.workK12t#(c.workK12t c.anySchoolt c.workK12t#c.workK12t) c.workColleget  c.workColleget#(c.workColleget c.anySchoolt c.workK12t c.workColleget#c.workColleget)
+
+. local Zvars2B  c.workK12t  c.workK12t#(c.workK12t c.anySchoolt c.workK12t#c.workK12t) c.workColleget  c.workColleget#(c.workColleget c.anySchoolt            c.workColleget#c.workColleget)
+
+. 
+. local Evars1   c.workPTonlyt##c.workPTonlyt                                                                                    c.workFTonlyt##c.workFTonlyt                                                                                               
+>    c.militaryt##c.militaryt              c.othert##c.othert
+
+. local Evars1A  c.workPTonlyt  c.workPTonlyt#(c.workPTonlyt c.anySchoolt c.workK12t c.workColleget)                             c.workFTonlyt  c.workFTonlyt#(c.workFTonlyt c.anySchoolt c.workK12t c.workColleget c.workPTonlyt)                          
+>    c.militaryt##c.militaryt              c.othert##c.othert
+
+. local Evars1B  c.workPTonlyt  c.workPTonlyt#(c.workPTonlyt c.anySchoolt                          )                             c.workFTonlyt  c.workFTonlyt#(c.workFTonlyt c.anySchoolt                                        )                          
+>    c.militaryt##c.militaryt              c.othert##c.othert
+
+. local Evars2   c.workPTonlyt##c.workPTonlyt##c.workPTonlyt                                                                     c.workFTonlyt##c.workFTonlyt##c.workFTonlyt                                                                                
+>    c.militaryt##c.militaryt##c.militaryt c.othert##c.othert##c.othert
+
+. local Evars2A  c.workPTonlyt  c.workPTonlyt#(c.workPTonlyt c.anySchoolt c.workK12t c.workColleget c.workPTonlyt#c.workPTonlyt) c.workFTonlyt  c.workFTonlyt#(c.workFTonlyt c.anySchoolt c.workK12t c.workColleget c.workPTonlyt c.workFTonlyt#c.workFTonly
+> t) c.militaryt##c.militaryt##c.militaryt c.othert##c.othert##c.othert
+
+. local Evars2B  c.workPTonlyt  c.workPTonlyt#(c.workPTonlyt c.anySchoolt                           c.workPTonlyt#c.workPTonlyt) c.workFTonlyt  c.workFTonlyt#(c.workFTonlyt c.anySchoolt                                         c.workFTonlyt#c.workFTonly
+> t) c.militaryt##c.militaryt##c.militaryt c.othert##c.othert##c.othert
+
+. 
+. local risk     gradHS grad4yr
+
+. local work     inSchWork PTwork
+
+. 
+. 
+. *================================================
+. * Wage OLS coef at all ages; mfx at age 2812 and 3112
+. *================================================
+. reg  lnWage `risk' if cohortFlag==1979
+
+      Source |       SS           df       MS      Number of obs   =   464,461
+-------------+----------------------------------   F(2, 464458)    =  39362.28
+       Model |  14875.6659         2  7437.83294   Prob > F        =    0.0000
+    Residual |  87763.2315   464,458   .18895838   R-squared       =    0.1449
+-------------+----------------------------------   Adj R-squared   =    0.1449
+       Total |  102638.897   464,460   .22098544   Root MSE        =    .43469
+
+------------------------------------------------------------------------------
+      lnWage |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      gradHS |    .232271   .0016224   143.16   0.000     .2290912    .2354509
+     grad4yr |   .4147948   .0019741   210.12   0.000     .4109256     .418664
+       _cons |   1.620098    .001425  1136.92   0.000     1.617305    1.622891
+------------------------------------------------------------------------------
+
+. reg  lnWage `risk' if cohortFlag==1997
+
+      Source |       SS           df       MS      Number of obs   =   422,114
+-------------+----------------------------------   F(2, 422111)    =  47682.05
+       Model |  18062.9795         2  9031.48975   Prob > F        =    0.0000
+    Residual |  79952.3293   422,111  .189410675   R-squared       =    0.1843
+-------------+----------------------------------   Adj R-squared   =    0.1843
+       Total |  98015.3088   422,113  .232201588   Root MSE        =    .43521
+
+------------------------------------------------------------------------------
+      lnWage |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      gradHS |    .246402     .00184   133.91   0.000     .2427956    .2500084
+     grad4yr |   .4532373   .0018405   246.26   0.000     .4496301    .4568445
+       _cons |   1.528724   .0016479   927.69   0.000     1.525494    1.531954
+------------------------------------------------------------------------------
+
+. 
+. reg  lnWage `risk' if cohortFlag==1979 & agemo==2812
+
+      Source |       SS           df       MS      Number of obs   =     2,489
+-------------+----------------------------------   F(2, 2486)      =    177.82
+       Model |   67.837864         2   33.918932   Prob > F        =    0.0000
+    Residual |  474.209838     2,486  .190752147   R-squared       =    0.1252
+-------------+----------------------------------   Adj R-squared   =    0.1244
+       Total |  542.047702     2,488  .217864832   Root MSE        =    .43675
+
+------------------------------------------------------------------------------
+      lnWage |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      gradHS |   .2185384   .0271364     8.05   0.000     .1653261    .2717506
+     grad4yr |   .3500654   .0228295    15.33   0.000     .3052986    .3948322
+       _cons |   1.735009   .0250083    69.38   0.000      1.68597    1.784049
+------------------------------------------------------------------------------
+
+. reg  lnWage `risk' if cohortFlag==1997 & agemo==2812
+
+      Source |       SS           df       MS      Number of obs   =     2,188
+-------------+----------------------------------   F(2, 2185)      =    161.67
+       Model |  65.8752707         2  32.9376354   Prob > F        =    0.0000
+    Residual |  445.148575     2,185  .203729325   R-squared       =    0.1289
+-------------+----------------------------------   Adj R-squared   =    0.1281
+       Total |  511.023845     2,187   .23366431   Root MSE        =    .45136
+
+------------------------------------------------------------------------------
+      lnWage |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+      gradHS |   .1608579   .0343389     4.68   0.000     .0935175    .2281982
+     grad4yr |   .3585261    .022196    16.15   0.000     .3149985    .4020536
+       _cons |   1.730255   .0321583    53.80   0.000     1.667191    1.793319
+------------------------------------------------------------------------------
+
+. 
+. log close
+      name:  <unnamed>
+       log:  [REDACTED]Descriptives/getRawPremia.log
+  log type:  text
+ closed on:   3 Mar 2020, 16:27:28
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

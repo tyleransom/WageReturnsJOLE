@@ -1,0 +1,1344 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/jared/NLSYvCPS/Data/CPS/CPS_import.log
+  log type:  text
+ opened on:   3 Mar 2020, 17:50:33
+
+. 
+. /* Need to create the wage gap variables as well as the
+> supply variables, by age, sex, education, and state. Also,
+> drop wage outliers.
+> Age groups:     young(1)  =26-35
+>                 old(2)    =36-64
+>                 others(0) =else
+> Education(<92): HS(1)     =12
+>                 college(2)=16 or 17
+>                 others(0) =else
+> Education(>92): HS(1)     =39 ('high-school graduate') or
+>                 38 ('twelth grade, no diploma')
+>                 college(2)=43 ('bachelor's degree')
+>                 others(0) =else
+> State:          duh
+> Wage:           low/hi(1)= <2 or >150 in 1989 dollars
+>                 fine(2)  = >=2 and <=150 in 1989 dollars
+> Sex:            sex male=1, female=2
+> Race:           race    white=1, non-white>1
+> Marital Status: marital married<=3, single >=4
+> P/T Employment: uhourse hours<35
+> */
+. 
+. local years 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 00
+>  01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16
+
+. foreach X in `years' {
+  2.         local EY = int(10000*uniform()) // NO seed; needs to be random
+  3.     ! gunzip -fc ./sourcedata/morg`X'.dta.gz > tmp`EY'.dta
+  4.     if inrange(`X',79,83) use year intmonth state        age sex race ethn
+> ic marital class   ftpt79 gradeat gradecp               uhours uhourse earnhr
+>  earnhre paidhr paidhre earnwk earnwke I25? weight earnwt        using tmp`EY
+> '.dta, clear
+  5.     if inrange(`X',84,88) use year intmonth state        age sex race ethn
+> ic marital class   ftpt79 gradeat gradecp schenr schlvl uhours uhourse earnhr
+>  earnhre paidhr paidhre earnwk earnwke I25? weight earnwt        using tmp`EY
+> '.dta, clear
+  6.     if inrange(`X',89,91) use year intmonth state stfips age sex race ethn
+> ic marital class   ftpt89 gradeat gradecp schenr schlvl uhours uhourse earnhr
+>  earnhre paidhr paidhre earnwk earnwke I25? weight earnwt        using tmp`EY
+> '.dta, clear
+  7.     if inrange(`X',92,93) use year intmonth state stfips age sex race ethn
+> ic marital class   ftpt89 grade92         schenr schlvl uhours uhourse earnhr
+>  earnhre paidhr paidhre earnwk earnwke I25? weight earnwt        using tmp`EY
+> '.dta, clear
+  8.     if inrange(`X',94,97) use year intmonth state stfips age sex race ethn
+> ic marital class94 ftpt94 grade92         schenr schlvl uhours uhourse earnhr
+>  earnhre paidhr paidhre earnwk earnwke I25? weight earnwt        using tmp`EY
+> '.dta, clear
+  9.     if inrange(`X',98,99) use year intmonth state stfips age sex race ethn
+> ic marital class94 ftpt94 grade92         schenr schlvl uhours uhourse earnhr
+>  earnhre paidhr paidhre earnwk earnwke I25? weight earnwt cmpwgt using tmp`EY
+> '.dta, clear
+ 10.     if inrange(`X',00,14) use year intmonth state stfips age sex race ethn
+> ic marital class94 ftpt94 grade92         schenr schlvl uhours uhourse earnhr
+>  earnhre paidhr paidhre earnwk earnwke I25? weight earnwt cmpwgt using tmp`EY
+> '.dta, clear
+ 11.     if inrange(`X',15,16) use year intmonth       stfips age sex race ethn
+> ic marital class94 ftpt94 grade92         schenr schlvl uhours uhourse earnhr
+>  earnhre paidhr paidhre earnwk earnwke I25? weight earnwt cmpwgt using tmp`EY
+> '.dta, clear
+ 12.     ! rm tmp`EY'.dta
+ 13.     
+.     disp "`X'"
+ 14.     /***Generate hourly wage: if reported weekly earnings, it is
+>     weekly earnings divided by usual hours.  If not, it is just
+>     usual hourly wage.***/
+.     
+.     generat hrwage1 = earnwke/uhourse
+ 15.     generat hrwage2 = earnhre/100
+ 16.     generat hrwage3 = hrwage2
+ 17.     replace hrwage3 = hrwage1 if mi(hrwage2)
+ 18.     
+.     rename hrwage3 hrwage
+ 19.     
+.     * drop if hrwage==.
+.     
+.     /***Create age and education flags(see top for details)***/
+.     
+.     * gen young= (age>=26 & age<=35)
+.     * gen older= (age>=36 & age<=64)
+.     * keep if young==1
+.     
+.     * Generate education attainment/variables
+.     if inrange(`X',79,91) {
+ 20.         gen byte hsonly    = (gradeat==12)
+ 21.         gen byte college   = (gradeat==16 | gradeat==17)
+ 22.         gen byte college2  = (gradeat>=16 & ~mi(gradeat)) // alt def of co
+> llege
+ 23.         gen byte gradHS    = (gradeat>=12 & ~mi(gradeat))
+ 24.         gen byte grad4yr   = (gradeat>=16 & ~mi(gradeat))
+ 25.         gen byte HSdropout = (gradeat<=11 & ~mi(gradeat))
+ 26.                 
+.                 * gradeat is attempted grade, gradecp is whether it was compl
+> eted or not
+.                 *   for those with gradeat=0, gradecp=2, so use "max" to keep
+>  it at 0
+.                 gen hgc       = gradeat*(gradecp==1) + max(gradeat-1,0)*(grad
+> ecp==2)
+ 27.     }
+ 28.     else {
+ 29.         gen byte hsonly    = (grade92==38 | grade92==39)
+ 30.         gen byte college   = (grade92==43)
+ 31.         gen byte college2  = (grade92>=43) & ~mi(grade92) // alt def of co
+> llege
+ 32.         gen byte gradHS    = (inrange(grade92,39,46))
+ 33.         gen byte grad4yr   = (inrange(grade92,43,46))
+ 34.         gen byte HSdropout = (grade92<=38)
+ 35.                 
+.                 * grade92 doesn't fully break it out by years completed; for 
+> now, "recode":
+.                 *                     Less Than 1st Grade (31=0 )
+.                 *                1st,2nd,3rd Or 4th Grade (32=3 ) 
+.                 *                        5th Or 6th Grade (33=6 )
+.                 *                        7th Or 8th Grade (34=8 )
+.                 *                               9th Grade (35=9 )
+.                 *                              10th Grade (36=10)
+.                 *                              11th Grade (37=11)
+.                 *                   12th Grade No Diploma (38=11) hgc 11 if n
+> o diploma
+.                 * High School Grad-Diploma Or Equiv (GED) (39=12)
+.                 *              Some College But No Degree (40=13)
+.                 * Associate Degree-Occupational/Vocationa (41=14)
+.                 *         Associate Deg.-Academic Program (42=14)
+.                 *          Bachelor's Degree(ex:ba,ab,bs) (43=16)
+.                 *         Master's(ex:MA,MS,MEng,MEd,MSW) (44=18)
+.                 *  Professional School Deg(ex:MD,DDS,DVM) (45=20) 
+.                 *            Doctorate Degree(ex:PhD,EdD) (46=21)
+.                 * Note: recode is VERY slow since replace is built-in (type -
+> which replace-)
+.                 *       but recode is an ado file (type -which recode-) trade
+> off of coding lines
+.                 *       for speed (replace has speed advantage of 90% )
+.                 genera hgc = grade92
+ 36.                 recode hgc (31=0 ) (32=3 ) (33=6 ) (34=8 ) (35=9 ) (36=10)
+>  (37=11) (38=11) (39=12) (40=13) (41=14) (42=14) (43=16) (44=18) (45=20) (46=
+> 21)
+ 37.     }
+ 38.     
+.     * Generate self-employment indicator
+.     if inrange(`X',79,93) {
+ 39.         gen byte selfEmployed = inrange(class,5,6)
+ 40.     }
+ 41.     else {
+ 42.         gen byte selfEmployed = inrange(class94,6,7)
+ 43.     }
+ 44. 
+.     * Generate employment status
+.     if inrange(`X',79,88) {
+ 45.         gen byte empFT     = inlist(ftpt79,1)
+ 46.         gen byte empPT     = inlist(ftpt79,2,4)
+ 47.         gen byte unemp     = inlist(ftpt79,3,5)
+ 48.         gen byte nilf      = inlist(ftpt79,0)
+ 49.     }
+ 50.     else if inrange(`X',89,93) {
+ 51.         gen byte empFT     = inlist(ftpt89,2)
+ 52.         gen byte empPT     = inlist(ftpt89,3,4,5)
+ 53.         gen byte unemp     = inlist(ftpt89,6,7)
+ 54.         gen byte nilf      = inlist(ftpt89,1)
+ 55.     }
+ 56.     else if inrange(`X',94,99) | inrange(`X',00,16) {
+ 57.         gen byte empFT     = inlist(ftpt94,2,8,9)
+ 58.         gen byte empPT     = inlist(ftpt94,3,4,6,7)
+ 59.         gen byte unemp     = inlist(ftpt94,5,10,11,12)
+ 60.         gen byte nilf      = inlist(ftpt94,1)
+ 61.     }
+ 62.     
+.     * Generate imputation indicators
+.     if inrange(`X',79,93) {
+ 63.         gen byte allocated_uhrs     = I25a>0 
+ 64.         gen byte allocated_hrly_job = I25b>0 
+ 65.         gen byte allocated_earnhr   = I25c>0
+ 66.         gen byte allocated_earnwk   = I25d>0 
+ 67.     }
+ 68.     else if inrange(`X',95,99) | inrange(`X',00,16) {
+ 69.         gen byte allocated_uhrs     = I25a>3 
+ 70.         gen byte allocated_hrly_job = I25b>3 
+ 71.         gen byte allocated_earnhr   = I25c>0
+ 72.         gen byte allocated_earnwk   = I25d>0 
+ 73.     }
+ 74.     if inrange(`X',79,93) {
+ 75.         gen byte allocated_incl_mi_uhrs     = I25a>0 & ~mi(I25a)
+ 76.         gen byte allocated_incl_mi_hrly_job = I25b>0 & ~mi(I25b)
+ 77.         gen byte allocated_incl_mi_earnhr   = I25c>0 & ~mi(I25c)
+ 78.         gen byte allocated_incl_mi_earnwk   = I25d>0 & ~mi(I25d)
+ 79.     }
+ 80.     else if inrange(`X',95,99) | inrange(`X',00,16) {
+ 81.         gen byte allocated_incl_mi_uhrs     = I25a>3 & ~mi(I25a)
+ 82.         gen byte allocated_incl_mi_hrly_job = I25b>3 & ~mi(I25b)
+ 83.         gen byte allocated_incl_mi_earnhr   = I25c>0 & ~mi(I25c)
+ 84.         gen byte allocated_incl_mi_earnwk   = I25d>0 & ~mi(I25d)
+ 85.     }
+ 86.     
+.     /***Create sex, race, marital, and p/t flags***/
+.     gen byte female   = (sex==2)
+ 87.     gen byte nonwhite = (race~=1)
+ 88.     gen byte hispanic = (ethnic<8 & year<=2002) | (~mi(ethnic) & year>=200
+> 3)
+ 89.     gen byte white    = race==1 & ~hispanic
+ 90.     gen byte black    = race==2 & ~hispanic
+ 91.     gen byte other    = race>2 & ~hispanic
+ 92.     gen byte married  = (marital<=3)
+ 93.     gen byte parttime = (uhourse<35)
+ 94.     
+.     * keep state year hrwage age college college2 female nonwhite parttime ma
+> rital
+.     tempfile holder`X'
+ 95.     save `holder`X'', replace
+ 96. 
+. }
+
+
+79
+(156,830 missing values generated)
+(226,913 missing values generated)
+(226,913 missing values generated)
+(70,184 real changes made)
+(note: file /tmp/St29593.000001 not found)
+file /tmp/St29593.000001 saved
+
+
+80
+(186,662 missing values generated)
+(268,887 missing values generated)
+(268,887 missing values generated)
+(82,340 real changes made)
+(note: file /tmp/St29593.000002 not found)
+file /tmp/St29593.000002 saved
+
+
+81
+(177,270 missing values generated)
+(254,328 missing values generated)
+(254,328 missing values generated)
+(77,184 real changes made)
+(note: file /tmp/St29593.000003 not found)
+file /tmp/St29593.000003 saved
+
+
+82
+(175,401 missing values generated)
+(248,451 missing values generated)
+(248,451 missing values generated)
+(73,139 real changes made)
+(note: file /tmp/St29593.000004 not found)
+file /tmp/St29593.000004 saved
+
+
+83
+(174,770 missing values generated)
+(246,293 missing values generated)
+(246,293 missing values generated)
+(71,627 real changes made)
+(note: file /tmp/St29593.000005 not found)
+file /tmp/St29593.000005 saved
+
+
+84
+(166,593 missing values generated)
+(239,085 missing values generated)
+(239,085 missing values generated)
+(72,598 real changes made)
+(note: file /tmp/St29593.000006 not found)
+file /tmp/St29593.000006 saved
+
+
+85
+(163,507 missing values generated)
+(237,096 missing values generated)
+(237,096 missing values generated)
+(73,692 real changes made)
+(note: file /tmp/St29593.000007 not found)
+file /tmp/St29593.000007 saved
+
+
+86
+(159,082 missing values generated)
+(231,858 missing values generated)
+(231,858 missing values generated)
+(72,884 real changes made)
+(note: file /tmp/St29593.000008 not found)
+file /tmp/St29593.000008 saved
+
+
+87
+(156,690 missing values generated)
+(228,876 missing values generated)
+(228,876 missing values generated)
+(72,266 real changes made)
+(note: file /tmp/St29593.000009 not found)
+file /tmp/St29593.000009 saved
+
+
+88
+(147,815 missing values generated)
+(216,629 missing values generated)
+(216,629 missing values generated)
+(68,887 real changes made)
+(note: file /tmp/St29593.00000a not found)
+file /tmp/St29593.00000a saved
+
+
+89
+(148,300 missing values generated)
+(218,117 missing values generated)
+(218,117 missing values generated)
+(69,817 real changes made)
+(note: file /tmp/St29593.00000b not found)
+file /tmp/St29593.00000b saved
+
+
+90
+(156,132 missing values generated)
+(230,239 missing values generated)
+(230,239 missing values generated)
+(74,107 real changes made)
+(note: file /tmp/St29593.00000c not found)
+file /tmp/St29593.00000c saved
+
+
+91
+(158,089 missing values generated)
+(229,556 missing values generated)
+(229,556 missing values generated)
+(71,467 real changes made)
+(note: file /tmp/St29593.00000d not found)
+file /tmp/St29593.00000d saved
+
+
+92
+(155,336 missing values generated)
+(225,179 missing values generated)
+(225,179 missing values generated)
+(69,843 real changes made)
+(hgc: 332184 changes made)
+(note: file /tmp/St29593.00000e not found)
+file /tmp/St29593.00000e saved
+
+
+93
+(153,490 missing values generated)
+(222,483 missing values generated)
+(222,483 missing values generated)
+(68,993 real changes made)
+(hgc: 328085 changes made)
+(note: file /tmp/St29593.00000f not found)
+file /tmp/St29593.00000f saved
+
+
+94
+(158,552 missing values generated)
+(214,472 missing values generated)
+(214,472 missing values generated)
+(62,186 real changes made)
+(hgc: 319234 changes made)
+(note: file /tmp/St29593.00000g not found)
+file /tmp/St29593.00000g saved
+
+
+95
+(154,613 missing values generated)
+(209,452 missing values generated)
+(209,452 missing values generated)
+(61,411 real changes made)
+(hgc: 314351 changes made)
+(note: file /tmp/St29593.00000h not found)
+file /tmp/St29593.00000h saved
+
+
+96
+(136,318 missing values generated)
+(183,931 missing values generated)
+(183,931 missing values generated)
+(54,166 real changes made)
+(hgc: 277856 changes made)
+(note: file /tmp/St29593.00000i not found)
+file /tmp/St29593.00000i saved
+
+
+97
+(136,358 missing values generated)
+(185,143 missing values generated)
+(185,143 missing values generated)
+(55,380 real changes made)
+(hgc: 280655 changes made)
+(note: file /tmp/St29593.00000j not found)
+file /tmp/St29593.00000j saved
+
+
+98
+(134,288 missing values generated)
+(184,445 missing values generated)
+(184,445 missing values generated)
+(56,788 real changes made)
+(hgc: 280392 changes made)
+(note: file /tmp/St29593.00000k not found)
+file /tmp/St29593.00000k saved
+
+
+99
+(134,182 missing values generated)
+(185,852 missing values generated)
+(185,852 missing values generated)
+(58,232 real changes made)
+(hgc: 282716 changes made)
+(note: file /tmp/St29593.00000l not found)
+file /tmp/St29593.00000l saved
+
+
+00
+(132,857 missing values generated)
+(185,958 missing values generated)
+(185,958 missing values generated)
+(59,533 real changes made)
+(hgc: 283236 changes made)
+(note: file /tmp/St29593.00000m not found)
+file /tmp/St29593.00000m saved
+
+
+01
+(143,461 missing values generated)
+(199,279 missing values generated)
+(199,279 missing values generated)
+(63,042 real changes made)
+(hgc: 303036 changes made)
+(note: file /tmp/St29593.00000n not found)
+file /tmp/St29593.00000n saved
+
+
+02
+(158,432 missing values generated)
+(219,257 missing values generated)
+(219,257 missing values generated)
+(68,439 real changes made)
+(1 missing value generated)
+(hgc: 329971 changes made)
+(note: file /tmp/St29593.00000o not found)
+file /tmp/St29593.00000o saved
+
+
+03
+(160,966 missing values generated)
+(219,735 missing values generated)
+(219,735 missing values generated)
+(66,895 real changes made)
+(hgc: 328608 changes made)
+(note: file /tmp/St29593.00000p not found)
+file /tmp/St29593.00000p saved
+
+
+04
+(158,403 missing values generated)
+(215,543 missing values generated)
+(215,543 missing values generated)
+(65,294 real changes made)
+(hgc: 322929 changes made)
+(note: file /tmp/St29593.00000q not found)
+file /tmp/St29593.00000q saved
+
+
+05
+(157,202 missing values generated)
+(214,382 missing values generated)
+(214,382 missing values generated)
+(65,388 real changes made)
+(hgc: 322991 changes made)
+(note: file /tmp/St29593.00000r not found)
+file /tmp/St29593.00000r saved
+
+
+06
+(154,349 missing values generated)
+(212,975 missing values generated)
+(212,975 missing values generated)
+(66,149 real changes made)
+(hgc: 320551 changes made)
+(note: file /tmp/St29593.00000s not found)
+file /tmp/St29593.00000s saved
+
+
+07
+(152,624 missing values generated)
+(213,328 missing values generated)
+(213,328 missing values generated)
+(67,446 real changes made)
+(hgc: 318207 changes made)
+(note: file /tmp/St29593.00000t not found)
+file /tmp/St29593.00000t saved
+
+
+08
+(153,602 missing values generated)
+(214,355 missing values generated)
+(214,355 missing values generated)
+(67,469 real changes made)
+(hgc: 317341 changes made)
+(note: file /tmp/St29593.00000u not found)
+file /tmp/St29593.00000u saved
+
+
+09
+(162,315 missing values generated)
+(220,962 missing values generated)
+(220,962 missing values generated)
+(65,501 real changes made)
+(hgc: 320941 changes made)
+(note: file /tmp/St29593.00000v not found)
+file /tmp/St29593.00000v saved
+
+
+10
+(164,214 missing values generated)
+(221,691 missing values generated)
+(221,691 missing values generated)
+(64,284 real changes made)
+(hgc: 321277 changes made)
+(note: file /tmp/St29593.00000w not found)
+file /tmp/St29593.00000w saved
+
+
+11
+(162,449 missing values generated)
+(219,467 missing values generated)
+(219,467 missing values generated)
+(63,673 real changes made)
+(hgc: 318334 changes made)
+(note: file /tmp/St29593.00000x not found)
+file /tmp/St29593.00000x saved
+
+
+12
+(160,969 missing values generated)
+(218,097 missing values generated)
+(218,097 missing values generated)
+(63,977 real changes made)
+(hgc: 316408 changes made)
+(note: file /tmp/St29593.000010 not found)
+file /tmp/St29593.000010 saved
+
+
+13
+(160,015 missing values generated)
+(218,158 missing values generated)
+(218,158 missing values generated)
+(64,564 real changes made)
+(hgc: 315717 changes made)
+(note: file /tmp/St29593.000011 not found)
+file /tmp/St29593.000011 saved
+
+
+14
+(159,852 missing values generated)
+(218,777 missing values generated)
+(218,777 missing values generated)
+(65,231 real changes made)
+(hgc: 317056 changes made)
+(note: file /tmp/St29593.000012 not found)
+file /tmp/St29593.000012 saved
+
+
+15
+(158,703 missing values generated)
+(217,612 missing values generated)
+(217,612 missing values generated)
+(64,760 real changes made)
+(hgc: 314692 changes made)
+(note: file /tmp/St29593.000013 not found)
+file /tmp/St29593.000013 saved
+
+
+16
+(158,149 missing values generated)
+(217,351 missing values generated)
+(217,351 missing values generated)
+(64,888 real changes made)
+(hgc: 314873 changes made)
+(note: file /tmp/St29593.000014 not found)
+file /tmp/St29593.000014 saved
+
+. 
+. clear
+
+. foreach X in `years' {
+  2.     append using `holder`X''
+  3. }
+(label intmonth already defined)
+(label state already defined)
+(label sex already defined)
+(label race already defined)
+(label ethnic already defined)
+(label marital already defined)
+(label gradecp already defined)
+(label paidhr already defined)
+(label paidhre already defined)
+(label I25a already defined)
+(label I25b already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label class already defined)
+(label ftpt79 already defined)
+(label intmonth already defined)
+(label state already defined)
+(label sex already defined)
+(label race already defined)
+(label ethnic already defined)
+(label marital already defined)
+(label gradecp already defined)
+(label paidhr already defined)
+(label paidhre already defined)
+(label I25a already defined)
+(label I25b already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label class already defined)
+(label ftpt79 already defined)
+(label intmonth already defined)
+(label state already defined)
+(label sex already defined)
+(label race already defined)
+(label ethnic already defined)
+(label marital already defined)
+(label gradecp already defined)
+(label paidhr already defined)
+(label paidhre already defined)
+(label I25a already defined)
+(label I25b already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label class already defined)
+(label ftpt79 already defined)
+(label intmonth already defined)
+(label state already defined)
+(label sex already defined)
+(label race already defined)
+(label ethnic already defined)
+(label marital already defined)
+(label gradecp already defined)
+(label paidhr already defined)
+(label paidhre already defined)
+(label I25a already defined)
+(label I25b already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label class already defined)
+(label ftpt79 already defined)
+(label P4L already defined)
+(label P27L already defined)
+(label P9L already defined)
+(label P10L already defined)
+(label P11L already defined)
+(label P12L already defined)
+(label P62L already defined)
+(label P48L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label P50L already defined)
+(label P51L already defined)
+(label P61L already defined)
+(label P59L already defined)
+(label P4L already defined)
+(label P27L already defined)
+(label P9L already defined)
+(label P10L already defined)
+(label P11L already defined)
+(label P12L already defined)
+(label P62L already defined)
+(label P48L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label P50L already defined)
+(label P51L already defined)
+(label P61L already defined)
+(label P59L already defined)
+(label P4L already defined)
+(label P27L already defined)
+(label P9L already defined)
+(label P10L already defined)
+(label P11L already defined)
+(label P12L already defined)
+(label P62L already defined)
+(label P48L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label P50L already defined)
+(label P51L already defined)
+(label P61L already defined)
+(label P59L already defined)
+(label P4L already defined)
+(label P27L already defined)
+(label P9L already defined)
+(label P10L already defined)
+(label P11L already defined)
+(label P12L already defined)
+(label P62L already defined)
+(label P48L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label P50L already defined)
+(label P51L already defined)
+(label P61L already defined)
+(label P59L already defined)
+(label P4L already defined)
+(label P27L already defined)
+(label P9L already defined)
+(label P10L already defined)
+(label P11L already defined)
+(label P12L already defined)
+(label P62L already defined)
+(label P48L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label P50L already defined)
+(label P51L already defined)
+(label P61L already defined)
+(label P59L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P9L already defined)
+(label P10L already defined)
+(label P11L already defined)
+(label P12L already defined)
+(label P62L already defined)
+(label P48L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label P50L already defined)
+(label P51L already defined)
+(label P61L already defined)
+(label P59L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P9L already defined)
+(label P10L already defined)
+(label P11L already defined)
+(label P12L already defined)
+(label P62L already defined)
+(label P48L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label P50L already defined)
+(label P51L already defined)
+(label P61L already defined)
+(label P59L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P9L already defined)
+(label P10L already defined)
+(label P11L already defined)
+(label P12L already defined)
+(label P48L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label P50L already defined)
+(label P51L already defined)
+(label P61L already defined)
+(label P59L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P9L already defined)
+(label P10L already defined)
+(label P11L already defined)
+(label P12L already defined)
+(label P14L already defined)
+(label P48L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label P50L already defined)
+(label P51L already defined)
+(label P61L already defined)
+(label P59L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P9L already defined)
+(label P10L already defined)
+(label P11L already defined)
+(label P12L already defined)
+(label P14L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P9L already defined)
+(label P10L already defined)
+(label P11L already defined)
+(label P12L already defined)
+(label P14L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label P19L already defined)
+(label P160L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P9L already defined)
+(label P10L already defined)
+(label P11L already defined)
+(label P12L already defined)
+(label P14L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label P19L already defined)
+(label P160L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P9L already defined)
+(label P10L already defined)
+(label P11L already defined)
+(label P12L already defined)
+(label P14L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label P19L already defined)
+(label P160L already defined)
+(note: variable earnwt was float, now double to accommodate using data's
+       values)
+(note: variable weight was float, now double to accommodate using data's
+       values)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P9L already defined)
+(label P10L already defined)
+(label P11L already defined)
+(label P12L already defined)
+(label P14L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label P19L already defined)
+(label P160L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P9L already defined)
+(label P10L already defined)
+(label P11L already defined)
+(label P12L already defined)
+(label P14L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label P19L already defined)
+(label P160L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P9L already defined)
+(label P10L already defined)
+(label P11L already defined)
+(label P12L already defined)
+(label P14L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label P19L already defined)
+(label P160L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P9L already defined)
+(label P10L already defined)
+(label P11L already defined)
+(label P12L already defined)
+(label P14L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label P19L already defined)
+(label P160L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P9L already defined)
+(label P10L already defined)
+(label P11L already defined)
+(label P12L already defined)
+(label P14L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label P19L already defined)
+(label P160L already defined)
+(note: variable earnwke was int, now double to accommodate using data's
+       values)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P9L already defined)
+(label P10L already defined)
+(label P11L already defined)
+(label P12L already defined)
+(label P14L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label P19L already defined)
+(label P160L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P9L already defined)
+(label P10L already defined)
+(label P11L already defined)
+(label P12L already defined)
+(label P14L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label P19L already defined)
+(label P160L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P9L already defined)
+(label P10L already defined)
+(label P11L already defined)
+(label P12L already defined)
+(label P14L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label P19L already defined)
+(label P160L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label age already defined)
+(label P9L already defined)
+(label P10L already defined)
+(label P11L already defined)
+(label P12L already defined)
+(label P14L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label P19L already defined)
+(label P160L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label P19L already defined)
+(label P160L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label P19L already defined)
+(label P160L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label P19L already defined)
+(label P160L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label P19L already defined)
+(label P160L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label P19L already defined)
+(label P160L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label P19L already defined)
+(label P160L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label P19L already defined)
+(label P160L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P27L already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label P19L already defined)
+(label P160L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label P19L already defined)
+(label P160L already defined)
+(label P4L already defined)
+(label stfips already defined)
+(label P18L already defined)
+(label P28L already defined)
+(label P29L already defined)
+(label I25c already defined)
+(label I25d already defined)
+(label P19L already defined)
+(label P160L already defined)
+
+. 
+. gen     empstat = .
+(12,266,167 missing values generated)
+
+. replace empstat = 1 if empFT==1
+(5,632,111 real changes made)
+
+. replace empstat = 2 if empPT==1
+(1,669,071 real changes made)
+
+. replace empstat = 3 if unemp==1
+(662,329 real changes made)
+
+. replace empstat = 4 if nilf ==1
+(4,264,543 real changes made)
+
+. lab def vlempstat 1 "Employed full-time" 2 "Employed part-time" 3 "Unemployed
+> " 4 "Not in labor force"
+
+. lab val empstat vlempstat
+
+. 
+. tab empstat
+
+           empstat |      Freq.     Percent        Cum.
+-------------------+-----------------------------------
+Employed full-time |  5,632,111       46.06       46.06
+Employed part-time |  1,669,071       13.65       59.71
+        Unemployed |    662,329        5.42       65.12
+Not in labor force |  4,264,543       34.88      100.00
+-------------------+-----------------------------------
+             Total | 12,228,054      100.00
+
+. tab year empstat, row nofreq
+
+           |                   empstat
+      year | Employed   Employed   Unemploye  Not in la |     Total
+-----------+--------------------------------------------+----------
+      1979 |     48.79      11.00       3.71      36.50 |    100.00 
+      1980 |     47.96      11.42       4.48      36.14 |    100.00 
+      1981 |     47.52      11.52       4.78      36.18 |    100.00 
+      1982 |     45.65      12.20       6.02      36.13 |    100.00 
+      1983 |     45.82      12.05       6.01      36.12 |    100.00 
+      1984 |     47.73      11.84       4.76      35.66 |    100.00 
+      1985 |     48.45      11.68       4.57      35.29 |    100.00 
+      1986 |     48.77      11.85       4.45      34.93 |    100.00 
+      1987 |     49.37      11.94       3.95      34.74 |    100.00 
+      1988 |     49.92      11.98       3.51      34.59 |    100.00 
+      1989 |     50.59      12.04       3.38      34.00 |    100.00 
+      1990 |     50.50      11.98       3.57      33.95 |    100.00 
+      1991 |     49.12      12.22       4.35      34.31 |    100.00 
+      1992 |     49.11      12.06       4.73      34.10 |    100.00 
+      1993 |     49.17      11.98       4.37      34.48 |    100.00 
+      1994 |     43.05      15.79       6.70      34.47 |    100.00 
+      1995 |     43.95      15.43       6.35      34.28 |    100.00 
+      1996 |     44.17      15.56       6.34      33.92 |    100.00 
+      1997 |     45.17      15.26       5.93      33.64 |    100.00 
+      1998 |     44.61      16.48       5.66      33.26 |    100.00 
+      1999 |     46.17      15.16       5.38      33.30 |    100.00 
+      2000 |     47.27      14.32       5.30      33.11 |    100.00 
+      2001 |     46.15      15.10       5.64      33.12 |    100.00 
+      2002 |     45.60      14.89       6.15      33.36 |    100.00 
+      2003 |     45.14      14.95       6.18      33.73 |    100.00 
+      2004 |     45.09      15.11       5.94      33.86 |    100.00 
+      2005 |     45.65      14.89       5.68      33.78 |    100.00 
+      2006 |     46.14      14.69       5.42      33.75 |    100.00 
+      2007 |     46.29      14.42       5.37      33.92 |    100.00 
+      2008 |     45.38      14.79       5.91      33.93 |    100.00 
+      2009 |     41.10      16.49       7.96      34.44 |    100.00 
+      2010 |     41.78      15.11       7.95      35.16 |    100.00 
+      2011 |     41.87      14.96       7.36      35.82 |    100.00 
+      2012 |     42.59      14.44       6.88      36.08 |    100.00 
+      2013 |     43.00      14.01       6.39      36.60 |    100.00 
+      2014 |     43.00      14.17       5.62      37.22 |    100.00 
+      2015 |     42.60      14.31       5.10      37.99 |    100.00 
+      2016 |     43.40      13.67       4.93      38.00 |    100.00 
+-----------+--------------------------------------------+----------
+     Total |     46.06      13.65       5.42      34.88 |    100.00 
+
+
+. 
+. sum uhourse if empFT, d
+
+                     (e&dp) Usual hours
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%           30              0
+ 5%           35              0
+10%           40              0       Obs           5,138,597
+25%           40              0       Sum of Wgt.   5,138,597
+
+50%           40                      Mean           42.44668
+                        Largest       Std. Dev.      7.570272
+75%           40             99
+90%           50             99       Variance       57.30902
+95%           60             99       Skewness       2.449142
+99%           70             99       Kurtosis       14.68265
+
+. sum uhourse if empPT, d
+
+                     (e&dp) Usual hours
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            3              0
+ 5%            7              0
+10%           10              0       Obs           1,433,669
+25%           16              0       Sum of Wgt.   1,433,669
+
+50%           24                      Mean           24.83253
+                        Largest       Std. Dev.      11.11321
+75%           32             99
+90%           40             99       Variance       123.5034
+95%           40             99       Skewness       .2266429
+99%           50             99       Kurtosis        2.96669
+
+. sum uhourse if unemp, d
+
+                     (e&dp) Usual hours
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            8              0
+10%           15              0       Obs             155,312
+25%           30              0       Sum of Wgt.     155,312
+
+50%           40                      Mean           36.24305
+                        Largest       Std. Dev.      13.77861
+75%           40             99
+90%           50             99       Variance       189.8502
+95%           56             99       Skewness       -.255984
+99%           72             99       Kurtosis        4.64542
+
+. sum uhourse if nilf , d
+
+                     (e&dp) Usual hours
+-------------------------------------------------------------
+no observations
+
+. 
+. cpigen
+Variables month and quarter missing, annual CPI will be generated
+(1262338 missing values generated)
+
+. gen  cpi1983A = cpiu if year==1983
+(11,917,646 missing values generated)
+
+. egen cpi1983B = max(cpi1983A)
+
+. gen  cpi1983  = cpiu/cpi1983B
+(946,621 missing values generated)
+
+. drop cpi cpiu cpi1983A cpi1983B
+
+. * http://www.usinflationcalculator.com/inflation/consumer-price-index-and-ann
+> ual-percent-changes-from-1913-to-2008/
+. replace cpi1983 = 2.36736 if year==2014
+(317,056 real changes made)
+
+. replace cpi1983 = 2.37017 if year==2015
+(314,692 real changes made)
+
+. replace cpi1983 = 2.40007 if year==2016
+(314,873 real changes made)
+
+. replace cpi1983 = 2.44786 if year==2017
+(0 real changes made)
+
+. 
+. ren intmonth month
+
+. 
+. compress
+  variable hgc was float now byte
+  variable empstat was float now byte
+  (73,597,002 bytes saved)
+
+. 
+. * If need all the vars in here, use this. But note that it will create git 
+. *   issues, so you'll need to rm the file
+. save     CPS_data1, replace
+(note: file CPS_data1.dta not found)
+file CPS_data1.dta saved
+
+. !gzip -f CPS_data1.dta
+
+
+. * !mv      CPS_data1.dta.gz /home/jared/TempData/
+. 
+. * Create smaller file, easier to git
+. drop if year-age < 1940
+(3,113,789 observations deleted)
+
+. gen float realwage = hrwage/cpi1983
+(3,473,687 missing values generated)
+
+. gen float realearn = earnwke/cpi1983 
+(3,382,595 missing values generated)
+
+. gen byte  shortyr = year - 1978
+
+. 
+. * Keep subset of variables to control file size
+. keep shortyr month age realwage realearn gradHS grad4yr hgc female white blac
+> k hispanic other empFT empPT unemp allocated* weight earnwt gradeat gradecp g
+> rade92
+
+. 
+. compress
+  (0 bytes saved)
+
+. 
+. save     CPS_data, replace
+(note: file CPS_data.dta not found)
+file CPS_data.dta saved
+
+. !gzip -f CPS_data.dta
+
+
+. * !mv      CPS_data.dta.gz /home/jared/TempData/
+. 
+. * Create smaller versions that can be gitted; randomize for testing
+. set seed 101
+
+. gen byte sortey = runiform()
+
+. sort     sortey
+
+. drop     sortey
+
+. 
+. local NUMPIECES 3
+
+. forvalues X = 1/`NUMPIECES' {
+  2.     preserve
+  3.         keep if inrange(_n,1+(_N/`NUMPIECES')*(`X'-1),(_N/`NUMPIECES')*(`X
+> '))
+  4.         save     CPS_data_pt`X', replace
+  5.         !gzip -f CPS_data_pt`X'.dta
+  6.     restore
+  7. }
+(6,101,586 observations deleted)
+(note: file CPS_data_pt1.dta not found)
+file CPS_data_pt1.dta saved
+
+(6,101,586 observations deleted)
+(note: file CPS_data_pt2.dta not found)
+file CPS_data_pt2.dta saved
+
+(6,101,586 observations deleted)
+(note: file CPS_data_pt3.dta not found)
+file CPS_data_pt3.dta saved
+
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/jared/NLSYvCPS/Data/CPS/CPS_import.log
+  log type:  text
+ closed on:   3 Mar 2020, 18:05:28
+-------------------------------------------------------------------------------

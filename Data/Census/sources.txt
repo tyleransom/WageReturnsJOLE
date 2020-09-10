@@ -1,0 +1,10 @@
+1970s: http://www.census.gov/popest/data/counties/asrh/pre-1980/co-asr-7079.html
+       -> http://www.census.gov/popest/data/counties/asrh/pre-1980/tables/co-asr-7079.csv
+1980s: http://www.census.gov/popest/data/counties/asrh/1980s/PE-02.html
+       -> individual links for years (great FireFox add-on to help: downThemAll)
+1990s: http://www.census.gov/popest/data/counties/asrh/1990s/CO-99-09.html
+       -> individual inks for states (great FireFox add-on to help: downThemAll)
+2000s: http://www.census.gov/popest/data/intercensal/county/county2010.html  
+       -> http://www.census.gov/popest/data/intercensal/county/files/CO-EST00INT-AGESEX-5YR.csv
+2010s: https://www2.census.gov/programs-surveys/popest/datasets/2010-2017/counties/asrh/cc-est2017-alldata.html
+       -> https://www2.census.gov/programs-surveys/popest/datasets/2010-2017/counties/asrh/cc-est2017-alldata.csv

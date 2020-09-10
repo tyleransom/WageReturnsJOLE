@@ -1,0 +1,593 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/jared/WageReturnsRepo/Data/IPEDS/ipeds_inst_clean.log
+  log type:  text
+ opened on:   9 Jan 2019, 16:23:06
+
+. 
+. clear all
+
+. 
+. *****************************************************************************
+. * Clean instutional data
+. *****************************************************************************
+. !unzip inst_all.dta.zip 
+
+Archive:  inst_all.dta.zip
+  inflating: inst_all.dta            
+
+. use inst_all.dta, clear
+(Relevant Institutional Charateristics 1984-2015)
+
+. !rm inst_all.dta
+
+
+. 
+. *============================================================================
+. * Initial cleaning
+. *============================================================================
+. * Clean instnm and city for the IPEDS data
+. do college_clean.do
+
+. *****************************************************************************
+. * Cleans instnm and city for match
+. * UPDATE 9/15/2016: subinword works much better/easier than regexr when wanti
+> ng 
+. *                   to replace entire words, regardess of location within in
+. *                   text, and will replace all instances
+. * UPDATE 1/19/2017: city technically not needed, but will keep
+. *****************************************************************************
+. * charlist instnm
+. * di "`r(ascii)'"
+. 
+. foreach X in instnm city {
+  2.         * Get rid of all punctuation 
+.         foreach Y in # - , & / ( ) : ; . {
+  3.                 replace `X' = subinstr( `X',"`Y'"," ",.)
+  4.         }
+  5.         
+.         foreach Y in ' ` `=char(146)' `=char(150)'   {
+  6.                 replace `X' = subinstr( `X',"`Y'","",.)
+  7.         }
+  8.         
+.         * Ñ,ì,ò
+.         replace `X' = subinstr( `X', "`=char(209)'","N",.)
+  9.         replace `X' = subinstr( `X', "`=char(237)'","I",.)
+ 10.         replace `X' = subinstr( `X', "`=char(243)'","O",.)
+ 11.         
+.         * Get rid of  extra/trailing/leading spaces
+.         qui replace `X' =  trim(itrim(`X'))
+ 12.         
+.         * replace "U" and "UN" and "UNIV" and "UNIVER" with "UNIVERSITY"
+.         qui replace `X' = subinword( `X', "U"     , "UNIVERSITY",.)
+ 13.         qui replace `X' = subinword( `X', "UN"    , "UNIVERSITY",.)
+ 14.         qui replace `X' = subinword( `X', "UNI"   , "UNIVERSITY",.)
+ 15.         qui replace `X' = subinword( `X', "UNIV"  , "UNIVERSITY",.)
+ 16.         qui replace `X' = subinword( `X', "UNIVE" , "UNIVERSITY",.)
+ 17.         qui replace `X' = subinword( `X', "UNIVER", "UNIVERSITY",.)
+ 18.         qui replace `X' = subinword( `X', "UNIVERISTY", "UNIVERSITY",.)
+ 19.         qui replace `X' = subinword( `X', "UNIVERTISY", "UNIVERSITY",.)
+ 20.         qui replace `X' = subinword( `X', "UNIVERSITYS", "UNIVERSITY",.)
+ 21.         qui replace `X' = subinword( `X', "UNIVERSITIES", "UNIVERSITY",.)
+ 22.         qui replace `X' = subinword( `X', "UNIVERSITIE", "UNIVERSITY",.)
+ 23.         
+.         qui replace `X' = subinstr( `X', "UNIVERSITY", "UNIVERSITY ",.)
+ 24.         qui replace `X' =  trim(itrim(`X'))
+ 25.         
+.         * If ends with "UNIVERSITY OF", put it at beginning
+.         qui replace instnm = "UNIVERSITY OF "+instnm if regexm( instnm, " UNI
+> VERSITY OF$")
+ 26.         qui replace instnm = regexr( instnm, " UNIVERSITY OF$", "")
+ 27. 
+.         * Now return all instances of "UNIVERSITY" back to "U"
+.         *  This makes the fuzzy match to work on important words
+.         qui replace `X' = subinword( `X', "UNIVERSITY", "U",.)
+ 28.         
+.         * replace "STATE" with "ST"
+.         qui replace `X' = subinword( `X', "STATE", "ST",.)
+ 29. 
+.         * replace "CMTY" with "COMMUNITY"
+.         qui replace `X' = subinword( `X', "CMTY", "COMMUNITY",.)
+ 30. 
+.         * replace "CC" and "C C" with "COMMUNITY COLLEGE"
+.         qui replace `X' = subinword( `X', "CC", "COMMUNITY COLLEGE",.)
+ 31.         
+.         qui replace `X' = subinword( `X', "C C", "COMMUNITY COLLEGE",.)
+ 32. 
+.         * If ends with "COMMUNITY COLLEGE OF", put it at beginning
+.         qui replace instnm = "COMMUNITY COLLEGE OF "+instnm if regexm( instnm
+> , " COMMUNITY COLLEGE OF$")
+ 33.         qui replace instnm = regexr( instnm, " COMMUNITY COLLEGE OF$", "")
+ 34.                         
+.         * replace "C" and "COL" and "COLL" and "COLLEGES" with "COLLEGE" ( no
+> te "C C" above is done)
+.         qui replace `X' = subinword( `X', "C"       , "COLLEGE",.)
+ 35.         qui replace `X' = subinword( `X', "COL"     , "COLLEGE",.)
+ 36.         qui replace `X' = subinword( `X', "COLL"    , "COLLEGE",.)
+ 37.         qui replace `X' = subinword( `X', "COLLEGES", "COLLEGE",.)
+ 38.         
+.         * If ends with "COLLEGE OF", put it at beginning
+.         qui replace instnm = "COLLEGE OF "+instnm if regexm( instnm, " COLLEG
+> E OF$")
+ 39.         qui replace instnm = regexr( instnm, " COLLEGE OF$", "")
+ 40. 
+.         * Drop the words "THE " "OF " "AND " "AT " "FOR "
+.         qui replace `X' = subinword( `X',"THE","",.)
+ 41.         qui replace `X' = subinword( `X',"OF" ,"",.)
+ 42.         qui replace `X' = subinword( `X',"AND","",.)
+ 43.         qui replace `X' = subinword( `X',"AT" ,"",.)
+ 44.         qui replace `X' = subinword( `X',"FOR","",.)
+ 45.         
+.         * Drop the words "INC" "CAMPUSES" "CAMPUS" "CAM" "CAMP$" CAMPU"
+.         qui replace `X' = subinword( `X', "INC"     ,"",.)
+ 46.         qui replace `X' = subinword( `X', "CAMPUSES","",.)
+ 47.         qui replace `X' = subinword( `X', "CAMPUS"  ,"",.)
+ 48.         qui replace `X' = subinword( `X', "CAMPU"   ,"",.)
+ 49.         qui replace `X' = subinword( `X', "CAMP"    ,"",.)
+ 50.         qui replace `X' = subinword( `X', "CAM"     ,"",.)
+ 51.         qui replace `X' = subinword( `X', "CMP"     ,"",.)
+ 52.         
+.         * Get rid of  extra/trailing/leading spaces
+.         qui replace `X' =  trim(itrim(`X'))
+ 53.         
+.         * replace and "SCH" with "SCHOOL"
+.         qui replace `X' = subinword( `X', "SCH", "SCHOOL",.)
+ 54. 
+.         * replace and "INST" with "INSTITUTE"
+.         qui replace `X' = subinword( `X', "INST", "INSTITUTE",.)
+ 55. 
+.         * replace and "TECHNOLOGY and "TECHNICAL" with "TECH"
+.         qui replace `X' = subinword( `X', "TECHNOLOGY", "TECH",.)
+ 56.         qui replace `X' = subinword( `X', "TECHNICAL" , "TECH",.)
+ 57. 
+.         * replace "INT TECH" with "INSTITUTE TECH"
+.         qui replace `X' = subinword( `X', "INT TECH" , "INSTITUTE TECH",.)
+ 58. 
+.         * replace "POLYTECHNIC" with "POLY"
+.         qui replace `X' = subinword( `X', "POLYTECHNIC"  , "POLY",.)
+ 59.         qui replace `X' = subinword( `X', "POLYTECH"     , "POLY",.)
+ 60.         qui replace `X' = subinword( `X', "POLYTECHNICAL", "POLY",.)
+ 61.         qui replace `X' = subinword( `X', "POLYTECHNICE" , "POLY",.)
+ 62. 
+.         * replace "AGRL" with "AGRICULTURAL"
+.         qui replace `X' = subinword( `X', "AGRL"  , "AGRICULTURAL",.)
+ 63. 
+.         * replace "AGRICULTURAL MECH" and "AGRICULTURAL MECHANICAL" with "A M
+> "
+.         qui replace `X' = subinword( `X', "AGRICULTURAL MECH"      , "A M",.)
+ 64.         qui replace `X' = subinword( `X', "AGRICULTURAL MECHANICAL", "A M"
+> ,.)
+ 65.         
+.         * replace "JR" with "JUNIOR"
+.         qui replace `X' = subinword( `X', "JR"  , "JUNIOR",.)
+ 66.         
+.         * replace "GRAD" with "GRADUATE"
+.         qui replace `X' = subinword( `X', "GRAD"  , "GRADUATE",.)
+ 67. 
+.         * replace "INTL" with "INTERNATIONAL"
+.         qui replace `X' = subinword( `X', "INTL"  , "INTERNATIONAL",.)
+ 68.         
+.         * replace "CTY" and "CNTY" with "COUNTY"
+.         qui replace `X' = subinword( `X', "CTY" , "COUNTY",.)
+ 69.         qui replace `X' = subinword( `X', "CNTY", "COUNTY",.)
+ 70.         
+.         * replace "NORTH" with "N"
+.         * qui replace `X' = subinword( `X', "NORTH"  , "N",.)
+. 
+.         * replace "EAST" with "E"
+.         * qui replace `X' = subinword( `X', "EAST"  , "E",.)
+.         
+.         * replace "SOUTH" with "S"
+.         * qui replace `X' = subinword( `X', "SOUTH"  , "S",.)
+. 
+.         * replace "WEST" with "W"
+.         * qui replace `X' = subinword( `X', "WEST"  , "W",.)
+. 
+.         * replace "STHN" with "SOUTHERN"
+.         qui replace `X' = subinword( `X', "STHN"  , "SOUTHERN",.)
+ 71.         
+.         * replace "STHESTN" with "SOUTHEASTERN"
+.         qui replace `X' = subinword( `X', "STHESTN"  , "SOUTHEASTERN",.)
+ 72. 
+.         * replace "STHWSTRN" with "SOUTHWESTERN"
+.         qui replace `X' = subinword( `X', "STHWSTRN"  , "SOUTHWESTERN",.)
+ 73. 
+.         * replace "ESTN" with "EASTERN"
+.         qui replace `X' = subinword( `X', "ESTN"  , "EASTERN",.)
+ 74.         
+.         * replace "WSTN" with "WESTERN"
+.         qui replace `X' = subinword( `X', "WSTN"  , "WESTERN",.)
+ 75. 
+.         * replace "SAINT" and "SNT" with "ST"
+.         qui replace `X' = subinword( `X', "SAINT", "ST",.)
+ 76.         qui replace `X' = subinword( `X', "SNT"  , "ST",.)
+ 77. 
+.         * replace "SEM" with "SEMINARY"
+.         qui replace `X' = subinword( `X', "SEM"  , "SEMINARY",.)
+ 78. 
+.         * replace "THEO" and "THEOL" and "THEOLOGICAL" with "THEOLOGY"
+.         qui replace `X' = subinword( `X', "THEO"        , "THEOLOGY",.)
+ 79.         qui replace `X' = subinword( `X', "THEOL"       , "THEOLOGY",.)
+ 80.         qui replace `X' = subinword( `X', "THEOLOGICAL" , "THEOLOGY",.)
+ 81.         
+.         * replace "INTELL" with "INTELLIGENCE"
+.         qui replace `X' = subinword( `X', "INTELL"  , "INTELLIGENCE",.)
+ 82.         
+.         * replace "MGMT" with "MANAGEMENT"
+.         qui replace `X' = subinword( `X', "MGMT"  , "MANAGEMENT",.)
+ 83.         
+.         * replace "MOUNT" with "MT"
+.         qui replace `X' = subinword( `X', "MOUNT"  , "MT",.)
+ 84. 
+.         * replace "FORT" with "FT"
+.         qui replace `X' = subinword( `X', "FORT"  , "FT",.)
+ 85. 
+.         * replace "CTR" with "CENTER"
+.         qui replace `X' = subinword( `X', "CTR"  , "CENTER",.)
+ 86.         
+.         * replace "MEDICINE" AND "MEDICAL" with "MED"
+.         qui replace `X' = subinword( `X',"MEDICINE","MED",.)
+ 87.         qui replace `X' = subinword( `X',"MEDICAL" ,"MED",.)
+ 88. 
+.         * replace "SCI", "SCIEN" and "SCIENCES" with "SCIENCE"
+.         qui replace `X' = subinword( `X', "SCI"     , "SCIENCE",.)
+ 89.         qui replace `X' = subinword( `X', "SCIEN"   , "SCIENCE",.)
+ 90.         qui replace `X' = subinword( `X', "SCIENCES", "SCIENCE",.)
+ 91. 
+.         * replace "HLTH" with "HEALTH"
+.         qui replace `X' = subinword( `X', "HLTH"  , "HEALTH",.)
+ 92. 
+.         * replace "ENVRNMTL" with "ENVIRONMENTAL"
+.         qui replace `X' = subinword( `X', "ENVRNMTL"  , "ENVIRONMENTAL",.)
+ 93. 
+.                 * replace "PROF" with "PROFESSIONAL"
+.         qui replace `X' = subinword( `X', "PROF"  , "PROFESSIONAL",.)
+ 94. 
+.         * replace "AVN" with "AVIATION"
+.         qui replace `X' = subinword( `X', "AVN"  , "AVIATION",.)
+ 95.         
+.         * States
+.         qui replace `X' = subinword( `X', "AL"   , "ALABAMA",.)       if stab
+> br=="AL"
+ 96.         qui replace `X' = subinword( `X', "ALA"  , "ALABAMA",.)       if s
+> tabbr=="AL"
+ 97.         qui replace `X' = subinword( `X', "AK"   , "ALASKA",.)        if s
+> tabbr=="AK"
+ 98.         qui replace `X' = subinword( `X', "ALAS" , "ALASKA",.)        if s
+> tabbr=="AK"
+ 99.         qui replace `X' = subinword( `X', "CA"   , "CALIFORNIA",.)    if s
+> tabbr=="CA"
+100.         qui replace `X' = subinword( `X', "CAL"  , "CALIFORNIA",.)    if s
+> tabbr=="CA"
+101.         qui replace `X' = subinword( `X', "FL"   , "FLORIDA",.)       if s
+> tabbr=="FL"
+102.         qui replace `X' = subinword( `X', "FLA"  , "FLORIDA",.)       if s
+> tabbr=="FL"
+103.         qui replace `X' = subinword( `X', "IND"  , "INDIANA",.)       if s
+> tabbr=="IN"
+104.         qui replace `X' = subinword( `X', "IL"   , "ILLINOIS",.)      if s
+> tabbr=="IL"
+105.         qui replace `X' = subinword( `X', "ILL"  , "ILLINOIS",.)      if s
+> tabbr=="IL"
+106.         qui replace `X' = subinword( `X', "LA"   , "LOUISIANA",.)     if s
+> tabbr=="LA"
+107.         qui replace `X' = subinword( `X', "MD"   , "MARYLAND",.)      if s
+> tabbr=="MD"
+108.         qui replace `X' = subinword( `X', "NJ"   , "NEW JERSEY",.)    if s
+> tabbr=="NJ"
+109.         qui replace `X' = subinword( `X', "NM"   , "NEW MEXICO",.)    if s
+> tabbr=="NM"
+110.         qui replace `X' = subinword( `X', "NC"   , "N CAROLINA",.)    if s
+> tabbr=="NC"
+111.         qui replace `X' = subinword( `X', "ND"   , "N DAKOTA",.)      if s
+> tabbr=="ND"
+112.         qui replace `X' = subinword( `X', "OK"   , "OKLAHOMA",.)      if s
+> tabbr=="OK"
+113.         qui replace `X' = subinword( `X', "OKLA" , "OKLAHOMA",.)      if s
+> tabbr=="OK"
+114.         qui replace `X' = subinword( `X', "PA"   , "PENNSYLVANIA",.)  if s
+> tabbr=="PA"
+115.         qui replace `X' = subinword( `X', "PENN" , "PENNSYLVANIA",.)  if s
+> tabbr=="PA"
+116.         qui replace `X' = subinword( `X', "SC"   , "S CAROLINA",.)    if s
+> tabbr=="SC"
+117.         qui replace `X' = subinword( `X', "SD"   , "S DAKOTA",.)      if s
+> tabbr=="SD"
+118.         qui replace `X' = subinword( `X', "TN"   , "TENNESSEE",.)     if s
+> tabbr=="TN"
+119.         qui replace `X' = subinword( `X', "TENN" , "TENNESSEE",.)     if s
+> tabbr=="TN"
+120.         qui replace `X' = subinword( `X', "VA"   , "VIRGINIA",.)      if s
+> tabbr=="VA"
+121.         qui replace `X' = subinword( `X', "VA"   , "VIRGINIA",.)      if s
+> tabbr=="WV"
+122.         
+.         * Get rid of  extra/trailing/leading spaces, again
+.         qui replace `X' =  trim(itrim(`X'))
+123.         
+.         *** More locational specific changes
+.         * replace "SN" with "SAN" at beginning
+.         qui replace `X' = subinword( `X', "SN","SAN",1)
+124.         
+.         * replace "CY" and "CIT" with "city" at end
+.         qui replace `X' = regexr( `X', "( CY$)"  , " CITY")             
+125.         qui replace `X' = regexr( `X', "( CIT$)"  , " CITY")            
+126.         
+.         * replace "MTN" with "MOUNTAIN" at end
+.         qui replace `X' = regexr( `X', "( MTN$)"  , " MOUNTAIN")             
+>    
+127.         
+.         * replace "PK" with "PARK" at end
+.         qui replace `X' = regexr( `X', "( PK$)"  , " PARK")
+128.         
+.         * replace "STA" with "STATION" at end
+.         qui replace `X' = regexr( `X', "( STA$)"  , " STATION")
+129.         
+.         * replace "VL" with "VILLE" at end, with or without space
+.         qui replace `X' = regexr( `X', "VL$"  , "VILLE")
+130.         
+.         * replace "WDS" with "WOODS" at end
+.         qui replace `X' = regexr( `X', "( WDS$)"  , " WOODS")
+131.         
+.         qui replace `X' = subinword( `X', "PITTSBG"  , "PITTSBURGH",.) if sta
+> bbr=="PA"
+132.         qui replace `X' = subinword( `X', "PITTSBURG", "PITTSBURGH",.) if 
+> stabbr=="PA"
+133.         
+.         * Get rid of  extra/trailing/leading spaces, again
+.         qui replace `X' =  trim(itrim(`X'))
+134.         
+.         * 3 different types of modified campuses: MAIN, ALL, CENTRAL/ADMIN. S
+> tandardize
+.         * replace "OFC" and "OFCS" with "OFFICE"
+.         qui replace `X' = subinword( `X', "OFC"  ,  "OFFICE",.)
+135.         qui replace `X' = subinword( `X', "OFCS"  ,  "OFFICE",.)
+136.         
+.         * replace "SYS" and "SYSW" with "SYSTEM"
+.         qui replace `X' = subinword( `X', "SYS"  ,  "SYSTEM",.)
+137.         qui replace `X' = subinword( `X', "SYSW"  ,  "SYSTEM",.)
+138.         
+.         * replace "ADM" with "ADMIN"
+.         qui replace `X' = subinword( `X', "ADM","ADMIN",.)
+139.         
+.         * Standarize Main Campuses
+.         qui replace `X' = regexr(`X', " MAIN CAMPUS", " MAIN")
+140.         qui replace `X' = regexr(`X', " MAIN CAM"   , " MAIN")
+141.         qui replace `X' = regexr(`X', " MAIN CAP"   , " MAIN")
+142.         qui replace `X' = regexr(`X', " MAIN$"      , " MAIN")  
+143.         
+.         * Get rid of Main Campuses? I think so...
+.         qui replace `X' = regexr( `X', " MAIN$"  , "")
+144. 
+.         * Standardize Central, Central Office, CEN OFFICE. 
+.         *  Potentially get rid of CENTRAL in NCERDC data. If someone goes to 
+> U VIRGINIA CENTRAL, they probably went to U VIRGINIA or U VIRGINIA MAIN, and 
+> we'll have 
+.         *   more info about them if so
+.         qui replace `X' = subinword(`X', "CENTRAL OFFICE"      , "CENTRAL",.)
+145.         qui replace `X' = subinword(`X', "CENTRAL OFF"         , "CENTRAL"
+> ,.)
+146.         qui replace `X' = subinword(`X', "CEN OFFICE"          , "CENTRAL"
+> ,.)
+147.         qui replace `X' = subinword(`X', "CEN OFF"             , "CENTRAL"
+> ,.)
+148.         qui replace `X' = subinword(`X', "ADMIN CENTRAL OFFICE", "CENTRAL"
+> ,.)
+149.         qui replace `X' = subinword(`X', "ADMIN CENTRAL"       , "CENTRAL"
+> ,.)
+150.         qui replace `X' = subinword(`X', "ADMIN CEN"           , "CENTRAL"
+> ,.)
+151.         * qui replace `X' = regexr( `X', " CENTRAL$"  , "") if NCERDC (in 
+> NCERDC file)
+.         
+.         * Related to SYSTEM and ALL should end in ALL
+.         qui replace `X' = subinword(`X',"SYSTEM ADMIN ALL$","ALL",.)
+152.         qui replace `X' = subinword(`X',"SYSTEM ADMIN$","ALL",.)
+153.         qui replace `X' = subinword(`X',"GEN ADMIN ALL$","ALL",.)
+154.         qui replace `X' = subinword(`X',"GEN ADMIN$","ALL",.)
+155.         qui replace `X' = subinword(`X',"ADMIN OFFFICE$","ALL",.)
+156.         qui replace `X' = subinword(`X',"ALL INSTITUTE$","ALL",.)
+157.         qui replace `X' = regexr(`X', "SYSTEM$", "ALL")
+158.         
+.         * Get rid of  extra/trailing/leading spaces, again
+.         qui replace `X' =  trim(itrim(`X'))
+159.         
+.         *** Individual institution fixes, roughly ordered by magnitude
+. 
+.         * ST U NEW YORK - (Arose because of NEW PALTZ, should resolve itself 
+> now)
+.         qui replace `X' = regexr( `X',"ST U NEW YORK","SUNY")
+160.         qui replace `X' = regexr(`X', "SUNY SUNY", "SUNY")
+161. 
+.         qui replace instnm = "SUNY "+instnm if regexm( instnm, " SUNY")
+162.         qui replace instnm = regexr( instnm, " SUNY", "")
+163.         
+.         * CITY U NEW YORK
+.         qui replace `X' = regexr( `X',"CITY U NEW YORK","CUNY")
+164.         qui replace `X' = regexr(`X', "CUNY CUNY", "CUNY")
+165. 
+.         qui replace instnm = "CUNY "+instnm if regexm( instnm, " CUNY")
+166.         qui replace instnm = regexr( instnm, " CUNY", "")
+167. 
+.         
+.         * MIAMI U, all OXFORD should say OXFORD
+.         qui replace `X' = regexr( `X', "^MIAMI U$","MIAMI U OXFORD") if city=
+> ="OXFORD"
+168.         
+.         * RUTGERS - TOTAL MESS
+.         qui replace `X' = regexr( `X', "RUTGERS ST U NEW JERSEY", "RUTGERS U"
+> )
+169.         qui replace `X' = regexr( `X', "RUTGERS ST U"           , "RUTGERS
+>  U")
+170.         
+.         qui replace `X' = regexr( `X', "$RUTGERS U^"            , "RUTGERS U 
+> NEW BRUNSWICK") if city=="NEW BRUNSWICK"
+171.         qui replace `X' = regexr( `X', "$RUTGERS U ALL^"        , "RUTGERS
+>  U NEW BRUNSWICK") // this is asserting that those at "ALL" should just be pu
+> t at "MAIN"
+172.         
+.         * LONG ISLAND
+.         qui replace `X' = regexr( `X', "^LONG ISLAND U W POST$","LONG ISLAND 
+> U COLLEGE W POST")
+173.         
+.         * U MASSACHUSETTS
+.         qui replace `X' = "U MASSACHUSETTS" if `X'=="U MASSACHUSETTS AMHERST"
+>  & city=="AMHERST"
+174. 
+.         * ST JOHNS
+.         qui replace `X' = regexr( `X', "ST JOHNS U NEW YORK", "ST JOHNS U")
+175. 
+.         * SE COLLEGE ASSEMBLIES OF GOD
+.         qui replace `X' = regexr( `X', "^SE COLLEGE", "SOUTHEASTERN COLLEGE")
+176. 
+.         * TULANE U
+.         qui replace `X' = "TULANE U" if `X'=="TULANE U LOUISIANA"
+177.         
+.         * SOUTHERN ILLINOIS U
+.         qui replace `X' = "SOUTHERN ILLINOIS U CARBONDALE" if `X'=="SOUTHERN 
+> ILLINOIS U" & city=="CARBONDALE" 
+178. 
+.         * WILLIAM MARY ALL COLLEGE
+.         qui replace `X' = "COLLEGE WILLIAM MARY" if `X'=="WILLIAM MARY ALL CO
+> LLEGE"
+179.         qui replace `X' = "COLLEGE WILLIAM MARY" if `X'=="COLLEGE WM MARY"
+180.         
+.         * INDIANA PURDUE U
+.         qui replace `X' = subinword(`X',"INDIANA PURDUE U","INDIANA U PURDUE 
+> U",.)
+181. 
+.         * PENNSYLVANIA ST U PENN ST
+.         qui replace `X' = subinword(`X',"PENNSYLVANIA ST U PENN ST","PENNSYLV
+> ANIA ST U",.)
+182.         qui replace `X' = subinword(`X',"PENNSYLVANIA ST U PENNSYLVANIA ST
+> ","PENNSYLVANIA ST U",.)
+183.         qui replace `X' = subinword(`X',"ABINGTON COLLEGE$","ABINGTON",.)
+184.         qui replace `X' = subinword(`X',"ALTOONA COLLEGE$","ALTOONA",.)
+185.         
+.         * CLINCH VALLEY COLLEGE UVA
+.         qui replace `X' = subinword(`X',"CLINCH VALLEY COLLEGE UVA","U VIRGIN
+> IA CLINCH VALLEY COLLEGE",.)
+186.         
+.         * OHIO/AUBURN U ALL - potentially need to come up with a better way t
+> o handle these.
+.         qui replace `X' = subinword(`X',"OHIO U ALL","OHIO U",.)
+187.         qui replace `X' = subinword(`X',"AUBURN U ALL","AUBURN U",.)
+188.         
+.         * COLUMBIA
+.         qui replace `X' = regexr( `X', "^COLUMBIA U$", "COLUMBIA U IN CITY NE
+> W YORK")
+189.         
+.         * BOWLING GRN to BOWLING GREEN
+.         qui replace `X' = subinword( `X', "GRN"  , "GREEN",.)
+190.         
+.         * INTER CONTINENTAL shouldn't have a space
+.         qui replace `X' = regexr( `X', "INTER CONTINENTAL" , "INTERCONTINENTA
+> L")
+191.         
+.         * U PITTSBURGH, the main campus sometimes has PITTSBURGH twice
+.         qui replace `X' = regexr( `X', "PITTSBURGH PITTSBURGH", "PITTSBURGH")
+192.         
+.         * NORTHWESTERN ST U - really?
+.         qui replace `X' = regexr( `X', "^NORTHWESTERN ST U$", "NORTHWESTERN S
+> T U LOUISIANA") if city=="NATCHITOCHES"
+193.         qui replace `X' = regexr( `X', "^NORTHWESTERN ST U$", "NORTHWESTER
+> N OKLAHOMA ST U")  if city=="ALVA"
+194. 
+.         * U S CAROLINA
+.         qui replace `X' = "U S CAROLINA COLUMBIA" if `X'=="U S CAROLINA" & ci
+> ty==""
+195.         
+.         * Get rid of  extra/trailing/leading spaces, again
+.         qui replace `X' =  trim(itrim(`X'))
+196. }
+(340 real changes made)
+(45,874 real changes made)
+(1,474 real changes made)
+(3,555 real changes made)
+(769 real changes made)
+(192 real changes made)
+(192 real changes made)
+(44 real changes made)
+(3 real changes made)
+(1,075 real changes made)
+(4,691 real changes made)
+(0 real changes made)
+(12 real changes made)
+(242 real changes made)
+(1 real change made)
+(14 real changes made)
+(2 real changes made)
+(0 real changes made)
+(301 real changes made)
+(0 real changes made)
+(0 real changes made)
+(7 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(450 real changes made)
+(92 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(2 real changes made)
+(18 real changes made)
+
+. 
+end of do-file
+
+. 
+. *==================================================
+. * Final cleaning/adjustments to allow for matching
+. *==================================================
+. *  Note: years are school years and thus 2009 is 2008-2009
+. * Need to get so there is one observation per nm/year/st/city combo.
+. *  Simplest solution: keep the smallest unitid per combo but only 
+. *   choose from the set that contains the mode(inst_control)
+. bys instnm year stabbr city: egen mode_control = mode(inst_control), minmode
+
+. gen control_not_mode = (inst_control!=mode_control)
+
+. 
+. bys  instnm year stabbr city (control_not_mode unitid): drop if _n!=1
+(1,460 observations deleted)
+
+. 
+. isid instnm year stabbr city
+
+. drop mode_control control_not_mode
+
+. 
+. label data "IPEDS Institutions, clean instnm and city"
+
+. 
+. * Individual fix
+. * Eastern NM U and E NM U Central switched unitids. Manual override
+. replace instnm="EASTERN NEW MEXICO UNIVERSITY"         if unitid==187648
+(31 real changes made)
+
+. replace instnm="EASTERN NEW MEXICO UNIVERSITY CENTRAL" if unitid==187657
+(17 real changes made)
+
+. 
+. compress
+  variable instnm was str105 now str98
+  (1,915,004 bytes saved)
+
+. save ipeds_inst_final.dta, replace
+(note: file ipeds_inst_final.dta not found)
+file ipeds_inst_final.dta saved
+
+. !zip -m ipeds_inst_final.dta.zip ipeds_inst_final.dta
+
+updating: ipeds_inst_final.dta (deflated 78%)
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/jared/WageReturnsRepo/Data/IPEDS/ipeds_inst_clean.log
+  log type:  text
+ closed on:   9 Jan 2019, 16:25:07
+-------------------------------------------------------------------------------
