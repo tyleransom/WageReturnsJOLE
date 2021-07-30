@@ -49,7 +49,7 @@ We include publicly available data in this respository, but we also document the
     - run `Descriptives/activity_tabulations29.do` which outputs `Descriptives/T*_29.tex` (which are the descriptive tables in TeX format)
     - comparison descriptive statistics for the CPS are located in `Descriptives/NLSYagedCPSstats.do` which outputs `Descriptives/T5_29_CPS.tex` (which we report in an appendix)
 * Descriptive Regressions, including various specifcations (Mincer, HLT, etc)
-    - run `y{79,97}_mincerv7_t0_16_no_oldest.do` which outputs marginal effects from various specifications that are reported in Tables 9 and 10 of the paper
+    - run `y{79,97}_mincerv8.do` which outputs marginal effects from various specifications that are reported in Tables 6 and 7 of the paper
 * No-unobserved-heterogeneity estimation in Stata:
     - run `Analysis/analysisMaster.do` which provides the following outputs that are beneficial because they provide useful starting values for the Matlab MEX optimization for the models with random factors: 
         * `y{79,97}_asvab_noFvars_t0_16_coef.csv` (for measurement system)
